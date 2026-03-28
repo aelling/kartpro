@@ -1,0 +1,73 @@
+# Layout
+container_width: 1260
+header_width: 'header_width_contained'
+main_width: 'main_width_contained'
+footer_width: 'footer_width_contained'
+
+# Header
+sticky_header: 0
+
+# Sidebar
+sliding_sidebar: 1
+
+# Social icons
+all_icons_show: 1
+facebook_url: 'https://www.facebook.com/idewdot'
+twitter_url: 'https://twitter.com/dewdots'
+instagram_url: 'https://www.instagram.com/google'
+linkedin_url: 'https://in.linkedin.com/company/google'
+youtube_url: 'https://www.youtube.com/@dev_tut'
+whatsapp_url: ''
+github_url: 'https://github.com/dewdot'
+telegram_url: ''
+vimeo_url: ''
+
+# Content
+highlight_author_comment: 0
+node_author_pic: 0
+node_tags: 0
+animated_content: 0
+
+# Components
+preloader_option: 1
+cookie_message: 1
+cookie_custom: 0
+scrolltotop_on: 1
+fontawesome_six: 0
+
+# Share page
+page_share_all: 0
+page_share_page: 0
+page_share_article: 0
+page_share_book: 0
+page_share_other: 0
+page_share_front: 0
+
+# Footer
+copyright_text: 1
+copyright_custom: 0
+
+# Insert custom codes
+css_extra: 0
+css_code: ''
+insert_head: 0
+head_code: ''
+insert_body_start: 0
+body_start_code: ''
+insert_body_end: 0
+body_end_code: ''
+localcssfile: 0
+localcssfilename: ''
+
+# Color
+color_default: 1
+color_primary: '#dd3923'
+color_secondary: '#3a3b54'
+color_primary_light: '#f4efec'
+color_secondary_light: '#d9dfee'
+color_border: '#e4dcd4'
+color_text: '#4a4a4a'
+color_text_light: '#878787'
+color_bold: '#222222'
+color_dark: '#0f0f22'
+bg_body: '#ffffff'

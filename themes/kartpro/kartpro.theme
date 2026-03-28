@@ -1,0 +1,122 @@
+<?php
+
+/**
+ * Kartpro theme overrides and preprocess functions.
+ */
+
+use Drupal\file\Entity\File;
+
+/**
+ * Sanitise input urls.
+ */
+function santise_val_url($url) {
+	if ($url != '') {
+		// Sanitise (remove all illegal characters) from url.
+		$url = filter_var($url, FILTER_SANITIZE_URL);
+		// Validate url.
+		if (filter_var($url, FILTER_VALIDATE_URL) == TRUE) {
+			$url = $url;
+		} else {
+			$url = '#';
+		}
+		return $url;
+	}
+}
+
+/**
+ * Html preprocess for kartpro theme.
+ */
+function kartpro_preprocess_html(&$variables) {
+	$variables['base_path'] = base_path();
+	$variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
+	// Layout
+	$variables['container_width'] = theme_get_setting('container_width', 'kartpro');
+	$variables['header_width'] = theme_get_setting('header_width', 'kartpro');
+	$variables['main_width'] = theme_get_setting('main_width', 'kartpro');
+	$variables['footer_width'] = theme_get_setting('footer_width', 'kartpro');
+  $variables['css_extra'] = theme_get_setting('css_extra', 'kartpro');
+  $variables['css_code'] = theme_get_setting('css_code', 'kartpro');
+	$variables['insert_head'] = theme_get_setting('insert_head', 'kartpro');
+	$variables['head_code'] = theme_get_setting('head_code', 'kartpro');
+	$variables['insert_body_start'] = theme_get_setting('insert_body_start', 'kartpro');
+	$variables['body_start_code'] = theme_get_setting('body_start_code', 'kartpro');
+	$variables['insert_body_end'] = theme_get_setting('insert_body_end', 'kartpro');
+	$variables['body_end_code'] = theme_get_setting('body_end_code', 'kartpro');
+	$variables['localcssfile'] = theme_get_setting('localcssfile', 'kartpro');
+	$variables['localcssfilename'] = theme_get_setting('localcssfilename', 'kartpro');
+	$variables['highlight_author_comment'] = theme_get_setting('highlight_author_comment', 'kartpro');
+	// Color
+	$variables['color_default'] = theme_get_setting('color_default', 'kartpro');
+	$variables['color_primary'] = theme_get_setting('color_primary', 'kartpro');
+	$variables['color_secondary'] = theme_get_setting('color_secondary', 'kartpro');
+	$variables['color_primary_light'] = theme_get_setting('color_primary_light', 'kartpro');
+	$variables['color_secondary_light'] = theme_get_setting('color_secondary_light', 'kartpro');
+	$variables['color_border'] = theme_get_setting('color_border', 'kartpro');
+	$variables['color_text'] = theme_get_setting('color_text', 'kartpro');
+	$variables['color_text_light'] = theme_get_setting('color_text_light', 'kartpro');
+	$variables['color_bold'] = theme_get_setting('color_bold', 'kartpro');
+	$variables['color_dark'] = theme_get_setting('color_dark', 'kartpro');
+	$variables['bg_body'] = theme_get_setting('bg_body', 'kartpro');
+	$variables['sticky_header'] = theme_get_setting('sticky_header', 'kartpro');
+}
+
+/**
+ * page preprocess
+ */
+function kartpro_preprocess_page(array &$variables) {
+	$config = \Drupal::config('system.site');
+	$variables['site_name'] = $config->get('name');
+	$variables['site_slogan'] = $config->get('slogan');
+	$variables['base_path'] = base_path();
+	$variables['all_icons_show'] = theme_get_setting('all_icons_show', 'kartpro');
+	$variables['facebook_url'] = santise_val_url(theme_get_setting('facebook_url', 'kartpro'));
+	$variables['twitter_url'] = santise_val_url(theme_get_setting('twitter_url', 'kartpro'));
+	$variables['instagram_url'] = santise_val_url(theme_get_setting('instagram_url', 'kartpro'));
+	$variables['linkedin_url'] = santise_val_url(theme_get_setting('linkedin_url', 'kartpro'));
+	$variables['youtube_url'] = santise_val_url(theme_get_setting('youtube_url', 'kartpro'));
+	$variables['vimeo_url'] = santise_val_url(theme_get_setting('vimeo_url', 'kartpro'));
+	$variables['whatsapp_url'] = santise_val_url(theme_get_setting('whatsapp_url', 'kartpro'));
+	$variables['github_url'] = santise_val_url(theme_get_setting('github_url', 'kartpro'));
+	$variables['telegram_url'] = santise_val_url(theme_get_setting('telegram_url', 'kartpro'));
+	$variables['scrolltotop_on'] = theme_get_setting('scrolltotop_on', 'kartpro');
+	$variables['copyright_text'] = theme_get_setting('copyright_text', 'kartpro');
+	$variables['copyright_custom'] = theme_get_setting('copyright_custom', 'kartpro');
+	$variables['sliding_sidebar'] = theme_get_setting('sliding_sidebar', 'kartpro');
+	$variables['animated_content'] = theme_get_setting('animated_content', 'kartpro');
+	$variables['cookie_message'] = theme_get_setting('cookie_message', 'kartpro');
+	$variables['cookie_custom'] = theme_get_setting('cookie_custom', 'kartpro');
+	$variables['preloader_option'] = theme_get_setting('preloader_option', 'kartpro');
+	$variables['fontawesome_six'] = theme_get_setting('fontawesome_six', 'kartpro');
+	
+	// Share page
+	$variables['page_share_all'] = theme_get_setting('page_share_all', 'kartpro');
+	$variables['page_share_front'] = theme_get_setting('page_share_front', 'kartpro');
+	$variables['page_share_page'] = theme_get_setting('page_share_page', 'kartpro');
+	$variables['page_share_article'] = theme_get_setting('page_share_article', 'kartpro');
+	$variables['page_share_book'] = theme_get_setting('page_share_book', 'kartpro');
+	$variables['page_share_other'] = theme_get_setting('page_share_other', 'kartpro');
+}
+
+/**
+ * Node preprocess.
+ */
+function kartpro_preprocess_node(array &$variables) {
+	$variables['node_author_pic'] = theme_get_setting('node_author_pic', 'kartpro');
+	$variables['node_tags'] = theme_get_setting('node_tags', 'kartpro');
+}
+
+/**
+ * Add current page to breadcrumb.
+ */
+function kartpro_preprocess_breadcrumb(&$variables) {
+	$request = \Drupal::request();
+	$route_match = \Drupal::routeMatch();
+	$page_title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
+	if (!empty($page_title)) {
+		$variables['breadcrumb'][] = [
+			'text' => $page_title,
+		];
+		// Add cache context based on url.
+		$variables['#cache']['contexts'][] = 'url';
+	}
+}

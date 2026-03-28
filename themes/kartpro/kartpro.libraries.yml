@@ -1,0 +1,59 @@
+# These will be loaded on every pages.
+global-styling:
+  version: VERSION
+  css:
+    component:
+      css/bootstrap-icons.css: {}
+      css/slick.css: {}
+      css/slick-theme.css: {}
+    theme:
+      css/style.css: {}
+  js:
+    js/slick.js: {}
+    js/kartpro.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+
+# Book
+book:
+  version: VERSION
+  css:
+    component:
+      css/book.css: {}
+
+# maintenance page
+maintenance:
+  version: VERSION
+  css:
+    theme:
+      css/maintenance.css: {}
+
+# Animated content
+animated-content:
+  version: VERSION
+  js:
+    js/animate.js: {}
+  css:
+    component:
+      css/animate.css: {}
+
+# cookiealert script
+cookiealert-scripts:
+  version: VERSION
+  js:
+    js/cookiealert.js: {}
+
+# FontAwesome 6
+fontawesome6:
+  version: 6.5.2
+  css:
+    component:
+      css/fontawesome6.css: {weight: -10}
+
+# Theme settings
+theme-settings:
+  version: VERSION
+  css:
+    theme:
+      css/theme-settings.css: {}

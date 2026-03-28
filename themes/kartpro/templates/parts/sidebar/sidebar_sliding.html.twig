@@ -1,0 +1,10 @@
+<div class="sliding-sidebar animated-panel-from-right">
+  <div class="sliding-sidebar-container block-section">
+    <div class="close-sliding-sidebar"><i class="bi bi-x"></i></div>
+      {% if page.sidebar_sliding %}
+        {{ page.sidebar_sliding }}
+      {% else %}
+        <p>Please add some content in <a href="{{ base_path }}admin/structure/block">Animated Sidebar</a> block region.</p><p>For more information please refer to this documentation page:<br /><a href="https://drupar.com/node/3350/" target="_blank">sliding sidebar</a></p>
+      {% endif %}
+  </div>
+</div>

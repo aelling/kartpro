@@ -1,0 +1,9 @@
+<div class="cookiealert" role="alert">
+  <div class="container">
+    {% if cookie_custom and page.cookie_text %}
+      {{ page.cookie_text }}
+    {% else %}
+      <p>This site uses cookies. By continuing to browse the site you are agreeing to our use of cookies. <button type="button" class="acceptcookies" aria-label="Close">{{ 'I agree'|t }}</button></p>
+    {% endif %}
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<style>
+{% if not color_default %}
+:root {
+  --color-primary: {{ color_primary }};
+  --color-secondary: {{ color_secondary }};
+  --light-primary: {{ color_primary_light }};
+  --light-secondary: {{ color_secondary_light }};
+  --color-border: {{ color_border }};
+  --text-color: {{ color_text }};
+  --text-color-light: {{ color_text_light }};
+  --bold-color: {{ color_bold }};
+  --dark: {{ color_dark }};
+  --bg-body: {{ bg_body }};
+}
+{% endif %}
+{% if sticky_header %}
+@media (min-width: 768px) {
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+}
+{% endif %}
+</style>
+

@@ -1,0 +1,34 @@
+name: kartPro
+type: theme
+base theme: stable9
+description: '<p>KartPro is a light weight modern Drupal 9, 10 theme by <a href="https://drupar.com/" target="_blank">Drupar.com</a> It is fully compatible with Drupal Commerce module.</p><p><a href="https://kartpro.dev5.dev/" target="_blank">Theme Demo</a> | <a href="https://drupar.com/theme/kartpro" target="_blank">Theme Homepage</a> | <a href="https://drupar.com/doc/kartpro" target="_blank">User Guide</a></p>'
+package: Drupar
+core_version_requirement: ^9 || ^10
+version: 1.0.2
+# Libraries
+libraries:
+  - kartpro/global-styling # Library for all global css. These css will be loaded on every pages.
+regions:
+  header_top: 'Header Top'
+  site_branding: 'Site Branding'
+  header: 'Header'
+  search_box: 'Header Search'
+  primary_menu: 'Primary menu'
+  page_header: 'Page Header'
+  hero: 'Hero Header'
+  highlighted: Highlighted
+  page_top: 'Page top'
+  page_bottom: 'Page bottom'
+  content: Content
+  content_top: 'Content Top'
+  content_bottom: 'Content Bottom'
+  content_home: 'Homepage Content'
+  sidebar_first: 'Sidebar Left'
+  sidebar_second: 'Sidebar Right'
+  sidebar_sliding: 'Sidebar Sliding'
+  footer_top: 'Footer Top'
+  footer: 'Footer'
+  footer_bottom: 'Footer Bottom'
+  copyright: 'Footer Copyright'
+  cookie_text: 'Cookie Consent Message'
+  hidden_blocks: 'Hidden Blocks'

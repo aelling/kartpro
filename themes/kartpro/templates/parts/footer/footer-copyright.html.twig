@@ -1,0 +1,7 @@
+<div class="copyright footer-last-region">
+  {% if copyright_custom and page.copyright %}
+    {{ page.copyright }}
+  {% else %}
+    &copy; {{ "now"|date("Y") }} {{ site_name }}, All rights reserved.
+  {% endif %}
+</div>
