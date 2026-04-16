@@ -14,7 +14,6 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Test\FunctionalTestSetupTrait;
 use Drupal\Core\Test\TestSetupTrait;
-use Drupal\Core\Url;
 use Drupal\Core\Utility\Error;
 use Drupal\Tests\block\Traits\BlockCreationTrait;
 use Drupal\Tests\node\Traits\ContentTypeCreationTrait;
@@ -84,14 +83,6 @@ abstract class BrowserTestBase extends TestCase {
    */
   protected $timeLimit = 500;
 
-  /**
-   * The translation file directory for the test environment.
-   *
-   * This is set in BrowserTestBase::prepareEnvironment().
-   *
-   * @var string
-   */
-  protected $translationFilesDirectory;
 
   /**
    * The config importer that can be used in a test.
@@ -224,7 +215,7 @@ abstract class BrowserTestBase extends TestCase {
   protected function initMink() {
     $driver = $this->getDefaultDriverInstance();
 
-    if ($driver instanceof BrowserKitDriver) {
+    if ($driver instanceof BrowserKitDriver && $driver->getClient() instanceof DrupalTestBrowser) {
       // Turn off curl timeout. Having a timeout is not a problem in a normal
       // test running, but it is a problem when debugging. Also, disable SSL
       // peer verification so that testing under HTTPS always works.
@@ -577,10 +568,6 @@ abstract class BrowserTestBase extends TestCase {
     // Clear the static cache so that subsequent cache invalidations will work
     // as expected.
     $this->container->get('cache_tags.invalidator')->resetChecksums();
-
-    // Generate a route to prime the URL generator with the correct base URL.
-    // @todo Remove in https://www.drupal.org/project/drupal/issues/3207896.
-    Url::fromRoute('<front>')->setAbsolute()->toString();
 
     // Explicitly call register() again on the container registered in \Drupal.
     // @todo This should already be called through

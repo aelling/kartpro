@@ -15,7 +15,6 @@ use Drupal\user\RoleInterface;
  * Basic access tests for Media.
  *
  * @group media
- * @group #slow
  */
 class MediaAccessTest extends MediaFunctionalTestBase {
 
@@ -131,7 +130,7 @@ class MediaAccessTest extends MediaFunctionalTestBase {
     $this->assertCacheContext('user');
     $assert_session->statusCodeEquals(200);
     $this->drupalGet('media/' . $user_media->id() . '/revisions/' . $previous_revision . '/view');
-    $this->assertCacheContext('user.permissions');
+    $this->assertCacheContext('user');
     $assert_session->statusCodeEquals(200);
     $role->revokePermission('view own unpublished media')->save();
     $this->drupalGet('media/' . $user_media->id() . '/revisions/' . $user_media->getRevisionId() . '/view');
@@ -221,6 +220,7 @@ class MediaAccessTest extends MediaFunctionalTestBase {
     $mediaOverviewRole = $this->createRole(['access content overview', 'access media overview']);
     $this->nonAdminUser->addRole($mediaOverviewRole)->save();
 
+    $this->grantPermissions($role, ['access user profiles']);
     $this->drupalGet('admin/content');
     $assert_session->linkByHrefExists('/admin/content/media');
     $this->clickLink('Media');

@@ -24,7 +24,7 @@ trait UiHelperTrait {
   /**
    * The current user logged in using the Mink controlled browser.
    *
-   * @var \Drupal\user\UserInterface
+   * @var \Drupal\user\UserInterface|false
    */
   protected $loggedInUser = FALSE;
 
@@ -526,7 +526,7 @@ trait UiHelperTrait {
    * @return string
    *   The equivalent XPath of a CSS expression.
    */
-  protected function cssSelectToXpath($selector, $html = TRUE, $prefix = 'descendant-or-self::') {
+  protected function cssSelectToXpath($selector, $html = TRUE, $prefix = 'descendant-or-self::'): string {
     return (new CssSelectorConverter($html))->toXPath($selector, $prefix);
   }
 

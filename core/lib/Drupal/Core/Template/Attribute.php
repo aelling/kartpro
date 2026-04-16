@@ -73,7 +73,7 @@ class Attribute implements \ArrayAccess, \IteratorAggregate, MarkupInterface {
    *
    * @var \Drupal\Core\Template\AttributeValueBase[]
    */
-  protected $storage = [];
+  protected array $storage = [];
 
   /**
    * Constructs a \Drupal\Core\Template\Attribute object.
@@ -94,6 +94,13 @@ class Attribute implements \ArrayAccess, \IteratorAggregate, MarkupInterface {
   public function offsetGet($name) {
     if (isset($this->storage[$name])) {
       return $this->storage[$name];
+    }
+    // The 'class' array key is expected to be itself an array, and therefore
+    // can be accessed using array append syntax before it has been initialized.
+    if ($name === 'class') {
+      // Initialize the class attribute as an empty array if not set.
+      $this->offsetSet('class', []);
+      return $this->storage['class'];
     }
   }
 
@@ -323,6 +330,9 @@ class Attribute implements \ArrayAccess, \IteratorAggregate, MarkupInterface {
     $return = '';
     /** @var \Drupal\Core\Template\AttributeValueBase $value */
     foreach ($this->storage as $value) {
+      if (!$value instanceof AttributeValueBase) {
+        throw new \RuntimeException(sprintf('Unexpected type for $value (%s).', get_debug_type($value)));
+      }
       $rendered = $value->render();
       if ($rendered) {
         $return .= ' ' . $rendered;

@@ -1333,7 +1333,22 @@
       const settings = response.settings || ajax.settings || drupalSettings;
 
       // Parse response.data into an element collection.
-      let $newContent = $($.parseHTML(response.data, document, true));
+      const parseHTML = (htmlString) => {
+        const fragment = document.createDocumentFragment();
+        // Create a temporary template element.
+        const template = fragment.appendChild(
+          document.createElement('template'),
+        );
+
+        // Set the innerHTML of the template to the provided HTML string.
+        template.innerHTML = htmlString;
+
+        // Return the contents of the temporary template.
+        return template.content.childNodes;
+      };
+
+      let $newContent = $(parseHTML(response.data));
+
       // For backward compatibility, in some cases a wrapper will be added. This
       // behavior will be removed before Drupal 9.0.0. If different behavior is
       // needed, the theme functions can be overridden.
@@ -1512,7 +1527,7 @@
      *   The XMLHttpRequest status.
      */
     css(ajax, response, status) {
-      // eslint-disable-next-line jquery/no-css
+      // eslint-disable-next-line no-jquery/no-css
       $(response.selector).css(response.argument);
     },
 
@@ -1854,23 +1869,7 @@
      *   Selector to use.
      */
     scrollTop(ajax, response) {
-      const offset = $(response.selector).offset();
-      // We can't guarantee that the scrollable object should be
-      // the body, as the element could be embedded in something
-      // more complex such as a modal popup. Recurse up the DOM
-      // and scroll the first element that has a non-zero top.
-      let scrollTarget = response.selector;
-      while ($(scrollTarget).scrollTop() === 0 && $(scrollTarget).parent()) {
-        scrollTarget = $(scrollTarget).parent();
-      }
-
-      // Only scroll upward.
-      if (offset.top - 10 < $(scrollTarget).scrollTop()) {
-        scrollTarget.get(0).scrollTo({
-          top: offset.top - 10,
-          behavior: 'smooth',
-        });
-      }
+      document.querySelector(response.selector)?.scrollIntoView();
     },
   };
 

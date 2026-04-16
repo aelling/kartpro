@@ -826,7 +826,8 @@ function hook_update_N(&$sandbox) {
  * a THEME.post_update.php file.
  *
  * These updates are executed after all hook_update_N() implementations. At this
- * stage Drupal is already fully repaired so you can use any API as you wish.
+ * stage Drupal is already fully bootstrapped so you can use any API as you
+ * wish.
  *
  * NAME can be arbitrary machine names. In contrast to hook_update_N() the
  * alphanumeric naming of functions in the file is the only thing which ensures
@@ -986,7 +987,7 @@ function hook_update_last_removed() {
  *
  * Drupal\Core\Updater\Updater is a class that knows how to update various parts
  * of the Drupal file system, for example to update modules that have newer
- * releases, or to install a new theme.
+ * releases.
  *
  * @return array
  *   An associative array of information about the updater(s) being provided.
@@ -1026,8 +1027,7 @@ function hook_updater_info() {
  * Alter the Updater information array.
  *
  * An Updater is a class that knows how to update various parts of the Drupal
- * file system, for example to update modules that have newer releases, or to
- * install a new theme.
+ * file system, for example to update modules that have newer releases.
  *
  * @param array $updaters
  *   Associative array of updaters as defined through hook_updater_info().
@@ -1095,11 +1095,12 @@ function hook_updater_info_alter(&$updaters) {
  *     install phase, this should only be used for version numbers, do not set
  *     it if not applicable.
  *   - description: The description of the requirement/status.
- *   - severity: The requirement's result/severity level, one of:
+ *   - severity: (optional) The requirement's result/severity level, one of:
  *     - REQUIREMENT_INFO: For info only.
  *     - REQUIREMENT_OK: The requirement is satisfied.
  *     - REQUIREMENT_WARNING: The requirement failed with a warning.
  *     - REQUIREMENT_ERROR: The requirement failed with an error.
+ *     Defaults to REQUIREMENT_OK when installing, REQUIREMENT_INFO otherwise.
  */
 function hook_requirements($phase) {
   $requirements = [];

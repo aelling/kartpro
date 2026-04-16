@@ -42,7 +42,7 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
 	// identifier: return.missing
 	'message' => '#^Function install_download_translation\\(\\) should return string but return statement is missing\\.$#',
-	'count' => 1,
+	'count' => 2,
 	'path' => __DIR__ . '/includes/install.core.inc',
 ];
 $ignoreErrors[] = [
@@ -56,14 +56,6 @@ $ignoreErrors[] = [
 	'message' => '#^Variable \\$custom_theme might not be defined\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/includes/theme.maintenance.inc',
-];
-$ignoreErrors[] = [
-	// identifier: staticMethod.deprecated
-	'message' => '#^Call to deprecated method registerLoader\\(\\) of class Doctrine\\\\Common\\\\Annotations\\\\AnnotationRegistry\\:
-This method is deprecated and will be removed in
-            doctrine/annotations 2\\.0\\. Annotations will be autoloaded in 2\\.0\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/lib/Drupal/Component/Annotation/Plugin/Discovery/AnnotatedClassDiscovery.php',
 ];
 $ignoreErrors[] = [
 	// identifier: method.notFound
@@ -130,7 +122,7 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
 	// identifier: property.notFound
 	'message' => '#^Access to an undefined property Drupal\\\\Component\\\\Diff\\\\Engine\\\\DiffEngine\\:\\:\\$xchanged\\.$#',
-	'count' => 6,
+	'count' => 2,
 	'path' => __DIR__ . '/lib/Drupal/Component/Diff/Engine/DiffEngine.php',
 ];
 $ignoreErrors[] = [
@@ -148,7 +140,7 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
 	// identifier: property.notFound
 	'message' => '#^Access to an undefined property Drupal\\\\Component\\\\Diff\\\\Engine\\\\DiffEngine\\:\\:\\$ychanged\\.$#',
-	'count' => 5,
+	'count' => 2,
 	'path' => __DIR__ . '/lib/Drupal/Component/Diff/Engine/DiffEngine.php',
 ];
 $ignoreErrors[] = [
@@ -561,12 +553,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/lib/Drupal/Core/Entity/KeyValueStore/KeyValueContentEntityStorage.php',
 ];
 $ignoreErrors[] = [
-	// identifier: variable.undefined
-	'message' => '#^Variable \\$selected_bundles might not be defined\\.$#',
-	'count' => 2,
-	'path' => __DIR__ . '/lib/Drupal/Core/Entity/Plugin/EntityReferenceSelection/DefaultSelection.php',
-];
-$ignoreErrors[] = [
 	// identifier: isset.variable
 	'message' => '#^Variable \\$value in isset\\(\\) always exists and is not nullable\\.$#',
 	'count' => 1,
@@ -855,6 +841,12 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/lib/Drupal/Core/Render/Renderer.php',
 ];
 $ignoreErrors[] = [
+	// identifier: variable.undefined
+	'message' => '#^Variable \\$render_start might not be defined\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/lib/Drupal/Core/Render/Renderer.php',
+];
+$ignoreErrors[] = [
 	// identifier: isset.variable
 	'message' => '#^Variable \\$transaction in isset\\(\\) always exists and is not nullable\\.$#',
 	'count' => 1,
@@ -965,7 +957,7 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
 	// identifier: return.missing
 	'message' => '#^Method Drupal\\\\block_content\\\\BlockContentForm\\:\\:save\\(\\) should return int but return statement is missing\\.$#',
-	'count' => 1,
+	'count' => 2,
 	'path' => __DIR__ . '/modules/block_content/src/BlockContentForm.php',
 ];
 $ignoreErrors[] = [
@@ -1001,7 +993,7 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
 	// identifier: return.missing
 	'message' => '#^Method Drupal\\\\book\\\\Form\\\\BookOutlineForm\\:\\:save\\(\\) should return int but return statement is missing\\.$#',
-	'count' => 1,
+	'count' => 2,
 	'path' => __DIR__ . '/modules/book/src/Form/BookOutlineForm.php',
 ];
 $ignoreErrors[] = [
@@ -1079,7 +1071,7 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
 	// identifier: return.missing
 	'message' => '#^Method Drupal\\\\contact\\\\MessageForm\\:\\:save\\(\\) should return int but return statement is missing\\.$#',
-	'count' => 1,
+	'count' => 2,
 	'path' => __DIR__ . '/modules/contact/src/MessageForm.php',
 ];
 $ignoreErrors[] = [
@@ -1135,12 +1127,6 @@ $ignoreErrors[] = [
 	'message' => '#^Method Drupal\\\\datetime\\\\Plugin\\\\Field\\\\FieldType\\\\DateTimeFieldItemList\\:\\:defaultValuesForm\\(\\) should return array but return statement is missing\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/modules/datetime/src/Plugin/Field/FieldType/DateTimeFieldItemList.php',
-];
-$ignoreErrors[] = [
-	// identifier: property.notFound
-	'message' => '#^Access to an undefined property Drupal\\\\datetime\\\\Plugin\\\\Field\\\\FieldType\\\\DateTimeItem\\:\\:\\$date\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/modules/datetime/src/Plugin/Field/FieldType/DateTimeItem.php',
 ];
 $ignoreErrors[] = [
 	// identifier: isset.variable
@@ -1253,7 +1239,7 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
 	// identifier: return.missing
 	'message' => '#^Method Drupal\\\\file\\\\Plugin\\\\Field\\\\FieldType\\\\FileFieldItemList\\:\\:postSave\\(\\) should return bool but return statement is missing\\.$#',
-	'count' => 1,
+	'count' => 2,
 	'path' => __DIR__ . '/modules/file/src/Plugin/Field/FieldType/FileFieldItemList.php',
 ];
 $ignoreErrors[] = [
@@ -1384,12 +1370,6 @@ $ignoreErrors[] = [
 ];
 $ignoreErrors[] = [
 	// identifier: variable.undefined
-	'message' => '#^Variable \\$dynamic_cache might not be defined\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/modules/jsonapi/tests/src/Functional/ResourceTestBase.php',
-];
-$ignoreErrors[] = [
-	// identifier: variable.undefined
 	'message' => '#^Variable \\$parseable_invalid_request_body might not be defined\\.$#',
 	'count' => 2,
 	'path' => __DIR__ . '/modules/jsonapi/tests/src/Functional/ResourceTestBase.php',
@@ -1457,7 +1437,7 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
 	// identifier: return.missing
 	'message' => '#^Method Drupal\\\\locale\\\\LocaleDefaultConfigStorage\\:\\:read\\(\\) should return array but return statement is missing\\.$#',
-	'count' => 1,
+	'count' => 2,
 	'path' => __DIR__ . '/modules/locale/src/LocaleDefaultConfigStorage.php',
 ];
 $ignoreErrors[] = [
@@ -1549,14 +1529,6 @@ $ignoreErrors[] = [
 	'message' => '#^Constructor of class Drupal\\\\migrate\\\\MigrateException has an unused parameter \\$previous\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/modules/migrate/src/MigrateException.php',
-];
-$ignoreErrors[] = [
-	// identifier: staticMethod.deprecated
-	'message' => '#^Call to deprecated method registerLoader\\(\\) of class Doctrine\\\\Common\\\\Annotations\\\\AnnotationRegistry\\:
-This method is deprecated and will be removed in
-            doctrine/annotations 2\\.0\\. Annotations will be autoloaded in 2\\.0\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/modules/migrate/src/Plugin/Discovery/AnnotatedClassDiscoveryAutomatedProviders.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Missing cache backend declaration for performance\\.$#',
@@ -1769,13 +1741,13 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
 	// identifier: return.missing
 	'message' => '#^Method Drupal\\\\node\\\\ConfigTranslation\\\\NodeTypeMapper\\:\\:setEntity\\(\\) should return bool but return statement is missing\\.$#',
-	'count' => 1,
+	'count' => 2,
 	'path' => __DIR__ . '/modules/node/src/ConfigTranslation/NodeTypeMapper.php',
 ];
 $ignoreErrors[] = [
 	// identifier: return.missing
 	'message' => '#^Method Drupal\\\\node\\\\NodeForm\\:\\:save\\(\\) should return int but return statement is missing\\.$#',
-	'count' => 1,
+	'count' => 2,
 	'path' => __DIR__ . '/modules/node/src/NodeForm.php',
 ];
 $ignoreErrors[] = [
@@ -1859,7 +1831,7 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
 	// identifier: return.missing
 	'message' => '#^Method Drupal\\\\path\\\\Plugin\\\\Field\\\\FieldType\\\\PathItem\\:\\:postSave\\(\\) should return bool but return statement is missing\\.$#',
-	'count' => 1,
+	'count' => 3,
 	'path' => __DIR__ . '/modules/path/src/Plugin/Field/FieldType/PathItem.php',
 ];
 $ignoreErrors[] = [
@@ -1899,7 +1871,7 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
 	// identifier: return.missing
 	'message' => '#^Method Drupal\\\\responsive_image\\\\ResponsiveImageStyleForm\\:\\:save\\(\\) should return int but return statement is missing\\.$#',
-	'count' => 1,
+	'count' => 2,
 	'path' => __DIR__ . '/modules/responsive_image/src/ResponsiveImageStyleForm.php',
 ];
 $ignoreErrors[] = [
@@ -2138,7 +2110,7 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
 	// identifier: return.missing
 	'message' => '#^Method Drupal\\\\taxonomy\\\\TermForm\\:\\:validateForm\\(\\) should return Drupal\\\\Core\\\\Entity\\\\ContentEntityInterface but return statement is missing\\.$#',
-	'count' => 1,
+	'count' => 2,
 	'path' => __DIR__ . '/modules/taxonomy/src/TermForm.php',
 ];
 $ignoreErrors[] = [
@@ -2210,7 +2182,7 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
 	// identifier: return.missing
 	'message' => '#^Method Drupal\\\\user\\\\RegisterForm\\:\\:save\\(\\) should return int but return statement is missing\\.$#',
-	'count' => 1,
+	'count' => 4,
 	'path' => __DIR__ . '/modules/user/src/RegisterForm.php',
 ];
 $ignoreErrors[] = [
@@ -2570,7 +2542,7 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
 	// identifier: return.missing
 	'message' => '#^Method Drupal\\\\views_ui\\\\ViewUI\\:\\:set\\(\\) should return \\$this\\(Drupal\\\\views_ui\\\\ViewUI\\) but return statement is missing\\.$#',
-	'count' => 1,
+	'count' => 2,
 	'path' => __DIR__ . '/modules/views_ui/src/ViewUI.php',
 ];
 $ignoreErrors[] = [
@@ -2624,7 +2596,7 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
 	// identifier: return.missing
 	'message' => '#^Method Drupal\\\\workspaces\\\\Form\\\\WorkspaceForm\\:\\:save\\(\\) should return int but return statement is missing\\.$#',
-	'count' => 1,
+	'count' => 2,
 	'path' => __DIR__ . '/modules/workspaces/src/Form/WorkspaceForm.php',
 ];
 $ignoreErrors[] = [
@@ -2801,14 +2773,6 @@ $ignoreErrors[] = [
 Client\\:\\:getConfig will be removed in guzzlehttp/guzzle\\:8\\.0\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/tests/Drupal/Tests/BrowserTestBase.php',
-];
-$ignoreErrors[] = [
-	// identifier: staticMethod.deprecated
-	'message' => '#^Call to deprecated method registerAutoloadNamespace\\(\\) of class Doctrine\\\\Common\\\\Annotations\\\\AnnotationRegistry\\:
-This method is deprecated and will be removed in
-            doctrine/annotations 2\\.0\\. Annotations will be autoloaded in 2\\.0\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/tests/Drupal/Tests/Component/Annotation/Doctrine/DocParserTest.php',
 ];
 $ignoreErrors[] = [
 	// identifier: constructor.unusedParameter
@@ -3007,6 +2971,18 @@ $ignoreErrors[] = [
 	'message' => '#^Variable \\$value in isset\\(\\) always exists and is not nullable\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/tests/Drupal/Tests/Core/Test/AssertContentTraitTest.php',
+];
+$ignoreErrors[] = [
+	// identifier: includeOnce.fileNotFound
+	'message' => '#^Path in include_once\\(\\) "vfs\\://drupal/sites/default/modules/module_a/module_a\\.post_update\\.php" is not a file or it does not exist\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/tests/Drupal/Tests/Core/Update/UpdateRegistryTest.php',
+];
+$ignoreErrors[] = [
+	// identifier: includeOnce.fileNotFound
+	'message' => '#^Path in include_once\\(\\) "vfs\\://drupal/sites/default/modules/module_b/module_b\\.post_update\\.php" is not a file or it does not exist\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/tests/Drupal/Tests/Core/Update/UpdateRegistryTest.php',
 ];
 $ignoreErrors[] = [
 	// identifier: class.implementsDeprecatedInterface

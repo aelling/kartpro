@@ -22,7 +22,6 @@ use Symfony\Component\Validator\ConstraintViolation;
  * Tests for CKEditor 5.
  *
  * @group ckeditor5
- * @group #slow
  * @internal
  */
 class CKEditor5Test extends CKEditor5TestBase {
@@ -214,6 +213,7 @@ JS;
     // Confirm there are no longer any warnings.
     $assert_session->waitForElementRemoved('css', '[data-drupal-messages] [role="alert"]');
     $page->pressButton('Save configuration');
+    $this->assertNotEmpty($assert_session->waitForText('Added text format ckeditor5'));
     $assert_session->responseContains('Added text format <em class="placeholder">ckeditor5</em>.');
   }
 

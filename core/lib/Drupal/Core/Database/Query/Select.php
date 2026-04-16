@@ -171,14 +171,14 @@ class Select extends Query implements SelectInterface {
    * {@inheritdoc}
    */
   public function hasAllTags() {
-    return !(boolean) array_diff(func_get_args(), array_keys($this->alterTags));
+    return !(bool) array_diff(func_get_args(), array_keys($this->alterTags));
   }
 
   /**
    * {@inheritdoc}
    */
   public function hasAnyTag() {
-    return (boolean) array_intersect(func_get_args(), array_keys($this->alterTags));
+    return (bool) array_intersect(func_get_args(), array_keys($this->alterTags));
   }
 
   /**
@@ -800,6 +800,15 @@ class Select extends Query implements SelectInterface {
    * {@inheritdoc}
    */
   public function __toString() {
+    if (!is_array($this->fields) ||
+      !is_array($this->expressions) ||
+      !is_array($this->tables) ||
+      !is_array($this->order) ||
+      !is_array($this->group) ||
+      !is_array($this->union)) {
+      throw new \UnexpectedValueException();
+    }
+
     // For convenience, we compile the query ourselves if the caller forgot
     // to do it. This allows constructs like "(string) $query" to work. When
     // the query will be executed, it will be recompiled using the proper
