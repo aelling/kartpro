@@ -1,0 +1,30 @@
+uuid: 215f3ea9-41c4-49e9-a916-a4fdba5e150a
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:b24a8616-ec55-4462-ad50-43d7ecd46ded'
+  module:
+    - block_content
+    - system
+  theme:
+    - kartpro
+id: kartpro_frontheroslider
+theme: kartpro
+region: hero
+weight: 0
+provider: null
+plugin: 'block_content:b24a8616-ec55-4462-ad50-43d7ecd46ded'
+settings:
+  id: 'block_content:b24a8616-ec55-4462-ad50-43d7ecd46ded'
+  label: 'Front hero slider'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'

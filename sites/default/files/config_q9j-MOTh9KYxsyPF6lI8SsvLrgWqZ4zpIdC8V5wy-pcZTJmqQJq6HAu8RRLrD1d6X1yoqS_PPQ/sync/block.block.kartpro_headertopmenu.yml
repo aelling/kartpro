@@ -1,0 +1,25 @@
+uuid: 770573c4-c13c-4234-8a0c-130e1829a2bf
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:548edd0f-223f-40fd-b59e-6f9ee62f9116'
+  module:
+    - block_content
+  theme:
+    - kartpro
+id: kartpro_headertopmenu
+theme: kartpro
+region: header_top
+weight: 0
+provider: null
+plugin: 'block_content:548edd0f-223f-40fd-b59e-6f9ee62f9116'
+settings:
+  id: 'block_content:548edd0f-223f-40fd-b59e-6f9ee62f9116'
+  label: 'Header top menu'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

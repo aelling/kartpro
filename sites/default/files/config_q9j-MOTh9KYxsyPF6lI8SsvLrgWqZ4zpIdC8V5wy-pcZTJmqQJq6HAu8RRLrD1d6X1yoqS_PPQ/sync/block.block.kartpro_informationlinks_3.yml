@@ -1,0 +1,30 @@
+uuid: ef156db9-cb3b-484f-b4bc-844502760087
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:d2a8ae97-f352-46d6-831d-22415ab4fc0a'
+  module:
+    - block_content
+    - system
+  theme:
+    - kartpro
+id: kartpro_informationlinks_3
+theme: kartpro
+region: sidebar_second
+weight: 0
+provider: null
+plugin: 'block_content:d2a8ae97-f352-46d6-831d-22415ab4fc0a'
+settings:
+  id: 'block_content:d2a8ae97-f352-46d6-831d-22415ab4fc0a'
+  label: 'Information Links'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/node/10\r\n/node/11"

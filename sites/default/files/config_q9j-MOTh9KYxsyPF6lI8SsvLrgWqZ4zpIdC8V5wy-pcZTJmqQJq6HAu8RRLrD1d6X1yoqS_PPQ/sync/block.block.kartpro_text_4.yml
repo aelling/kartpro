@@ -1,0 +1,30 @@
+uuid: a9f047ca-ef8a-45ae-b980-2129c5e4e964
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:eeeffe05-8f18-46c5-bad5-cb5a9c0bdefb'
+  module:
+    - block_content
+    - system
+  theme:
+    - kartpro
+id: kartpro_text_4
+theme: kartpro
+region: sidebar_second
+weight: 0
+provider: null
+plugin: 'block_content:eeeffe05-8f18-46c5-bad5-cb5a9c0bdefb'
+settings:
+  id: 'block_content:eeeffe05-8f18-46c5-bad5-cb5a9c0bdefb'
+  label: Text
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/node/10\r\n/node/11"

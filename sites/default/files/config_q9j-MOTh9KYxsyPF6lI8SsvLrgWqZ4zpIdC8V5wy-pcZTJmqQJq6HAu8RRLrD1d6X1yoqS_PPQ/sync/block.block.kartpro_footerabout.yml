@@ -1,0 +1,25 @@
+uuid: 98aa3010-d594-4661-b17c-49ad172d29f6
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:5065d1d9-a829-47ef-a3f6-8f035378036c'
+  module:
+    - block_content
+  theme:
+    - kartpro
+id: kartpro_footerabout
+theme: kartpro
+region: footer
+weight: -14
+provider: null
+plugin: 'block_content:5065d1d9-a829-47ef-a3f6-8f035378036c'
+settings:
+  id: 'block_content:5065d1d9-a829-47ef-a3f6-8f035378036c'
+  label: 'Footer About'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

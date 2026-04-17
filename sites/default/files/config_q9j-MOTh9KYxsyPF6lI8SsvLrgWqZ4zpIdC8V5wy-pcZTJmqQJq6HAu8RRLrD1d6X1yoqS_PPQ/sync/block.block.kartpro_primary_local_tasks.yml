@@ -1,0 +1,22 @@
+uuid: 81a9d152-c86b-4912-8221-dfda78d91ef4
+langcode: en
+status: true
+dependencies:
+  theme:
+    - kartpro
+_core:
+  default_config_hash: nGE3EoPQQaQCuqTUtZgw0-KIzmrqdKDzdNQf2JyPUt4
+id: kartpro_primary_local_tasks
+theme: kartpro
+region: content
+weight: -7
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: 'Primary tabs'
+  label_display: '0'
+  provider: core
+  primary: true
+  secondary: false
+visibility: {  }

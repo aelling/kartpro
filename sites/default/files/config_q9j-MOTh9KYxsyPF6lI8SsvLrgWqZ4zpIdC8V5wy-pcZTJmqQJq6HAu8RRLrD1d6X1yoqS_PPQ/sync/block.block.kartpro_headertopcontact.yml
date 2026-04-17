@@ -1,0 +1,25 @@
+uuid: a4e708ec-7a43-4453-a900-0d6e6a9b409c
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:a2c5ad2e-3a64-4c62-9b65-b2a9bf517b75'
+  module:
+    - block_content
+  theme:
+    - kartpro
+id: kartpro_headertopcontact
+theme: kartpro
+region: header_top
+weight: 0
+provider: null
+plugin: 'block_content:a2c5ad2e-3a64-4c62-9b65-b2a9bf517b75'
+settings:
+  id: 'block_content:a2c5ad2e-3a64-4c62-9b65-b2a9bf517b75'
+  label: 'Header top contact'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

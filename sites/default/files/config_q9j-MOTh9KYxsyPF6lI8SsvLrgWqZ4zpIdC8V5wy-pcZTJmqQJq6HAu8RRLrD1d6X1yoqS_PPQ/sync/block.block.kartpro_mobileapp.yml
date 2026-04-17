@@ -1,0 +1,25 @@
+uuid: 0169fc39-dc9c-48f9-a77b-8bb13ad58d2b
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:01c23462-91c7-4735-9696-7eab3c8296da'
+  module:
+    - block_content
+  theme:
+    - kartpro
+id: kartpro_mobileapp
+theme: kartpro
+region: footer
+weight: -11
+provider: null
+plugin: 'block_content:01c23462-91c7-4735-9696-7eab3c8296da'
+settings:
+  id: 'block_content:01c23462-91c7-4735-9696-7eab3c8296da'
+  label: 'Mobile App'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

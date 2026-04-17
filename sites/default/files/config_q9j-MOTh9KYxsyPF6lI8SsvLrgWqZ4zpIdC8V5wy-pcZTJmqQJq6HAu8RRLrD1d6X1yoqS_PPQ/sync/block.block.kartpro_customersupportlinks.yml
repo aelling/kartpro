@@ -1,0 +1,25 @@
+uuid: a2d3fec7-e46e-4d96-98bb-929258417e6d
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:5076d7a2-efd0-43d6-bb9d-4396f950a6b3'
+  module:
+    - block_content
+  theme:
+    - kartpro
+id: kartpro_customersupportlinks
+theme: kartpro
+region: footer
+weight: -12
+provider: null
+plugin: 'block_content:5076d7a2-efd0-43d6-bb9d-4396f950a6b3'
+settings:
+  id: 'block_content:5076d7a2-efd0-43d6-bb9d-4396f950a6b3'
+  label: 'Customer Support'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

@@ -1,0 +1,22 @@
+uuid: ffe3a91f-08a9-45a2-8b19-de258aaff4f0
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_cart
+  theme:
+    - kartpro
+id: kartpro_cart
+theme: kartpro
+region: header
+weight: 0
+provider: null
+plugin: commerce_cart
+settings:
+  id: commerce_cart
+  label: Cart
+  label_display: '0'
+  provider: commerce_cart
+  dropdown: true
+  show_if_empty: true
+visibility: {  }

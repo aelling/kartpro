@@ -1,0 +1,14 @@
+uuid: e057cb98-74b4-4d02-98a0-5529f9bfcfc4
+langcode: en
+status: true
+dependencies: {  }
+name: 'Full HTML3'
+format: full_html3
+weight: -9
+filters:
+  filter_image_lazy_load:
+    id: filter_image_lazy_load
+    provider: filter
+    status: true
+    weight: 15
+    settings: {  }

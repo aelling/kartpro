@@ -1,0 +1,22 @@
+uuid: 3898ee00-22dd-4b7c-9d62-bbb898800d75
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_product
+id: products_path
+label: 'Products Path'
+type: 'canonical_entities:commerce_product'
+pattern: '/store/[commerce_product:field_category:0:entity]/[commerce_product:field_category:1:entity]/[commerce_product:title]'
+selection_criteria:
+  78a47bea-94e1-42fe-8912-f8e06144608f:
+    id: 'entity_bundle:commerce_product'
+    negate: false
+    uuid: 78a47bea-94e1-42fe-8912-f8e06144608f
+    context_mapping:
+      commerce_product: commerce_product
+    bundles:
+      default: default
+selection_logic: and
+weight: -5
+relationships: {  }

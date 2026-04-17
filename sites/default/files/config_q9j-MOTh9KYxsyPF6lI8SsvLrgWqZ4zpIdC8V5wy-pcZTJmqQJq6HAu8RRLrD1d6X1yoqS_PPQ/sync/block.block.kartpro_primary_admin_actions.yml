@@ -1,0 +1,20 @@
+uuid: 527973b2-1af3-4d40-a6c3-cd4df504c4fb
+langcode: en
+status: true
+dependencies:
+  theme:
+    - kartpro
+_core:
+  default_config_hash: Q9_2whdOj1YIomfvsIfopROW4FT_X5pY0DjdOiOaQ5U
+id: kartpro_primary_admin_actions
+theme: kartpro
+region: content
+weight: -6
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility: {  }

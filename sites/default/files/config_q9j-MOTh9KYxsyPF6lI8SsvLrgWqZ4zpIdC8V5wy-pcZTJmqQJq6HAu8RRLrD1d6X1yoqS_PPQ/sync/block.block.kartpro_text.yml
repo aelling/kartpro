@@ -1,0 +1,25 @@
+uuid: 142f9fdc-7bef-4b7d-b2b5-9b042296b76a
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:eeeffe05-8f18-46c5-bad5-cb5a9c0bdefb'
+  module:
+    - block_content
+  theme:
+    - kartpro
+id: kartpro_text
+theme: kartpro
+region: footer_bottom
+weight: 0
+provider: null
+plugin: 'block_content:eeeffe05-8f18-46c5-bad5-cb5a9c0bdefb'
+settings:
+  id: 'block_content:eeeffe05-8f18-46c5-bad5-cb5a9c0bdefb'
+  label: 'Text One'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }
