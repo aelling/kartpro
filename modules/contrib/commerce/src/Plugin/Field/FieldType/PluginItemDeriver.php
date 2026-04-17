@@ -2,11 +2,11 @@
 
 namespace Drupal\commerce\Plugin\Field\FieldType;
 
-use Drupal\commerce\Event\CommerceEvents;
-use Drupal\commerce\Event\ReferenceablePluginTypesEvent;
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\commerce\Event\CommerceEvents;
+use Drupal\commerce\Event\ReferenceablePluginTypesEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

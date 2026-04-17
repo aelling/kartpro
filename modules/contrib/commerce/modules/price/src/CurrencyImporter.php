@@ -6,10 +6,10 @@ use CommerceGuys\Addressing\Country\CountryRepository;
 use CommerceGuys\Intl\Currency\CurrencyRepository;
 use CommerceGuys\Intl\Exception\UnknownCurrencyException;
 use CommerceGuys\Intl\Exception\UnknownLocaleException;
-use Drupal\commerce_price\Entity\CurrencyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\commerce_price\Entity\CurrencyInterface;
 
 /**
  * Default implementation of the currency importer.
@@ -89,7 +89,7 @@ class CurrencyImporter implements CurrencyImporterInterface {
     ];
     /** @var \Drupal\commerce_price\Entity\CurrencyInterface $entity */
     $entity = $this->storage->create($values);
-    $entity->trustData()->save();
+    $entity->save();
     if ($this->languageManager->isMultilingual()) {
       // Import translations for any additional languages the site has.
       $languages = $this->languageManager->getLanguages(LanguageInterface::STATE_CONFIGURABLE);

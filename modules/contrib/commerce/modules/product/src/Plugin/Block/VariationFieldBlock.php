@@ -2,8 +2,8 @@
 
 namespace Drupal\commerce_product\Plugin\Block;
 
-use Drupal\commerce_product\Entity\ProductVariationInterface;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\commerce_product\Entity\ProductVariationInterface;
 use Drupal\layout_builder\Plugin\Block\FieldBlock;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

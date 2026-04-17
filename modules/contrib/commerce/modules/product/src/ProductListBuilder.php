@@ -2,11 +2,11 @@
 
 namespace Drupal\commerce_product;
 
-use Drupal\commerce_product\Entity\ProductType;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Drupal\commerce_product\Entity\ProductType;
 
 /**
  * Defines the list builder for products.

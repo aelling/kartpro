@@ -2,6 +2,8 @@
 
 namespace Drupal\commerce_payment\Plugin\Commerce\PaymentMethodType;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\commerce_payment\Attribute\CommercePaymentMethodType;
 use Drupal\commerce_payment\CreditCard as CreditCardHelper;
 use Drupal\commerce_payment\Entity\PaymentMethodInterface;
 use Drupal\commerce_payment\FailedPaymentDetailsInterface;
@@ -9,12 +11,11 @@ use Drupal\entity\BundleFieldDefinition;
 
 /**
  * Provides the credit card payment method type.
- *
- * @CommercePaymentMethodType(
- *   id = "credit_card",
- *   label = @Translation("Credit card"),
- * )
  */
+#[CommercePaymentMethodType(
+  id: "credit_card",
+  label: new TranslatableMarkup('Credit card'),
+)]
 class CreditCard extends PaymentMethodTypeBase implements FailedPaymentDetailsInterface {
 
   /**
@@ -28,7 +29,7 @@ class CreditCard extends PaymentMethodTypeBase implements FailedPaymentDetailsIn
     else {
       $card_type = $this->t('Credit card');
     }
-    $card_number = $payment_method->card_number->value;
+    $card_number = $payment_method->card_number->value ?? '';
     $args = [
       '@card_type' => $card_type,
       '@card_number' => $card_number,

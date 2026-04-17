@@ -2,12 +2,12 @@
 
 namespace Drupal\Tests\commerce_log\Functional;
 
+use Drupal\Tests\commerce_order\Functional\OrderBrowserTestBase;
 use Drupal\commerce_event_recorder_test\CommerceEventRecorder;
 use Drupal\commerce_log\LogStorageInterface;
 use Drupal\commerce_log\LogViewBuilder;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\profile\Entity\Profile;
-use Drupal\Tests\commerce_order\Functional\OrderBrowserTestBase;
 
 /**
  * Test logging for failed payments.

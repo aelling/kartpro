@@ -2,12 +2,12 @@
 
 namespace Drupal\commerce_product\Access;
 
-use Drupal\config_translation\Access\ConfigTranslationFormAccess;
-use Drupal\config_translation\ConfigMapperInterface;
-use Drupal\config_translation\ConfigMapperManagerInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\config_translation\Access\ConfigTranslationFormAccess;
+use Drupal\config_translation\ConfigMapperInterface;
+use Drupal\config_translation\ConfigMapperManagerInterface;
 
 /**
  * Checks access for displaying the product attribute add, edit, delete forms.

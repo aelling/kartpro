@@ -2,8 +2,8 @@
 
 namespace Drupal\commerce_promotion;
 
-use Drupal\commerce_promotion\Entity\PromotionInterface;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
+use Drupal\commerce_promotion\Entity\PromotionInterface;
 
 /**
  * Defines the interface for coupon storage.

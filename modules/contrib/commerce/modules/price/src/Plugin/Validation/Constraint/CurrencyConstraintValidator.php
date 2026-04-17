@@ -2,9 +2,9 @@
 
 namespace Drupal\commerce_price\Plugin\Validation\Constraint;
 
-use Drupal\commerce_price\Plugin\Field\FieldType\PriceItem;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\commerce_price\Plugin\Field\FieldType\PriceItem;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;

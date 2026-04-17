@@ -2,14 +2,14 @@
 
 namespace Drupal\commerce_order;
 
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityStorageException;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\commerce\CommerceContentEntityStorage;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Event\OrderEvent;
 use Drupal\commerce_order\Event\OrderEvents;
 use Drupal\commerce_order\Exception\OrderLockedSaveException;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityStorageException;
-use Drupal\Core\Entity\EntityTypeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -59,6 +59,10 @@ class OrderStorage extends CommerceContentEntityStorage implements OrderStorageI
     $instance = parent::createInstance($container, $entity_type);
     $instance->orderRefresh = $container->get('commerce_order.order_refresh');
     $instance->lockBackend = $container->get('lock');
+    // Ensure that the commerce_order logger exists before using it.
+    if (!$container->has('logger.channel.commerce_order')) {
+      $container->set('logger.channel.commerce_order', $container->get('logger.factory')->get('commerce_order'));
+    }
     $instance->logger = $container->get('logger.channel.commerce_order');
     return $instance;
   }

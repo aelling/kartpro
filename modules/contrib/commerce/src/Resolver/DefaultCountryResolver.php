@@ -2,8 +2,8 @@
 
 namespace Drupal\commerce\Resolver;
 
-use Drupal\commerce\Country;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\commerce\Country;
 
 /**
  * Returns the site's default country.
@@ -11,21 +11,12 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 class DefaultCountryResolver implements CountryResolverInterface {
 
   /**
-   * The configuration factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
    * Constructs a new DefaultCountryResolver object.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The config factory.
    */
-  public function __construct(ConfigFactoryInterface $config_factory) {
-    $this->configFactory = $config_factory;
-  }
+  public function __construct(protected ConfigFactoryInterface $configFactory) {}
 
   /**
    * {@inheritdoc}

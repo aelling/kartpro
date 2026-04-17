@@ -3,14 +3,13 @@
 namespace Drupal\commerce_order\Form;
 
 use Drupal\commerce_order\Entity\OrderItemType;
-use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Form controller for the commerce_order entity edit forms.
  */
-class OrderForm extends ContentEntityForm {
+class OrderForm extends OrderFormBase {
 
   /**
    * The date formatter.
@@ -56,6 +55,7 @@ class OrderForm extends ContentEntityForm {
 
     $form['#tree'] = TRUE;
     $form['#theme'] = 'commerce_order_edit_form';
+    $form['#attached']['library'][] = 'commerce_order/admin-order';
     // Changed must be sent to the client, for later overwrite error checking.
     $form['changed'] = [
       '#type' => 'hidden',
@@ -132,6 +132,11 @@ class OrderForm extends ContentEntityForm {
     }
     if (isset($form['mail'])) {
       $form['mail']['#group'] = 'customer';
+
+      if ($order->getState()->getId() === 'draft') {
+        $form['mail']['#disabled'] = TRUE;
+        $form['mail']['widget'][0]['value']['#description'] = $this->t('Cannot be directly set for draft orders; updates based on checkout input or user email address.');
+      }
     }
     elseif (!empty($order->getEmail())) {
       $form['customer']['mail'] = $this->fieldAsReadOnly($this->t('Contact email'), $order->getEmail());

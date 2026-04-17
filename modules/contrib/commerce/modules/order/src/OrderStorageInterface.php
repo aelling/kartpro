@@ -2,8 +2,8 @@
 
 namespace Drupal\commerce_order;
 
-use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
+use Drupal\commerce_order\Entity\OrderInterface;
 
 /**
  * Defines the interface for order storage.

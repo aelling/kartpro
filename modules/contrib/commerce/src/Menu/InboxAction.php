@@ -2,11 +2,11 @@
 
 namespace Drupal\commerce\Menu;
 
-use Drupal\commerce\InboxMessageStorageInterface;
 use Drupal\Core\Menu\LocalActionDefault;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\RouteProviderInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\commerce\InboxMessageStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -57,7 +57,7 @@ class InboxAction extends LocalActionDefault {
   /**
    * {@inheritdoc}
    */
-  public function getTitle(Request $request = NULL) {
+  public function getTitle(?Request $request = NULL) {
     $count = $this->inboxMessageStorage->getUnreadCount();
     return $count ? $this->t('Commerce inbox (@count)', ['@count' => $count]) : $this->t('Commerce inbox');
   }

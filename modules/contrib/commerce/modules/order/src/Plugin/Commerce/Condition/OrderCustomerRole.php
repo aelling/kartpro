@@ -2,23 +2,24 @@
 
 namespace Drupal\commerce_order\Plugin\Commerce\Condition;
 
-use Drupal\commerce\EntityHelper;
-use Drupal\commerce\Plugin\Commerce\Condition\ConditionBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\commerce\Attribute\CommerceCondition;
+use Drupal\commerce\EntityHelper;
+use Drupal\commerce\Plugin\Commerce\Condition\ConditionBase;
 use Drupal\user\Entity\Role;
 
 /**
  * Provides the customer role condition for orders.
- *
- * @CommerceCondition(
- *   id = "order_customer_role",
- *   label = @Translation("Customer role"),
- *   category = @Translation("Customer"),
- *   entity_type = "commerce_order",
- *   weight = -1,
- * )
  */
+#[CommerceCondition(
+  id: "order_customer_role",
+  label: new TranslatableMarkup("Customer role"),
+  entity_type: "commerce_order",
+  category: new TranslatableMarkup("Customer"),
+  weight: -1,
+)]
 class OrderCustomerRole extends ConditionBase {
 
   /**

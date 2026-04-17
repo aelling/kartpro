@@ -2,17 +2,20 @@
 
 namespace Drupal\Tests\commerce_product\FunctionalJavascript;
 
-use Drupal\commerce_product\Entity\ProductType;
-use Drupal\commerce_product\Entity\ProductVariationType;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Url;
+use Drupal\commerce_product\Entity\ProductType;
+use Drupal\commerce_product\Entity\ProductVariationType;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\Tests\system\Traits\OffCanvasTestTrait;
 
 /**
  * @group commerce
  */
 class ProductLayoutBuilderIntegrationTest extends ProductWebDriverTestBase {
+
+  use OffCanvasTestTrait;
 
   /**
    * {@inheritdoc}
@@ -22,9 +25,12 @@ class ProductLayoutBuilderIntegrationTest extends ProductWebDriverTestBase {
     'layout_discovery',
     'layout_builder',
     'commerce_cart',
+    'commerce_product',
     'image',
+    'off_canvas_test',
     'views',
     'views_ui',
+    'commerce_product_test',
   ];
 
   /**
@@ -44,6 +50,20 @@ class ProductLayoutBuilderIntegrationTest extends ProductWebDriverTestBase {
       'administer site configuration',
       'administer views',
     ], parent::getAdministratorPermissions());
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function tearDown(): void {
+    // Workaround to the faulty deprecation check performed in the parent method
+    // Somehow, the $warnings array contain non string items causing the
+    // str_starts_with() check to trigger a TypeError.
+    // @see https://www.drupal.org/project/drupal/issues/3568635.
+    $this->getSession()->executeScript(
+      "sessionStorage.setItem('js_testing_log_test.warnings', '[]');"
+    );
+    parent::tearDown();
   }
 
   /**
@@ -259,6 +279,7 @@ class ProductLayoutBuilderIntegrationTest extends ProductWebDriverTestBase {
     $this->assertSession()->pageTextContains('You are editing the layout for this Default product.');
     $this->addBlockToLayout('SKU');
     $this->getSession()->getPage()->pressButton('Save layout');
+    $this->assertNotEmpty($this->assertSession()->waitForElement('css', '.messages--status'));
     $this->assertSession()->pageTextContains('The layout override has been saved.');
 
     $this->drupalGet($product->toUrl());
@@ -345,6 +366,42 @@ class ProductLayoutBuilderIntegrationTest extends ProductWebDriverTestBase {
   }
 
   /**
+   * Tests that an extra field can be added to the layout.
+   */
+  public function testExtraFieldInLayoutBuilder() {
+    $variation = $this->createEntity('commerce_product_variation', [
+      'type' => 'default',
+      'sku' => 'variation',
+      'price' => [
+        'number' => 10,
+        'currency_code' => 'USD',
+      ],
+    ]);
+
+    $product = $this->createEntity('commerce_product', [
+      'type' => 'default',
+      'title' => $this->randomMachineName(),
+      'stores' => $this->stores,
+      'body' => ['value' => 'Testing product variation extra field injection!'],
+      'variations' => [$variation],
+    ]);
+
+    $this->enableLayoutsForBundle('default');
+    $this->addBlockToLayout('Variations', function () {
+      $this->getSession()->getPage()->selectFieldOption('Label', '- Hidden -');
+      $this->getSession()->getPage()->selectFieldOption('Formatter', 'Rendered entity');
+      $this->assertSession()->assertWaitOnAjaxRequest();
+    });
+    $save_layout = $this->getSession()->getPage()->findButton('Save layout');
+    $save_layout->focus();
+    $save_layout->click();
+
+    // Confirm that extra field shown correctly.
+    $this->drupalGet($product->toUrl());
+    $this->assertSession()->pageTextContains('Extra field content');
+  }
+
+  /**
    * Configures a default layout for a product type.
    */
   protected function configureDefaultLayout() {
@@ -364,6 +421,7 @@ class ProductLayoutBuilderIntegrationTest extends ProductWebDriverTestBase {
     $save_layout = $this->getSession()->getPage()->findButton('Save layout');
     $save_layout->focus();
     $save_layout->click();
+    $this->assertNotEmpty($this->assertSession()->waitForElement('css', '.messages--status'));
     $this->assertSession()->pageTextContains('The layout has been saved.');
   }
 
@@ -410,7 +468,7 @@ class ProductLayoutBuilderIntegrationTest extends ProductWebDriverTestBase {
    * @param callable|null $configure
    *   A callback that is invoked to configure the block.
    */
-  protected function addBlockToLayout($block_title, callable $configure = NULL) {
+  protected function addBlockToLayout($block_title, ?callable $configure = NULL) {
     $assert_session = $this->assertSession();
     $assert_session->linkExists('Add block');
     $this->clickLink('Add block');
@@ -434,7 +492,8 @@ class ProductLayoutBuilderIntegrationTest extends ProductWebDriverTestBase {
    */
   private function assertOffCanvasFormAfterWait(string $expected_form_id): void {
     $this->assertSession()->assertWaitOnAjaxRequest();
-    $off_canvas = $this->assertSession()->waitForElementVisible('css', '#drupal-off-canvas');
+    $this->waitForOffCanvasArea();
+    $off_canvas = $this->assertSession()->elementExists('css', '#drupal-off-canvas');
     $this->assertNotNull($off_canvas);
     $form_id_element = $off_canvas->find('hidden_field_selector', ['hidden_field', 'form_id']);
     // Ensure the form ID has the correct value and that the form is visible.

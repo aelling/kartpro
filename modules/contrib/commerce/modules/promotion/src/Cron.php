@@ -2,9 +2,9 @@
 
 namespace Drupal\commerce_promotion;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\commerce\CronInterface;
 use Drupal\commerce_promotion\Entity\PromotionInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 
 /**

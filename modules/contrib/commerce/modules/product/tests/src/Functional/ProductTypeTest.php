@@ -47,7 +47,6 @@ class ProductTypeTest extends ProductBrowserTestBase {
     $this->assertNotEmpty($product_type);
     $this->assertEquals($edit['label'], $product_type->label());
     $this->assertEquals($edit['description'], $product_type->getDescription());
-    $this->assertEquals('default', $product_type->getVariationTypeId());
     $this->assertEquals(['default'], $product_type->getVariationTypeIds());
     $this->assertTrue($product_type->allowsMultipleVariations());
     $this->assertTrue($product_type->shouldInjectVariationFields());
@@ -69,7 +68,6 @@ class ProductTypeTest extends ProductBrowserTestBase {
     $this->assertNotEmpty($product_type);
     $this->assertEquals($edit['label'], $product_type->label());
     $this->assertEquals($edit['description'], $product_type->getDescription());
-    $this->assertEquals($edit['id'], $product_type->getVariationTypeId());
     $this->assertEquals([$edit['id']], $product_type->getVariationTypeIds());
     $variation_type = ProductVariationType::load($edit['id']);
     $this->assertNotEmpty($variation_type);
@@ -221,8 +219,7 @@ class ProductTypeTest extends ProductBrowserTestBase {
     $product_type = $this->createEntity('commerce_product_type', [
       'id' => 'foo',
       'label' => 'foo',
-      'variationType' => $variation_type->id(),
-      'variationTypes' => [],
+      'variationTypes' => [$variation_type->id()],
     ]);
     $product = $this->createEntity('commerce_product', [
       'type' => $product_type->id(),

@@ -124,6 +124,17 @@ final class OrderEvents {
   const ORDER_DELETE = 'commerce_order.commerce_order.delete';
 
   /**
+   * Name of the event fired when building the order total summary.
+   *
+   * Allows modules to alter the adjustments labels for example.
+   *
+   * @Event
+   *
+   * @see \Drupal\commerce_order\Event\OrderSummaryBuildTotalsEvent
+   */
+  const ORDER_SUMMARY_BUILD_TOTALS = 'commerce_order.order_summary_build_totals';
+
+  /**
    * Name of the event fired after loading an order item.
    *
    * @Event

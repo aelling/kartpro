@@ -5,7 +5,7 @@ package: Testing
 dependencies:
   - commerce:commerce_product
 
-# Information added by Drupal.org packaging script on 2024-08-22
-version: '8.x-2.40'
+# Information added by Drupal.org packaging script on 2026-03-25
+version: '3.3.4'
 project: 'commerce'
-datestamp: 1724356773
+datestamp: 1774453533

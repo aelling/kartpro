@@ -4,6 +4,7 @@ namespace Drupal\commerce\Plugin\views\field;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\views\Attribute\ViewsField;
 use Drupal\views\Plugin\views\field\EntityField;
 use Drupal\views\ResultRow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -14,9 +15,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Can be configured to show nothing when there's only one possible bundle.
  *
  * @ingroup views_field_handlers
- *
- * @ViewsField("commerce_entity_bundle")
  */
+#[ViewsField("commerce_entity_bundle")]
 class EntityBundle extends EntityField {
 
   /**

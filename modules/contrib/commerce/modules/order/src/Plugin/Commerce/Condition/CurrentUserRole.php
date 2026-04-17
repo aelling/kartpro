@@ -4,26 +4,27 @@ declare(strict_types=1);
 
 namespace Drupal\commerce_order\Plugin\Commerce\Condition;
 
-use Drupal\commerce\Plugin\Commerce\Condition\ConditionBase;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\commerce\Attribute\CommerceCondition;
+use Drupal\commerce\Plugin\Commerce\Condition\ConditionBase;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides the current user role condition for orders.
- *
- * @CommerceCondition(
- *   id = "current_user_role",
- *   label = @Translation("User role"),
- *   category = @Translation("Current request"),
- *   entity_type = "commerce_order",
- * )
  */
+#[CommerceCondition(
+  id: "current_user_role",
+  label: new TranslatableMarkup("User role"),
+  entity_type: "commerce_order",
+  category: new TranslatableMarkup("Current request"),
+)]
 class CurrentUserRole extends ConditionBase implements ContainerFactoryPluginInterface {
 
   /**

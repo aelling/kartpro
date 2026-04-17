@@ -3,13 +3,13 @@
 namespace Drupal\commerce_product\Plugin\views\field;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\Attribute\ViewsField;
 use Drupal\views\ResultRow;
 
 /**
  * Field handler to present a button to copy variation link.
- *
- * @ViewsField("commerce_product_variation_copy_link")
  */
+#[ViewsField("commerce_product_variation_copy_link")]
 class ProductVariationCopyLink extends ProductVariationViewLink {
 
   /**

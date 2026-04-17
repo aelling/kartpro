@@ -2,11 +2,11 @@
 
 namespace Drupal\commerce_promotion;
 
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\commerce\CommerceContentEntityStorage;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_promotion\Event\FilterPromotionsEvent;
 use Drupal\commerce_promotion\Event\PromotionEvents;
-use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

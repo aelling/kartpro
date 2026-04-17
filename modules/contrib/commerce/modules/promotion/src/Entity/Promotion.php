@@ -2,6 +2,11 @@
 
 namespace Drupal\commerce_promotion\Entity;
 
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Entity\EntityChangedTrait;
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\commerce\ConditionGroup;
 use Drupal\commerce\Entity\CommerceContentEntityBase;
 use Drupal\commerce\EntityOwnerTrait;
@@ -11,11 +16,6 @@ use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_price\Calculator;
 use Drupal\commerce_promotion\Plugin\Commerce\PromotionOffer\OrderItemPromotionOfferInterface;
 use Drupal\commerce_promotion\Plugin\Commerce\PromotionOffer\PromotionOfferInterface;
-use Drupal\Core\Datetime\DrupalDateTime;
-use Drupal\Core\Entity\EntityChangedTrait;
-use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 
 /**
@@ -47,7 +47,7 @@ use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
  *       "disable" = "Drupal\commerce_promotion\Form\PromotionDisableForm",
  *       "edit" = "Drupal\commerce_promotion\Form\PromotionForm",
  *       "duplicate" = "Drupal\commerce_promotion\Form\PromotionForm",
- *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm"
+ *       "delete" = "Drupal\commerce_promotion\Form\PromotionDeleteForm"
  *     },
  *     "local_task_provider" = {
  *       "default" = "Drupal\entity\Menu\DefaultEntityLocalTaskProvider",
@@ -167,7 +167,7 @@ class Promotion extends CommerceContentEntityBase implements PromotionInterface 
    * {@inheritdoc}
    */
   public function getCreatedTime() {
-    return $this->get('created')->value;
+    return (int) $this->get('created')->value;
   }
 
   /**
@@ -253,6 +253,8 @@ class Promotion extends CommerceContentEntityBase implements PromotionInterface 
     if (!$this->get('offer')->isEmpty()) {
       return $this->get('offer')->first()->getTargetInstance();
     }
+
+    return NULL;
   }
 
   /**
@@ -447,7 +449,7 @@ class Promotion extends CommerceContentEntityBase implements PromotionInterface 
   /**
    * {@inheritdoc}
    */
-  public function setEndDate(DrupalDateTime $end_date = NULL) {
+  public function setEndDate(?DrupalDateTime $end_date = NULL) {
     $this->get('end_date')->value = NULL;
     if ($end_date) {
       $this->get('end_date')->value = $end_date->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
@@ -682,6 +684,8 @@ class Promotion extends CommerceContentEntityBase implements PromotionInterface 
    * {@inheritdoc}
    */
   public static function postDelete(EntityStorageInterface $storage, array $entities) {
+    parent::postDelete($storage, $entities);
+
     // Delete the linked coupons and usage records.
     $coupons = [];
     foreach ($entities as $entity) {
@@ -889,6 +893,20 @@ class Promotion extends CommerceContentEntityBase implements PromotionInterface 
         'weight' => 4,
       ]);
 
+    $fields['allow_multiple_coupons'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Allow multiple coupons'))
+      ->setDescription(t('Allow multiple coupons to apply to a single order.'))
+      ->setDefaultValue(FALSE)
+      ->setSetting('display_description', TRUE)
+      ->setDisplayOptions('form', [
+        'type' => 'boolean_checkbox',
+        'settings' => [
+          'display_label' => TRUE,
+        ],
+      ])
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
     $fields['require_coupon'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Require a coupon to apply this promotion'))
       ->setDefaultValue(FALSE)
@@ -986,6 +1004,13 @@ class Promotion extends CommerceContentEntityBase implements PromotionInterface 
     asort($plugins);
 
     return $plugins;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isMultipleCouponsAllowed() {
+    return (bool) $this->get('allow_multiple_coupons')->value;
   }
 
 }

@@ -2,15 +2,15 @@
 
 namespace Drupal\commerce_tax\Controller;
 
-use Drupal\commerce\UrlData;
-use Drupal\commerce_tax\Plugin\Commerce\TaxNumberType\SupportsVerificationInterface;
-use Drupal\commerce_tax\Plugin\Commerce\TaxNumberType\VerificationResult;
-use Drupal\commerce_tax\Plugin\Field\FieldType\TaxNumberItemInterface;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\commerce\UrlData;
+use Drupal\commerce_tax\Plugin\Commerce\TaxNumberType\SupportsVerificationInterface;
+use Drupal\commerce_tax\Plugin\Commerce\TaxNumberType\VerificationResult;
+use Drupal\commerce_tax\Plugin\Field\FieldType\TaxNumberItemInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;

@@ -10,6 +10,11 @@
   font-style: italic;
 }
 
+.checkout-pane-overview .pane-configuration-admin-description,
+.checkout-pane-overview .pane-configuration-default-step {
+  font-size: 0.9em;
+  font-style: italic;
+}
 .checkout-pane-overview .pane-configuration-summary-cell {
   line-height: 1em;
 }

@@ -14,7 +14,7 @@ class ResponseSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     $events[KernelEvents::RESPONSE][] = ['onResponse'];
     return $events;
   }
@@ -30,7 +30,7 @@ class ResponseSubscriber implements EventSubscriberInterface {
       return;
     }
     $response = $event->getResponse();
-    $response->headers->set('X-Commerce-Core', '2');
+    $response->headers->set('X-Commerce-Core', '3');
   }
 
 }

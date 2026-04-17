@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\commerce_tax\Kernel\Plugin\Commerce\TaxNumberType;
 
+use Drupal\Tests\commerce_order\Kernel\OrderKernelTestBase;
 use Drupal\commerce_tax\Plugin\Commerce\TaxNumberType\EuropeanUnionVat;
 use Drupal\commerce_tax\Plugin\Commerce\TaxNumberType\VerificationResult;
-use Drupal\Tests\commerce_order\Kernel\OrderKernelTestBase;
 
 /**
  * @coversDefaultClass \Drupal\commerce_tax\Plugin\Commerce\TaxNumberType\EuropeanUnionVat
@@ -102,7 +102,7 @@ class EuropeanUnionVatTest extends OrderKernelTestBase {
   public function testVerify() {
     $request_time = $this->container->get('datetime.time')->getRequestTime();
     $wsdl = \Drupal::service('extension.list.module')->getPath('commerce_tax') . '/tests/fixtures/checkVatService.wsdl';
-    $soap_client = $this->getMockFromWsdl($wsdl);
+    $soap_client = $this->createMock(\SoapClient::class);
     // Modify the plugin's protected property to use the mock.
     $property = new \ReflectionProperty(EuropeanUnionVat::class, 'soapClient');
     $property->setAccessible(TRUE);

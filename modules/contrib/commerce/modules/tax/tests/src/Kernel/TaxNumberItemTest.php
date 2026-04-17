@@ -2,12 +2,12 @@
 
 namespace Drupal\Tests\commerce_tax\Kernel;
 
-use Drupal\commerce_tax\Plugin\Commerce\TaxNumberType\VerificationResult;
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Tests\commerce\Kernel\CommerceKernelTestBase;
+use Drupal\commerce_tax\Plugin\Commerce\TaxNumberType\VerificationResult;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\Tests\commerce\Kernel\CommerceKernelTestBase;
 
 /**
  * Tests the 'commerce_tax_number' field type.

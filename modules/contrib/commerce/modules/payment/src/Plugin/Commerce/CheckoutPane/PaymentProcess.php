@@ -2,9 +2,15 @@
 
 namespace Drupal\commerce_payment\Plugin\Commerce\CheckoutPane;
 
+use Drupal\commerce\Response\NeedsRedirectException;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Url;
 use Drupal\commerce\InlineFormManager;
+use Drupal\commerce_checkout\Attribute\CommerceCheckoutPane;
 use Drupal\commerce_checkout\Plugin\Commerce\CheckoutFlow\CheckoutFlowInterface;
-use Drupal\commerce_checkout\Plugin\Commerce\CheckoutPane\CheckoutPaneBase;
 use Drupal\commerce_payment\Entity\PaymentGatewayInterface;
 use Drupal\commerce_payment\Event\FailedPaymentEvent;
 use Drupal\commerce_payment\Event\PaymentEvents;
@@ -13,24 +19,18 @@ use Drupal\commerce_payment\Exception\PaymentGatewayException;
 use Drupal\commerce_payment\Plugin\Commerce\PaymentGateway\ManualPaymentGatewayInterface;
 use Drupal\commerce_payment\Plugin\Commerce\PaymentGateway\OffsitePaymentGatewayInterface;
 use Drupal\commerce_payment\Plugin\Commerce\PaymentGateway\SupportsStoredPaymentMethodsInterface;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Link;
-use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Provides the payment process pane.
- *
- * @CommerceCheckoutPane(
- *   id = "payment_process",
- *   label = @Translation("Payment process"),
- *   default_step = "payment",
- *   wrapper_element = "container",
- * )
  */
-class PaymentProcess extends CheckoutPaneBase {
+#[CommerceCheckoutPane(
+  id: "payment_process",
+  label: new TranslatableMarkup("Payment process"),
+  default_step: "payment",
+  wrapper_element: "container",
+)]
+class PaymentProcess extends PaymentCheckoutPaneBase {
 
   /**
    * The inline form manager.
@@ -43,18 +43,12 @@ class PaymentProcess extends CheckoutPaneBase {
   protected LoggerChannelInterface $logger;
 
   /**
-   * The event dispatcher.
-   */
-  protected EventDispatcherInterface $eventDispatcher;
-
-  /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, CheckoutFlowInterface $checkout_flow = NULL): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, ?CheckoutFlowInterface $checkout_flow = NULL): self {
     $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition, $checkout_flow);
     $instance->inlineFormManager = $container->get('plugin.manager.commerce_inline_form');
     $instance->logger = $container->get('logger.channel.commerce_payment');
-    $instance->eventDispatcher = $container->get('event_dispatcher');
     return $instance;
   }
 
@@ -71,6 +65,7 @@ class PaymentProcess extends CheckoutPaneBase {
    * {@inheritdoc}
    */
   public function buildConfigurationSummary() {
+    $parent_summary = parent::buildConfigurationSummary();
     if (!empty($this->configuration['capture'])) {
       $summary = $this->t('Transaction mode: Authorize and capture');
     }
@@ -78,7 +73,7 @@ class PaymentProcess extends CheckoutPaneBase {
       $summary = $this->t('Transaction mode: Authorize only');
     }
 
-    return $summary;
+    return $parent_summary ? implode('<br>', [$parent_summary, $summary]) : $summary;
   }
 
   /**
@@ -116,13 +111,14 @@ class PaymentProcess extends CheckoutPaneBase {
    * {@inheritdoc}
    */
   public function isVisible() {
-    if ($this->order->isPaid() || !$this->order->getTotalPrice() || $this->order->getTotalPrice()->isZero()) {
-      // No payment is needed if the order is free or has already been paid.
-      return FALSE;
-    }
     $payment_info_pane = $this->checkoutFlow->getPane('payment_information');
     if (!$payment_info_pane->isVisible() || $payment_info_pane->getStepId() == '_disabled') {
       // Hide the pane if the PaymentInformation pane has been disabled.
+      return FALSE;
+    }
+    if ($this->order->getBalance()?->isZero() && $this->collectBillingProfileOnly()) {
+      // Payment is not needed because order is already paid, or it did not
+      // opt-in to collect payment for free order.
       return FALSE;
     }
 
@@ -185,10 +181,12 @@ class PaymentProcess extends CheckoutPaneBase {
         $this->checkoutFlow->redirectToStep($next_step_id);
       }
     }
+    catch (NeedsRedirectException $e) {
+      throw $e;
+    }
     // Consistently log exceptions from any type of payment gateway.
     catch (PaymentGatewayException $e) {
       $this->logger->error($e->getMessage());
-
       $message = $e instanceof DeclineException ?
         $this->t('We encountered an error processing your payment method. Please verify your details and try again.') :
         $this->t('We encountered an unexpected error processing your payment. Please try again later.');
@@ -198,6 +196,12 @@ class PaymentProcess extends CheckoutPaneBase {
       $this->eventDispatcher->dispatch($event, PaymentEvents::PAYMENT_FAILURE);
 
       $this->checkoutFlow->redirectToStep($error_step_id);
+    }
+    // In case of a generic exception, make sure we don't just crash.
+    catch (\Exception $exception) {
+      // Log the exception, don't redirect from the catch block as we already
+      // have code redirecting to the error step right after this.
+      $this->logger->error($exception->getMessage());
     }
 
     // If we get to this point the payment gateway is not properly configured.

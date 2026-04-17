@@ -2,11 +2,11 @@
 
 namespace Drupal\commerce_payment\Entity;
 
+use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\commerce\CommerceSinglePluginCollection;
 use Drupal\commerce\ConditionGroup;
 use Drupal\commerce\Plugin\Commerce\Condition\ParentEntityAwareInterface;
 use Drupal\commerce_order\Entity\OrderInterface;
-use Drupal\Core\Config\Entity\ConfigEntityBase;
 
 /**
  * Defines the payment gateway entity class.

@@ -5,28 +5,27 @@ namespace Drupal\commerce_order\Plugin\Field\FieldWidget;
 use Drupal\commerce\Context;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Entity\OrderItemInterface;
-use Drupal\commerce_order\Form\OrderForm;
+use Drupal\commerce_order\Form\OrderFormBase;
 use Drupal\commerce_price\Price;
 use Drupal\commerce_price\Resolver\ChainPriceResolverInterface;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'commerce_unit_price' widget.
- *
- * @FieldWidget(
- *   id = "commerce_unit_price",
- *   label = @Translation("Unit price"),
- *   field_types = {
- *     "commerce_price",
- *   }
- * )
  */
+#[FieldWidget(
+  id: "commerce_unit_price",
+  label: new TranslatableMarkup("Unit price"),
+  field_types: ["commerce_price"],
+)]
 class UnitPriceWidget extends WidgetBase implements ContainerFactoryPluginInterface {
 
   /**
@@ -223,7 +222,7 @@ class UnitPriceWidget extends WidgetBase implements ContainerFactoryPluginInterf
     }
 
     $form_object = $form_state->getFormObject();
-    if ($form_object instanceof OrderForm) {
+    if ($form_object instanceof OrderFormBase) {
       return $form_object->getEntity();
     }
     return NULL;

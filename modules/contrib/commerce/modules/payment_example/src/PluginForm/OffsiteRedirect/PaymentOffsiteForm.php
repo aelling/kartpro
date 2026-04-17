@@ -2,10 +2,10 @@
 
 namespace Drupal\commerce_payment_example\PluginForm\OffsiteRedirect;
 
-use Drupal\commerce_payment\Exception\PaymentGatewayException;
-use Drupal\commerce_payment\PluginForm\PaymentOffsiteForm as BasePaymentOffsiteForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\commerce_payment\Exception\PaymentGatewayException;
+use Drupal\commerce_payment\PluginForm\PaymentOffsiteForm as BasePaymentOffsiteForm;
 
 class PaymentOffsiteForm extends BasePaymentOffsiteForm {
 

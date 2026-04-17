@@ -2,9 +2,9 @@
 
 namespace Drupal\commerce_order\Form;
 
-use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\commerce_order\Entity\OrderInterface;
 
 /**
  * Provides a form for selecting the order's customer (uid and mail fields).
@@ -40,7 +40,7 @@ trait CustomerFormTrait {
    * @return array
    *   The parent form with the customer form elements added.
    */
-  public function buildCustomerForm(array $form, FormStateInterface $form_state, OrderInterface $order = NULL) {
+  public function buildCustomerForm(array $form, FormStateInterface $form_state, ?OrderInterface $order = NULL) {
     $selected_customer_type = $form_state->getValue(['customer_type'], 'existing');
     $wrapper_id = Html::getUniqueId('customer-fieldset-wrapper');
 

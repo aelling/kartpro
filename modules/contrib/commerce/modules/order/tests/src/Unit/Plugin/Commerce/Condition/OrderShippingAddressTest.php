@@ -3,11 +3,11 @@
 namespace Drupal\Tests\commerce_order\Unit\Plugin\Commerce\Condition;
 
 use CommerceGuys\Addressing\Address;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Tests\UnitTestCase;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Plugin\Commerce\Condition\OrderShippingAddress;
-use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\profile\Entity\ProfileInterface;
-use Drupal\Tests\UnitTestCase;
 
 /**
  * @coversDefaultClass \Drupal\commerce_order\Plugin\Commerce\Condition\OrderShippingAddress

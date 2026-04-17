@@ -2,12 +2,13 @@
 
 namespace Drupal\commerce_payment\Entity;
 
-use Drupal\commerce_price\Price;
 use Drupal\Core\Entity\ContentEntityBase;
+use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityMalformedException;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\commerce_price\Price;
 
 /**
  * Defines the payment entity class.
@@ -57,6 +58,8 @@ use Drupal\Core\Field\BaseFieldDefinition;
  * )
  */
 class Payment extends ContentEntityBase implements PaymentInterface {
+
+  use EntityChangedTrait;
 
   /**
    * {@inheritdoc}
@@ -151,7 +154,11 @@ class Payment extends ContentEntityBase implements PaymentInterface {
    * {@inheritdoc}
    */
   public function getRemoteState() {
-    return $this->get('remote_state')->value;
+    if (!$this->get('remote_state')->isEmpty()) {
+      return $this->get('remote_state')->value;
+    }
+
+    return NULL;
   }
 
   /**
@@ -166,7 +173,11 @@ class Payment extends ContentEntityBase implements PaymentInterface {
    * {@inheritdoc}
    */
   public function getAvsResponseCode() {
-    return $this->get('avs_response_code')->value;
+    if (!$this->get('avs_response_code')->isEmpty()) {
+      return $this->get('avs_response_code')->value;
+    }
+
+    return NULL;
   }
 
   /**
@@ -181,7 +192,11 @@ class Payment extends ContentEntityBase implements PaymentInterface {
    * {@inheritdoc}
    */
   public function getAvsResponseCodeLabel() {
-    return $this->get('avs_response_code_label')->value;
+    if (!$this->get('avs_response_code_label')->isEmpty()) {
+      return $this->get('avs_response_code_label')->value;
+    }
+
+    return NULL;
   }
 
   /**
@@ -203,6 +218,8 @@ class Payment extends ContentEntityBase implements PaymentInterface {
       }
       return $balance;
     }
+
+    return NULL;
   }
 
   /**
@@ -212,6 +229,8 @@ class Payment extends ContentEntityBase implements PaymentInterface {
     if (!$this->get('amount')->isEmpty()) {
       return $this->get('amount')->first()->toPrice();
     }
+
+    return NULL;
   }
 
   /**
@@ -229,6 +248,8 @@ class Payment extends ContentEntityBase implements PaymentInterface {
     if (!$this->get('refunded_amount')->isEmpty()) {
       return $this->get('refunded_amount')->first()->toPrice();
     }
+
+    return NULL;
   }
 
   /**
@@ -258,7 +279,11 @@ class Payment extends ContentEntityBase implements PaymentInterface {
    * {@inheritdoc}
    */
   public function getAuthorizedTime() {
-    return $this->get('authorized')->value;
+    if (!$this->get('authorized')->isEmpty()) {
+      return (int) $this->get('authorized')->value;
+    }
+
+    return NULL;
   }
 
   /**
@@ -281,7 +306,7 @@ class Payment extends ContentEntityBase implements PaymentInterface {
    * {@inheritdoc}
    */
   public function getExpiresTime() {
-    return $this->get('expires')->value;
+    return (int) $this->get('expires')->value;
   }
 
   /**
@@ -303,7 +328,11 @@ class Payment extends ContentEntityBase implements PaymentInterface {
    * {@inheritdoc}
    */
   public function getCompletedTime() {
-    return $this->get('completed')->value;
+    if (!$this->get('completed')->isEmpty()) {
+      return (int) $this->get('completed')->value;
+    }
+
+    return NULL;
   }
 
   /**
@@ -311,6 +340,25 @@ class Payment extends ContentEntityBase implements PaymentInterface {
    */
   public function setCompletedTime($timestamp) {
     $this->set('completed', $timestamp);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCreatedTime(): ?int {
+    if ($this->get('created')->isEmpty()) {
+      return NULL;
+    }
+
+    return (int) $this->get('created')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setCreatedTime(int $timestamp): static {
+    $this->set('created', $timestamp);
     return $this;
   }
 
@@ -386,7 +434,14 @@ class Payment extends ContentEntityBase implements PaymentInterface {
       ->setLabel(t('Payment gateway'))
       ->setDescription(t('The payment gateway.'))
       ->setRequired(TRUE)
-      ->setSetting('target_type', 'commerce_payment_gateway');
+      ->setSetting('target_type', 'commerce_payment_gateway')
+      ->setDisplayOptions('view', [
+        'label' => 'inline',
+        'type' => 'entity_reference_label',
+        'settings' => [
+          'link' => FALSE,
+        ],
+      ]);
 
     $fields['payment_gateway_mode'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Payment gateway mode'))
@@ -397,7 +452,14 @@ class Payment extends ContentEntityBase implements PaymentInterface {
       ->setLabel(t('Payment method'))
       ->setDescription(t('The payment method.'))
       ->setSetting('target_type', 'commerce_payment_method')
-      ->setReadOnly(TRUE);
+      ->setReadOnly(TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'inline',
+        'type' => 'entity_reference_label',
+        'settings' => [
+          'link' => FALSE,
+        ],
+      ]);
 
     $fields['order_id'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Order'))
@@ -421,7 +483,11 @@ class Payment extends ContentEntityBase implements PaymentInterface {
       ->setLabel(t('Amount'))
       ->setDescription(t('The payment amount.'))
       ->setRequired(TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'inline',
+        'type' => 'commerce_price_default',
+      ]);
 
     $fields['refunded_amount'] = BaseFieldDefinition::create('commerce_price')
       ->setLabel(t('Refunded amount'))
@@ -434,9 +500,8 @@ class Payment extends ContentEntityBase implements PaymentInterface {
       ->setRequired(TRUE)
       ->setSetting('max_length', 255)
       ->setDisplayOptions('view', [
-        'label' => 'hidden',
+        'label' => 'inline',
         'type' => 'list_default',
-        'weight' => 0,
       ])
       ->setDisplayConfigurable('view', TRUE)
       ->setSetting('workflow_callback', ['\Drupal\commerce_payment\Entity\Payment', 'getWorkflowId']);
@@ -476,7 +541,39 @@ class Payment extends ContentEntityBase implements PaymentInterface {
     $fields['captured'] = BaseFieldDefinition::create('timestamp')
       ->setLabel(t('Captured'))
       ->setDescription(t('The time when the payment was captured.'))
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'inline',
+        'type' => 'timestamp',
+        'settings' => [
+          'date_format' => 'short',
+        ],
+      ]);
+
+    $fields['created'] = BaseFieldDefinition::create('created')
+      ->setLabel(t('Created'))
+      ->setDescription(t('The time when the payment was created.'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'inline',
+        'type' => 'timestamp',
+        'settings' => [
+          'date_format' => 'short',
+        ],
+      ]);
+
+    $fields['changed'] = BaseFieldDefinition::create('changed')
+      ->setLabel(t('Changed'))
+      ->setDescription(t('The time when the payment was last saved.'))
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'inline',
+        'type' => 'timestamp',
+        'settings' => [
+          'date_format' => 'short',
+        ],
+      ]);
 
     return $fields;
   }

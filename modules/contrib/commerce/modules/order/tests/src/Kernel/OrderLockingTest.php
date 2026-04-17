@@ -2,12 +2,12 @@
 
 namespace Drupal\Tests\commerce_order\Kernel;
 
+use Drupal\Core\Entity\EntityStorageException;
 use Drupal\commerce_order\Entity\Order;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Entity\OrderItem;
 use Drupal\commerce_order\Exception\OrderVersionMismatchException;
 use Drupal\commerce_price\Price;
-use Drupal\Core\Entity\EntityStorageException;
 
 /**
  * Tests order locking.

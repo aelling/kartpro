@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\commerce_promotion\Kernel;
 
+use Drupal\Tests\commerce_order\Kernel\OrderKernelTestBase;
 use Drupal\commerce_order\Entity\Order;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Entity\OrderItem;
@@ -9,7 +10,6 @@ use Drupal\commerce_price\Price;
 use Drupal\commerce_promotion\Entity\Coupon;
 use Drupal\commerce_promotion\Entity\Promotion;
 use Drupal\language\Entity\ConfigurableLanguage;
-use Drupal\Tests\commerce_order\Kernel\OrderKernelTestBase;
 use Drupal\user\UserInterface;
 
 /**
@@ -379,6 +379,160 @@ class PromotionOrderProcessorTest extends OrderKernelTestBase {
     $language = ConfigurableLanguage::createFromLangcode($langcode);
     $this->container->get('language.default')->set($language);
     \Drupal::languageManager()->reset();
+  }
+
+  /**
+   * Tests coupon redemption behavior with allow_multiple_coupons.
+   */
+  public function testMultipleCouponRedemption() {
+    $order_refresh = $this->container->get('commerce_order.order_refresh');
+
+    // Create a promotion that does NOT allow multiple coupons.
+    $promotion1 = Promotion::create([
+      'name' => 'Single Use Promotion',
+      'allow_multiple_coupons' => FALSE,
+      'order_types' => [$this->order->bundle()],
+      'stores' => [$this->store->id()],
+      'status' => TRUE,
+    ]);
+    $promotion1->save();
+
+    // Create a promotion that allows multiple coupons.
+    $promotion2 = Promotion::create([
+      'name' => 'Multi Use Promotion',
+      'allow_multiple_coupons' => TRUE,
+      'order_types' => [$this->order->bundle()],
+      'stores' => [$this->store->id()],
+      'status' => TRUE,
+    ]);
+    $promotion2->save();
+
+    // Create coupons for both promotions.
+    $coupon1 = Coupon::create(['code' => 'SAVE10_1', 'promotion_id' => $promotion1->id()]);
+    $coupon1->save();
+
+    $coupon2 = Coupon::create(['code' => 'SAVE10_2', 'promotion_id' => $promotion1->id()]);
+    $coupon2->save();
+
+    $coupon3 = Coupon::create(['code' => 'SAVE15_1', 'promotion_id' => $promotion2->id()]);
+    $coupon3->save();
+
+    $coupon4 = Coupon::create(['code' => 'SAVE15_2', 'promotion_id' => $promotion2->id()]);
+    $coupon4->save();
+
+    // Apply multiple coupons from promotion 2 (should apply successfully).
+    $this->order->set('coupons', [$coupon3, $coupon4]);
+    $this->order->save();
+    $order_refresh->refresh($this->order);
+    $this->assertCount(2, $this->order->get('coupons')->referencedEntities(), 'Both coupons applied when allow_multiple_coupons is TRUE.');
+
+    $this->assertTrue($coupon2->available($this->order), "Coupon from promotion that does not allow multiple coupons should be available if no other coupons from the same promotion are applied.");
+
+    // Apply a single coupon from promotion 1 (should apply successfully).
+    $this->order->set('coupons', [$coupon1]);
+    $this->order->save();
+    $order_refresh->refresh($this->order);
+    $this->assertCount(1, $this->order->get('coupons')->referencedEntities(), 'Single coupon applied correctly.');
+
+    $this->assertFalse($coupon2->available($this->order), "Second coupon from the same promotion should not be available when allow_multiple_coupons is FALSE.");
+  }
+
+  /**
+   * Tests promotion behavior with sequence.
+   *
+   * @dataProvider promotionDataParameters
+   */
+  public function testPromotionApplyingSequence(
+    array $plugin_ids,
+    array $weights,
+    Price $expected_order_total,
+    bool $enforce_weight_ordering = FALSE,
+  ) {
+    $this->config('commerce_promotion.settings')
+      ->set('enforce_weight_ordering', $enforce_weight_ordering)
+      ->save();
+
+    // Create promotions and coupons.
+    $coupon_promotion = Promotion::create([
+      'name' => $this->randomString(),
+      'order_types' => [$this->order->bundle()],
+      'stores' => [$this->store->id()],
+      'status' => TRUE,
+      'weight' => $weights[0] ?? 0,
+      'offer' => [
+        'target_plugin_id' => $plugin_ids[0] ?? 'order_item_percentage_off',
+        'target_plugin_configuration' => [
+          'percentage' => '0.15',
+        ],
+      ],
+    ]);
+    $coupon_promotion->save();
+    $promotion = Promotion::create([
+      'name' => $this->randomString(),
+      'order_types' => [$this->order->bundle()],
+      'stores' => [$this->store->id()],
+      'status' => TRUE,
+      'weight' => $weights[1] ?? 0,
+      'offer' => [
+        'target_plugin_id' => $plugin_ids[1] ?? 'order_item_fixed_amount_off',
+        'target_plugin_configuration' => [
+          'amount' => [
+            'number' => '10.00',
+            'currency_code' => 'USD',
+          ],
+        ],
+      ],
+    ]);
+    $promotion->save();
+    $coupon = Coupon::create([
+      'code' => 'SAVE_15_PERCENT',
+      'promotion_id' => $coupon_promotion->id(),
+      'status' => TRUE,
+    ]);
+    $coupon->save();
+    $this->order->get('coupons')->appendItem($coupon);
+
+    // Add order items to the order and save it.
+    $order_item = OrderItem::create([
+      'type' => 'test',
+      'quantity' => 2,
+      'unit_price' => [
+        'number' => '50.00',
+        'currency_code' => 'USD',
+      ],
+    ]);
+    $order_item->save();
+    $this->order->addItem($order_item);
+    $this->order->save();
+    $this->assertTrue($this->order->getTotalPrice()->equals(new Price('100.00', 'USD')));
+    $this->container->get('commerce_order.order_refresh')->refresh($this->order);
+    $this->order->recalculateTotalPrice();
+    $this->assertTrue($this->order->getTotalPrice()->equals($expected_order_total));
+  }
+
+  /**
+   * Data provider for ::testPromotionApplyingSequence.
+   *
+   * @return \Generator
+   *   The test data.
+   */
+  public static function promotionDataParameters(): \Generator {
+    yield [[NULL, NULL], [0, 1], new Price('65.00', 'USD')];
+    yield [[NULL, NULL], [0, 1], new Price('65.00', 'USD'), TRUE];
+    yield [[NULL, NULL], [1, 0], new Price('65.00', 'USD')];
+    yield [[NULL, NULL], [1, 0], new Price('68.00', 'USD'), TRUE];
+    yield [['order_percentage_off', NULL], [0, 1], new Price('65.00', 'USD')];
+    yield [['order_percentage_off', NULL], [0, 1], new Price('65.00', 'USD'), TRUE];
+    yield [['order_percentage_off', NULL], [1, 0], new Price('65.00', 'USD')];
+    yield [['order_percentage_off', NULL], [1, 0], new Price('68.00', 'USD'), TRUE];
+    yield [[NULL, 'order_fixed_amount_off'], [0, 1], new Price('75.00', 'USD')];
+    yield [[NULL, 'order_fixed_amount_off'], [0, 1], new Price('75.00', 'USD'), TRUE];
+    yield [[NULL, 'order_fixed_amount_off'], [1, 0], new Price('75.00', 'USD')];
+    yield [[NULL, 'order_fixed_amount_off'], [1, 0], new Price('75.00', 'USD'), TRUE];
+    yield [['order_percentage_off', 'order_fixed_amount_off'], [0, 1], new Price('75.00', 'USD')];
+    yield [['order_percentage_off', 'order_fixed_amount_off'], [0, 1], new Price('75.00', 'USD'), TRUE];
+    yield [['order_percentage_off', 'order_fixed_amount_off'], [1, 0], new Price('75.00', 'USD')];
+    yield [['order_percentage_off', 'order_fixed_amount_off'], [1, 0], new Price('75.00', 'USD'), TRUE];
   }
 
 }

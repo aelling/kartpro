@@ -5,8 +5,8 @@
  * A test module for the commerce_order module.
  */
 
-use Drupal\commerce_order\Plugin\Field\FieldWidget\AdjustmentDefaultWidget;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\commerce_order\Plugin\Field\FieldWidget\AdjustmentDefaultWidget;
 
 /**
  * Implements hook_field_widget_single_element_form_alter().

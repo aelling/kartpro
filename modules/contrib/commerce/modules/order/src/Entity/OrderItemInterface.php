@@ -2,10 +2,10 @@
 
 namespace Drupal\commerce_order\Entity;
 
-use Drupal\commerce_order\EntityAdjustableInterface;
-use Drupal\commerce_price\Price;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
+use Drupal\commerce_order\EntityAdjustableInterface;
+use Drupal\commerce_price\Price;
 
 /**
  * Defines the interface for order items.

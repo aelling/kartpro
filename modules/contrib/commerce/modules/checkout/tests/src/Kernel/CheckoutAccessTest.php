@@ -2,14 +2,14 @@
 
 namespace Drupal\Tests\commerce_checkout\Kernel;
 
+use Drupal\Core\Routing\RouteObjectInterface;
+use Drupal\Core\Url;
+use Drupal\Tests\commerce_cart\Kernel\CartKernelTestBase;
 use Drupal\commerce_order\Entity\Order;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_product\Entity\Product;
 use Drupal\commerce_product\Entity\ProductVariation;
 use Drupal\commerce_store\StoreCreationTrait;
-use Drupal\Core\Routing\RouteObjectInterface;
-use Drupal\Core\Url;
-use Drupal\Tests\commerce_cart\Kernel\CartKernelTestBase;
 use Drupal\user\UserInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -141,6 +141,18 @@ class CheckoutAccessTest extends CartKernelTestBase {
     $order = $this->createOrder($user1);
     $order->setItems([]);
     $request = $this->createRequest($order);
+    $this->assertFalse($this->accessManager->checkRequest($request, $user1));
+  }
+
+  /**
+   * Tests that orders belonging to disabled stores cannot enter checkout.
+   */
+  public function testDisabledStore() {
+    $user1 = $this->createUser(['access checkout']);
+    $order = $this->createOrder($user1);
+    $request = $this->createRequest($order);
+    $this->assertTrue($this->accessManager->checkRequest($request, $user1));
+    $order->getStore()->setUnpublished()->save();
     $this->assertFalse($this->accessManager->checkRequest($request, $user1));
   }
 

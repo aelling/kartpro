@@ -2,8 +2,8 @@
 
 namespace Drupal\commerce_number_pattern\Entity;
 
-use Drupal\commerce\CommerceSinglePluginCollection;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
+use Drupal\commerce\CommerceSinglePluginCollection;
 
 /**
  * Defines the number pattern entity class.

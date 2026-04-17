@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\commerce_payment\Functional;
 
-use Drupal\commerce_payment\Entity\PaymentGateway;
 use Drupal\Tests\commerce\Functional\CommerceBrowserTestBase;
+use Drupal\commerce_payment\Entity\PaymentGateway;
 
 /**
  * Tests the payment gateway UI.

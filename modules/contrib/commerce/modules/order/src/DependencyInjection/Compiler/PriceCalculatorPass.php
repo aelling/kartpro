@@ -16,7 +16,7 @@ class PriceCalculatorPass implements CompilerPassInterface {
   /**
    * {@inheritdoc}
    */
-  public function process(ContainerBuilder $container) {
+  public function process(ContainerBuilder $container): void {
     $definition = $container->getDefinition('commerce_order.price_calculator');
     $processor_interface = OrderProcessorInterface::class;
     $processors = [];

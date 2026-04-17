@@ -25,8 +25,8 @@ class OrderAccessControlHandler extends EntityAccessControlHandler {
       $operation = 'update';
       $additional_operation = 'unlock';
     }
-    // Unlocking an order requires the same permissions as 'view', with an
-    // additional check to ensure that the order has been placed.
+    // Resending an order receipt requires the same permissions as 'view', with
+    // an additional check to ensure that the order has been placed.
     elseif ($operation == 'resend_receipt') {
       if ($entity->getState()->getId() == 'draft') {
         return AccessResult::forbidden()->addCacheableDependency($entity);
@@ -46,8 +46,17 @@ class OrderAccessControlHandler extends EntityAccessControlHandler {
       }
     }
     elseif (in_array($operation, ['update', 'delete'])) {
-      $lock_check = ($additional_operation == 'unlock') ? $entity->isLocked() : !$entity->isLocked();
-      $result = AccessResult::allowedIf($lock_check)->andIf($result);
+      if ($additional_operation == 'unlock') {
+        // Check unlock operation.
+        $result = AccessResult::allowedIf($entity->isLocked())
+          ->andIf(AccessResult::allowedIfHasPermission($account, 'unlock orders'))
+          ->andIf($result);
+      }
+      else {
+        // Check update or delete operations.
+        $result = AccessResult::allowedIf(!$entity->isLocked())->andIf($result);
+      }
+
       $result = $result->addCacheableDependency($entity);
     }
 

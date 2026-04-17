@@ -69,7 +69,7 @@ class PaymentGatewayListBuilder extends DraggableListBuilder {
     $entities = $this->load();
     // If there are less than 2 gateways, disable dragging.
     if (count($entities) <= 1) {
-      unset($this->weightKey);
+      $this->weightKey = NULL;
     }
     return parent::render();
   }

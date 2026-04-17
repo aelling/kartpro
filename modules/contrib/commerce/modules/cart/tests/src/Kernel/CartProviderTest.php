@@ -204,6 +204,13 @@ class CartProviderTest extends CartKernelTestBase {
     $this->cartProvider->clearCaches();
     $cart = $this->cartProvider->getCart('default', $this->store, $this->authenticatedUser);
     $this->assertNull($cart);
+
+    // A cart belonging to a disabled store should not be returned.
+    $this->cartProvider->createCart('default', $this->store, $this->authenticatedUser);
+    $this->store->setUnpublished()->save();
+    $this->cartProvider->clearCaches();
+    $cart = $this->cartProvider->getCart('default', $this->store, $this->authenticatedUser);
+    $this->assertNull($cart);
   }
 
 }

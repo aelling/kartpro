@@ -2,20 +2,23 @@
 
 namespace Drupal\commerce_order\Plugin\Commerce\Condition;
 
-use Drupal\commerce\Plugin\Commerce\Condition\ConditionBase;
+use Drupal\commerce\EntityHelper;
+use Drupal\commerce_price\Entity\Currency;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\commerce\Attribute\CommerceCondition;
+use Drupal\commerce\Plugin\Commerce\Condition\ConditionBase;
 
 /**
  * Provides the currency condition for orders.
- *
- * @CommerceCondition(
- *   id = "order_currency",
- *   label = @Translation("Order currency"),
- *   category = @Translation("Order", context = "Commerce"),
- *   entity_type = "commerce_order",
- * )
  */
+#[CommerceCondition(
+  id: "order_currency",
+  label: new TranslatableMarkup('Order currency'),
+  entity_type: "commerce_order",
+  category: new TranslatableMarkup("Order", [], ["context" => "Commerce"]),
+)]
 class OrderCurrency extends ConditionBase {
 
   /**
@@ -33,13 +36,12 @@ class OrderCurrency extends ConditionBase {
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
 
+    $currencies = EntityHelper::extractLabels(Currency::loadMultiple());
     $form['currencies'] = [
-      '#type' => 'commerce_entity_select',
+      '#type' => 'checkboxes',
       '#title' => $this->t('Currencies'),
       '#default_value' => $this->configuration['currencies'],
-      '#target_type' => 'commerce_currency',
-      '#hide_single_entity' => FALSE,
-      '#multiple' => TRUE,
+      '#options' => $currencies,
       '#required' => TRUE,
     ];
 

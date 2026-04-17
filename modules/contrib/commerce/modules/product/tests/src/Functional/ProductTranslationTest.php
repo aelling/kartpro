@@ -2,11 +2,11 @@
 
 namespace Drupal\Tests\commerce_product\Functional;
 
+use Drupal\Core\Language\Language;
+use Drupal\Core\Url;
 use Drupal\commerce_price\Price;
 use Drupal\commerce_product\Entity\Product;
 use Drupal\commerce_product\Entity\ProductVariation;
-use Drupal\Core\Language\Language;
-use Drupal\Core\Url;
 
 /**
  * Tests translating products and variations.

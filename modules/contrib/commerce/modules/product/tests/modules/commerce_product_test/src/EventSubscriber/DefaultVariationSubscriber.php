@@ -11,7 +11,7 @@ class DefaultVariationSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
       ProductEvents::PRODUCT_DEFAULT_VARIATION => 'onDefaultVariation',
     ];
@@ -24,7 +24,7 @@ class DefaultVariationSubscriber implements EventSubscriberInterface {
    *   The event.
    */
   public function onDefaultVariation(ProductDefaultVariationEvent $event) {
-    if ($event->getDefaultVariation()->getSku() === 'TEST_DEFAULT_VARIATION_EVENT') {
+    if ($event->getDefaultVariation()?->getSku() === 'TEST_DEFAULT_VARIATION_EVENT') {
       $variations = $event->getProduct()->getVariations();
       $new_default = end($variations);
       $event->setDefaultVariation($new_default);

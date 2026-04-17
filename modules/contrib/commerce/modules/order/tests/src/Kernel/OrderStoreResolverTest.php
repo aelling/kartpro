@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\commerce_order\Kernel;
 
-use Drupal\commerce_order\Entity\Order;
 use Drupal\Core\Routing\RouteObjectInterface;
+use Drupal\commerce_order\Entity\Order;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;

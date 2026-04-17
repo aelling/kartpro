@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\commerce_cart\FunctionalJavascript;
 
-use Drupal\commerce_order\Entity\Order;
-use Drupal\commerce_product\Entity\ProductVariationType;
+use Drupal\commerce_price\Calculator;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\commerce_product\Entity\ProductVariationType;
 
 /**
  * Tests pages with multiple products rendered with add to cart forms.
@@ -87,7 +87,7 @@ class MultipleCartFormsTest extends CartWebDriverTestBase {
           'type' => 'default',
           'sku' => $this->randomMachineName(),
           'price' => [
-            'number' => (string) 3 * $i,
+            'number' => Calculator::multiply('3', $i),
             'currency_code' => 'USD',
           ],
           'attribute_color' => $color_attributes[$value[0]],
@@ -157,7 +157,7 @@ class MultipleCartFormsTest extends CartWebDriverTestBase {
     $this->assertSession()->assertWaitOnAjaxRequest();
     $current_form->pressButton('Add to cart');
 
-    $this->cart = Order::load($this->cart->id());
+    $this->cart = $this->reloadEntity($this->cart);
     $order_items = $this->cart->getItems();
     $this->assertEquals(3, $order_items[0]->getQuantity());
     /** @var \Drupal\commerce_product\Entity\ProductVariationInterface $variation */
@@ -178,8 +178,7 @@ class MultipleCartFormsTest extends CartWebDriverTestBase {
     $this->assertSession()->assertWaitOnAjaxRequest();
     $forms[1]->pressButton('Add to cart');
 
-    $this->container->get('entity_type.manager')->getStorage('commerce_order')->resetCache([$this->cart->id()]);
-    $this->cart = Order::load($this->cart->id());
+    $this->cart = $this->reloadEntity($this->cart);
     $order_items = $this->cart->getItems();
     $this->assertEquals(1, $order_items[1]->getQuantity());
     /** @var \Drupal\commerce_product\Entity\ProductVariationInterface $variation */
@@ -207,7 +206,7 @@ class MultipleCartFormsTest extends CartWebDriverTestBase {
     $current_form->selectFieldOption('purchased_entity[0][variation]', $this->products[2]->getVariations()[1]->id());
     $this->assertSession()->assertWaitOnAjaxRequest();
     $current_form->pressButton('Add to cart');
-    $this->cart = Order::load($this->cart->id());
+    $this->cart = $this->reloadEntity($this->cart);
     $order_items = $this->cart->getItems();
     $this->assertEquals(3, $order_items[0]->getQuantity());
     /** @var \Drupal\commerce_product\Entity\ProductVariationInterface $variation */
@@ -222,8 +221,7 @@ class MultipleCartFormsTest extends CartWebDriverTestBase {
     $forms[1]->selectFieldOption('purchased_entity[0][variation]', $this->products[1]->getVariations()[3]->id());
     $this->assertSession()->assertWaitOnAjaxRequest();
     $forms[1]->pressButton('Add to cart');
-    $this->container->get('entity_type.manager')->getStorage('commerce_order')->resetCache([$this->cart->id()]);
-    $this->cart = Order::load($this->cart->id());
+    $this->cart = $this->reloadEntity($this->cart);
     $order_items = $this->cart->getItems();
     $this->assertEquals(1, $order_items[1]->getQuantity());
     /** @var \Drupal\commerce_product\Entity\ProductVariationInterface $variation */
@@ -249,8 +247,7 @@ class MultipleCartFormsTest extends CartWebDriverTestBase {
     $this->assertSession()->assertWaitOnAjaxRequest();
     $current_form->pressButton('Add to cart');
 
-    \Drupal::entityTypeManager()->getStorage('commerce_order')->resetCache();
-    $this->cart = Order::load($this->cart->id());
+    $this->cart = $this->reloadEntity($this->cart);
     $order_items = $this->cart->getItems();
     $this->assertEquals(10, $order_items[0]->getQuantity());
     /** @var \Drupal\commerce_product\Entity\ProductVariationInterface $variation */

@@ -2,14 +2,13 @@
 
 namespace Drupal\commerce_log\Form;
 
-use Drupal\commerce_log\LogStorageInterface;
-use Drupal\commerce_log\LogTemplateManagerInterface;
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\commerce_log\LogStorageInterface;
+use Drupal\commerce_log\LogTemplateManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LogCommentForm extends FormBase {
@@ -113,8 +112,7 @@ class LogCommentForm extends FormBase {
     assert($storage instanceof EntityStorageInterface);
     $entity = $storage->load($form_state->getValue('source_entity_id'));
     assert($entity instanceof ContentEntityInterface);
-    $comment = nl2br(Html::escape($form_state->getValue('comment')));
-    $log_storage->generate($entity, $form_state->getValue('log_template_id'), ['comment' => $comment])->save();
+    $log_storage->generate($entity, $form_state->getValue('log_template_id'), ['comment' => $form_state->getValue('comment')])->save();
     $this->messenger()->addStatus($this->t('Comment saved'));
   }
 

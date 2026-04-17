@@ -2,10 +2,10 @@
 
 namespace Drupal\Tests\commerce\Unit;
 
-use Drupal\commerce_order\Entity\OrderInterface;
-use Drupal\commerce_order\Plugin\Commerce\Condition\CurrentUserRole;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Tests\UnitTestCase;
+use Drupal\commerce_order\Entity\OrderInterface;
+use Drupal\commerce_order\Plugin\Commerce\Condition\CurrentUserRole;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**

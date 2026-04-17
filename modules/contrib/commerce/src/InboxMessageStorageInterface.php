@@ -26,7 +26,7 @@ interface InboxMessageStorageInterface {
    * @return \Drupal\commerce\InboxMessage[]
    *   The messages.
    */
-  public function loadMultiple(array $conditions = [], int $limit = NULL): array;
+  public function loadMultiple(array $conditions = [], ?int $limit = NULL): array;
 
   /**
    * Gets count of the unread messages.

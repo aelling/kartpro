@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\commerce_product\Kernel;
 
+use Drupal\Tests\commerce\Kernel\CommerceKernelTestBase;
 use Drupal\commerce_product\Entity\Product;
 use Drupal\commerce_product\Entity\ProductVariation;
-use Drupal\Tests\commerce\Kernel\CommerceKernelTestBase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -94,9 +94,18 @@ class ProductVariationStorageTest extends CommerceKernelTestBase {
       'variations' => $variations,
     ]);
     $product->save();
-
     $variationsFiltered = $this->variationStorage->loadEnabled($product);
-    $this->assertEquals(2, count($variationsFiltered), '2 out of 3 variations are enabled');
+    $this->assertEquals(3, count($variationsFiltered), 'for the admin user, 3 out of 3 variations are enabled');
+
+    $product = Product::create([
+      'type' => 'default',
+      'variations' => $variations,
+    ]);
+    $product->save();
+    $user = $this->createUser(['view commerce_product']);
+    $this->container->get('current_user')->setAccount($user);
+    $variationsFiltered = $this->variationStorage->loadEnabled($product);
+    $this->assertEquals(2, count($variationsFiltered), 'for a normal user, 2 out of 3 variations are enabled');
     $this->assertEquals(reset($variations)->getSku(), reset($variationsFiltered)->getSku(), 'The sort order of the variations remains the same');
   }
 

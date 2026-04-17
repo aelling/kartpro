@@ -2,10 +2,10 @@
 
 namespace Drupal\Tests\commerce_payment\Unit;
 
+use Drupal\Tests\UnitTestCase;
 use Drupal\commerce_payment\Entity\PaymentInterface;
 use Drupal\commerce_payment\Entity\PaymentMethodInterface;
 use Drupal\commerce_payment\Exception\PaymentGatewayException;
-use Drupal\Tests\UnitTestCase;
 
 /**
  * @coversDefaultClass \Drupal\commerce_payment\Exception\PaymentGatewayException

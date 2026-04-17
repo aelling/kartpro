@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\commerce_tax\FunctionalJavascript;
 
-use Drupal\commerce_tax\Entity\TaxType;
 use Drupal\Tests\commerce\FunctionalJavascript\CommerceWebDriverTestBase;
+use Drupal\commerce_tax\Entity\TaxType;
 
 /**
  * Tests the commerce_tax custom plugin.

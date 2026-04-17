@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\commerce\Kernel;
 
-use Drupal\commerce\Interval;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\commerce\Interval;
 
 /**
  * Tests the Interval class.

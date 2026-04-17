@@ -2,11 +2,11 @@
 
 namespace Drupal\Tests\commerce_promotion\FunctionalJavascript;
 
+use Drupal\Core\Url;
+use Drupal\Tests\commerce\FunctionalJavascript\CommerceWebDriverTestBase;
 use Drupal\commerce_order\Entity\OrderItem;
 use Drupal\commerce_order\Entity\OrderItemType;
 use Drupal\commerce_price\Price;
-use Drupal\Core\Url;
-use Drupal\Tests\commerce\FunctionalJavascript\CommerceWebDriverTestBase;
 use Drupal\views\Entity\View;
 
 /**
@@ -45,6 +45,7 @@ class CartCouponRedemptionElementTest extends CommerceWebDriverTestBase {
   protected static $modules = [
     'block',
     'commerce_cart',
+    'commerce_product',
     'commerce_promotion',
   ];
 

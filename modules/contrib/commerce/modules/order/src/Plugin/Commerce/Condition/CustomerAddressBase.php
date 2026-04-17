@@ -3,9 +3,9 @@
 namespace Drupal\commerce_order\Plugin\Commerce\Condition;
 
 use CommerceGuys\Addressing\Zone\Zone;
-use Drupal\commerce\Plugin\Commerce\Condition\ConditionBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\commerce\Plugin\Commerce\Condition\ConditionBase;
 
 /**
  * Provides a base class for the billing/shipping address condition for orders.
@@ -75,7 +75,7 @@ abstract class CustomerAddressBase extends ConditionBase {
     $order = $entity;
 
     $profiles = $order->collectProfiles();
-    $profile_scope = $this->pluginDefinition['profile_scope'] ?? 'billing';
+    $profile_scope = $this->pluginDefinition['profile_scope'] ?? $this->pluginDefinition['additional']['profile_scope'] ?? 'billing';
     $profile = $profiles[$profile_scope] ?? NULL;
     if (!$profile) {
       // The promotion can't be applied until the address is known.

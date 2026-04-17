@@ -2,10 +2,10 @@
 
 namespace Drupal\commerce_payment\Form;
 
-use Drupal\commerce\InlineFormManager;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\commerce\InlineFormManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -77,6 +77,7 @@ class PaymentMethodEditForm extends EntityForm implements ContainerInjectionInte
    */
   public function save(array $form, FormStateInterface $form_state) {
     // The entity was saved by the inline form.
+    return SAVED_UPDATED;
   }
 
 }

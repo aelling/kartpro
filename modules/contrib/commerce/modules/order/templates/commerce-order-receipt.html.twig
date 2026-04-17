@@ -40,9 +40,9 @@
         </tr>
         <tr>
           <td style="padding-top:15px; padding-bottom: 15px; text-align: left; border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc">
-            <div><span style="font-weight: bold;">{{ 'Order number:' }}</span> {{ order_entity.getOrderNumber }}</div>
+            <div><span style="font-weight: bold;">{{ 'Order number:'|t }}</span> {{ order_entity.getOrderNumber }}</div>
             {% if (order_entity.getPlacedTime) %}
-              <div style="margin-top: 5px;"><span style="font-weight: bold;">{{ 'Order date:' }}</span> {{ order_entity.getPlacedTime|format_date('short') }}</div>
+              <div style="margin-top: 5px;"><span style="font-weight: bold;">{{ 'Order date:'|t }}</span> {{ order_entity.getPlacedTime|format_date('short') }}</div>
             {% endif %}
           </td>
         </tr>

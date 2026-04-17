@@ -2,10 +2,12 @@
 
 namespace Drupal\commerce_tax\Plugin\Commerce\TaxType;
 
-use Drupal\commerce_order\Entity\OrderItemInterface;
-use Drupal\commerce_tax\TaxableType;
-use Drupal\commerce_tax\TaxZone;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\commerce_order\Entity\OrderItemInterface;
+use Drupal\commerce_tax\Attribute\CommerceTaxType;
+use Drupal\commerce_tax\TaxZone;
+use Drupal\commerce_tax\TaxableType;
 use Drupal\profile\Entity\ProfileInterface;
 
 // cspell:ignore Jungholz Heligoland Mittelberg Melilla Büsingen Lugano Campione
@@ -13,12 +15,11 @@ use Drupal\profile\Entity\ProfileInterface;
 
 /**
  * Provides the European Union VAT tax type.
- *
- * @CommerceTaxType(
- *   id = "european_union_vat",
- *   label = "European Union VAT",
- * )
  */
+#[CommerceTaxType(
+  id: "european_union_vat",
+  label: new TranslatableMarkup("European Union VAT"),
+)]
 class EuropeanUnionVat extends LocalTaxTypeBase {
 
   /**
@@ -66,7 +67,7 @@ class EuropeanUnionVat extends LocalTaxTypeBase {
     $store_zones = $this->getMatchingZones($store_address);
 
     $customer_tax_number = '';
-    if (!$customer_profile->get('tax_number')->isEmpty()) {
+    if ($customer_profile->hasField('tax_number') && !$customer_profile->get('tax_number')->isEmpty()) {
       /** @var \Drupal\commerce_tax\Plugin\Field\FieldType\TaxNumberItemInterface $tax_number_item */
       $tax_number_item = $customer_profile->get('tax_number')->first();
       if ($tax_number_item->checkValue('european_union_vat')) {
@@ -173,6 +174,13 @@ class EuropeanUnionVat extends LocalTaxTypeBase {
           'label' => $labels['reduced'],
           'percentages' => [
             ['number' => '0.1', 'start_date' => '1995-01-01'],
+          ],
+        ],
+        [
+          'id' => 'zero',
+          'label' => $labels['zero'],
+          'percentages' => [
+            ['number' => '0', 'start_date' => '2026-01-01'],
           ],
         ],
       ],
@@ -382,8 +390,9 @@ class EuropeanUnionVat extends LocalTaxTypeBase {
           'id' => 'standard',
           'label' => $labels['standard'],
           'percentages' => [
-            ['number' => '0.2', 'start_date' => '2009-07-01', 'end_date' => '2023-12-31'],
-            ['number' => '0.22', 'start_date' => '2024-01-01'],
+            ['number' => '0.20', 'start_date' => '2009-07-01', 'end_date' => '2023-12-31'],
+            ['number' => '0.22', 'start_date' => '2024-01-01', 'end_date' => '2025-06-30'],
+            ['number' => '0.24', 'start_date' => '2025-07-01'],
           ],
           'default' => TRUE,
         ],
@@ -391,8 +400,16 @@ class EuropeanUnionVat extends LocalTaxTypeBase {
           'id' => 'reduced',
           'label' => $labels['reduced'],
           'percentages' => [
-            ['number' => '0.09', 'start_date' => '2009-01-01', 'end_date' => '2023-12-31'],
-            ['number' => '0.13', 'start_date' => '2024-01-01'],
+            ['number' => '0.09', 'start_date' => '2009-01-01', 'end_date' => '2024-12-31'],
+            ['number' => '0.13', 'start_date' => '2025-01-01'],
+          ],
+        ],
+        [
+          'id' => 'super_reduced',
+          'label' => $labels['super_reduced'],
+          'percentages' => [
+            ['number' => '0.05', 'start_date' => '2022-08-01', 'end_date' => '2024-12-31'],
+            ['number' => '0.09', 'start_date' => '2025-01-01'],
           ],
         ],
       ],
@@ -452,7 +469,8 @@ class EuropeanUnionVat extends LocalTaxTypeBase {
           'id' => 'intermediate',
           'label' => $labels['intermediate'],
           'percentages' => [
-            ['number' => '0.14', 'start_date' => '2013-01-01'],
+            ['number' => '0.14', 'start_date' => '2013-01-01', 'end_date' => '2025-12-31'],
+            ['number' => '0.135', 'start_date' => '2026-01-01'],
           ],
         ],
         [
@@ -792,7 +810,8 @@ class EuropeanUnionVat extends LocalTaxTypeBase {
           'id' => 'intermediate',
           'label' => $labels['intermediate'],
           'percentages' => [
-            ['number' => '0.09', 'start_date' => '2004-05-01'],
+            ['number' => '0.09', 'start_date' => '2004-05-01', 'end_date' => '2025-12-31'],
+            ['number' => '0.12', 'start_date' => '2026-01-01'],
           ],
         ],
         [
@@ -1088,7 +1107,8 @@ class EuropeanUnionVat extends LocalTaxTypeBase {
           'label' => $labels['standard'],
           'percentages' => [
             ['number' => '0.20', 'start_date' => '2016-01-01', 'end_date' => '2016-12-31'],
-            ['number' => '0.19', 'start_date' => '2017-01-01'],
+            ['number' => '0.19', 'start_date' => '2017-01-01', 'end_date' => '2025-07-31'],
+            ['number' => '0.21', 'start_date' => '2025-08-01'],
           ],
           'default' => TRUE,
         ],
@@ -1096,14 +1116,15 @@ class EuropeanUnionVat extends LocalTaxTypeBase {
           'id' => 'intermediate',
           'label' => $labels['intermediate'],
           'percentages' => [
-            ['number' => '0.09', 'start_date' => '2008-12-01'],
+            ['number' => '0.09', 'start_date' => '2008-12-01', 'end_date' => '2025-07-31'],
           ],
         ],
         [
           'id' => 'reduced',
           'label' => $labels['reduced'],
           'percentages' => [
-            ['number' => '0.05', 'start_date' => '2008-12-01'],
+            ['number' => '0.05', 'start_date' => '2008-12-01', 'end_date' => '2025-07-31'],
+            ['number' => '0.11', 'start_date' => '2025-08-01'],
           ],
         ],
       ],
@@ -1184,7 +1205,8 @@ class EuropeanUnionVat extends LocalTaxTypeBase {
           'id' => 'standard',
           'label' => $labels['standard'],
           'percentages' => [
-            ['number' => '0.2', 'start_date' => '2011-01-01'],
+            ['number' => '0.2', 'start_date' => '2011-01-01', 'end_date' => '2024-12-31'],
+            ['number' => '0.23', 'start_date' => '2025-01-01'],
           ],
           'default' => TRUE,
         ],
@@ -1192,7 +1214,15 @@ class EuropeanUnionVat extends LocalTaxTypeBase {
           'id' => 'reduced',
           'label' => $labels['reduced'],
           'percentages' => [
-            ['number' => '0.1', 'start_date' => '2011-01-01'],
+            ['number' => '0.1', 'start_date' => '2011-01-01', 'end_date' => '2024-12-31'],
+            ['number' => '0.19', 'start_date' => '2025-01-01'],
+          ],
+        ],
+        [
+          'id' => 'second_reduced',
+          'label' => $labels['second_reduced'],
+          'percentages' => [
+            ['number' => '0.05', 'start_date' => '2023-01-01'],
           ],
         ],
       ],

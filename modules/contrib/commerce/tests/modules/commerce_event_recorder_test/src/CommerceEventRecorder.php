@@ -2,8 +2,8 @@
 
 namespace Drupal\commerce_event_recorder_test;
 
-use Drupal\commerce_payment\Event\FailedPaymentEvent;
 use Drupal\Core\State\StateInterface;
+use Drupal\commerce_payment\Event\FailedPaymentEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class CommerceEventRecorder implements EventSubscriberInterface {

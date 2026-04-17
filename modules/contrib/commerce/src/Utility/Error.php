@@ -3,8 +3,8 @@
 namespace Drupal\commerce\Utility;
 
 use Drupal\Core\Utility\Error as DrupalCoreError;
-use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use Psr\Log\LoggerInterface;
 
 /**
  * Commerce error utility class.

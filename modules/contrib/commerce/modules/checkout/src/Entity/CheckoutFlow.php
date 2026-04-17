@@ -2,9 +2,9 @@
 
 namespace Drupal\commerce_checkout\Entity;
 
+use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\commerce\CommerceSinglePluginCollection;
 use Drupal\commerce_checkout\Plugin\Commerce\CheckoutFlow\CheckoutFlowWithPanesInterface;
-use Drupal\Core\Config\Entity\ConfigEntityBase;
 
 /**
  * Defines the checkout flow entity class.

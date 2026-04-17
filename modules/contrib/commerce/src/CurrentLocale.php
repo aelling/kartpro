@@ -19,20 +19,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class CurrentLocale implements CurrentLocaleInterface {
 
   /**
-   * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $requestStack;
-
-  /**
-   * The chain resolver.
-   *
-   * @var \Drupal\commerce\Resolver\ChainLocaleResolverInterface
-   */
-  protected $chainResolver;
-
-  /**
    * Static cache of resolved locales. One per request.
    *
    * @var \SplObjectStorage
@@ -42,14 +28,12 @@ class CurrentLocale implements CurrentLocaleInterface {
   /**
    * Constructs a new CurrentLocale object.
    *
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   The request stack.
-   * @param \Drupal\commerce\Resolver\ChainLocaleResolverInterface $chain_resolver
+   * @param \Drupal\commerce\Resolver\ChainLocaleResolverInterface $chainResolver
    *   The chain resolver.
    */
-  public function __construct(RequestStack $request_stack, ChainLocaleResolverInterface $chain_resolver) {
-    $this->requestStack = $request_stack;
-    $this->chainResolver = $chain_resolver;
+  public function __construct(protected RequestStack $requestStack, protected ChainLocaleResolverInterface $chainResolver) {
     $this->locales = new \SplObjectStorage();
   }
 
@@ -58,7 +42,7 @@ class CurrentLocale implements CurrentLocaleInterface {
    */
   public function getLocale() {
     $request = $this->requestStack->getCurrentRequest();
-    if (!$request || !$this->locales->contains($request)) {
+    if (!$request || !$this->locales->offsetExists($request)) {
       $locale = $this->chainResolver->resolve();
       if (!$request) {
         return $locale;

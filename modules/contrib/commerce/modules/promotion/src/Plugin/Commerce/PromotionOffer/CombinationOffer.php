@@ -2,27 +2,28 @@
 
 namespace Drupal\commerce_promotion\Plugin\Commerce\PromotionOffer;
 
-use Drupal\commerce\ConditionGroup;
-use Drupal\commerce_order\Entity\OrderInterface;
-use Drupal\commerce_price\Calculator;
-use Drupal\commerce_promotion\Entity\PromotionInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\commerce\ConditionGroup;
+use Drupal\commerce_order\Entity\OrderInterface;
+use Drupal\commerce_price\Calculator;
+use Drupal\commerce_promotion\Attribute\CommercePromotionOffer;
+use Drupal\commerce_promotion\Entity\PromotionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides the 'combination_offer' offer plugin.
  *
  * This provides support for combining/stacking multiple promotion offers.
- *
- * @CommercePromotionOffer(
- *   id = "combination_offer",
- *   label = @Translation("Combination offer"),
- *   entity_type = "commerce_order",
- * )
  */
+#[CommercePromotionOffer(
+  id: "combination_offer",
+  label: new TranslatableMarkup("Combination offer"),
+  entity_type: "commerce_order"
+)]
 class CombinationOffer extends OrderPromotionOfferBase implements CombinationOfferInterface {
 
   /**

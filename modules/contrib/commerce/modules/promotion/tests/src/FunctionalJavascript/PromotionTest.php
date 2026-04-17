@@ -2,12 +2,12 @@
 
 namespace Drupal\Tests\commerce_promotion\FunctionalJavascript;
 
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Tests\commerce\FunctionalJavascript\CommerceWebDriverTestBase;
 use Drupal\commerce_promotion\Entity\Promotion;
 use Drupal\commerce_promotion\Plugin\Commerce\PromotionOffer\CombinationOffer;
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\language\Entity\ConfigurableLanguage;
-use Drupal\Tests\commerce\FunctionalJavascript\CommerceWebDriverTestBase;
 
 /**
  * Tests the admin UI for promotions.
@@ -325,7 +325,6 @@ class PromotionTest extends CommerceWebDriverTestBase {
     $this->assertEquals('0.10', $offer_field->target_plugin_configuration['percentage']);
 
     $this->drupalGet($promotion->toUrl('edit-form'));
-    $this->assertSession()->pageTextContains('Restricted');
     $this->assertSession()->checkboxChecked('Current order total');
     $this->assertSession()->fieldValueEquals('conditions[form][order][order_total_price][configuration][form][amount][number]', '9.10');
 
@@ -376,7 +375,6 @@ class PromotionTest extends CommerceWebDriverTestBase {
     $this->assertSession()->fieldValueEquals('name[0][value]', '10% off');
     $this->assertSession()->fieldValueEquals('offer[0][target_plugin_id]', 'order_item_percentage_off');
     $this->assertSession()->fieldValueEquals('offer[0][target_plugin_configuration][order_item_percentage_off][percentage]', '10');
-    $this->assertSession()->pageTextContains('Restricted');
     $this->assertSession()->checkboxChecked('Current order total');
     $this->assertSession()->fieldValueEquals('conditions[form][order][order_total_price][configuration][form][amount][number]', '9.10');
 
@@ -428,7 +426,7 @@ class PromotionTest extends CommerceWebDriverTestBase {
     $this->assertTrue($promotion->isEnabled());
     $this->drupalGet($promotion->toUrl('disable-form'));
     $this->assertSession()->pageTextContains($this->t('Are you sure you want to disable the promotion @label?', ['@label' => $promotion->label()]));
-    $this->submitForm([], (string) $this->t('Disable'));
+    $this->submitForm([], 'Disable');
 
     $promotion = $this->reloadEntity($promotion);
     $this->assertFalse($promotion->isEnabled());
@@ -446,7 +444,7 @@ class PromotionTest extends CommerceWebDriverTestBase {
     $this->assertFalse($promotion->isEnabled());
     $this->drupalGet($promotion->toUrl('enable-form'));
     $this->assertSession()->pageTextContains($this->t('Are you sure you want to enable the promotion @label?', ['@label' => $promotion->label()]));
-    $this->submitForm([], (string) $this->t('Enable'));
+    $this->submitForm([], 'Enable');
 
     $promotion = $this->reloadEntity($promotion);
     $this->assertTrue($promotion->isEnabled());

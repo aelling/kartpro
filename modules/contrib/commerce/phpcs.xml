@@ -14,7 +14,6 @@
 
   <rule ref="Drupal">
     <!-- Commerce is not yet compliant with the new deprecation format. -->
-    <exclude name="Drupal.Commenting.Deprecated"/>
     <exclude name="Drupal.Semantics.FunctionTriggerError"/>
 
     <!-- The following rules are intentionally disabled. -->

@@ -2,12 +2,12 @@
 
 namespace Drupal\Tests\commerce_product\Kernel\Entity;
 
+use Drupal\Tests\commerce\Kernel\CommerceKernelTestBase;
 use Drupal\commerce_price\Price;
 use Drupal\commerce_product\Entity\Product;
 use Drupal\commerce_product\Entity\ProductAttribute;
 use Drupal\commerce_product\Entity\ProductAttributeValue;
 use Drupal\commerce_product\Entity\ProductVariation;
-use Drupal\Tests\commerce\Kernel\CommerceKernelTestBase;
 use Drupal\user\UserInterface;
 
 /**
@@ -67,8 +67,6 @@ class ProductVariationTest extends CommerceKernelTestBase {
    * @covers ::setListPrice
    * @covers ::getPrice
    * @covers ::setPrice
-   * @covers ::isActive
-   * @covers ::setActive
    * @covers ::getCreatedTime
    * @covers ::setCreatedTime
    * @covers ::getOwner
@@ -154,6 +152,7 @@ class ProductVariationTest extends CommerceKernelTestBase {
     $this->assertEmpty($variation->getAttributeValues());
 
     $this->assertEquals([
+      'url.query_args:v',
       'store',
     ], $variation->getCacheContexts());
   }
@@ -298,6 +297,45 @@ class ProductVariationTest extends CommerceKernelTestBase {
     ])->save();
 
     self::assertSame($variation, SAVED_NEW);
+  }
+
+  /**
+   * @covers ::createDuplicate
+   */
+  public function testDuplicate() {
+    $time = time() - 3600;
+    /** @var \Drupal\commerce_product\Entity\ProductVariationInterface $variation */
+    $variation = ProductVariation::create([
+      'type' => 'default',
+      'sku' => strtolower($this->randomMachineName()),
+      'title' => $this->randomString(),
+    ]);
+    $variation->setCreatedTime($time);
+    $variation->setChangedTime($time);
+    $variation->save();
+    /** @var \Drupal\commerce_product\Entity\ProductInterface $product */
+    $product = Product::create([
+      'type' => 'default',
+      'title' => 'My Product Title',
+      'variations' => [$variation],
+    ]);
+    $product->save();
+
+    // Create variation duplicate.
+    $duplicate_variation = $variation->createDuplicate();
+    $duplicate_variation->setSKU(strtolower($this->randomMachineName()));
+    $duplicate_variation->save();
+
+    // Confirm that the duplicated variation created with the proper timestamps.
+    $this->assertEquals($variation->label(), $duplicate_variation->label());
+    $this->assertNotEquals($variation->id(), $duplicate_variation->id());
+    $this->assertNotEquals($variation->getSku(), $duplicate_variation->getSku());
+    $this->assertNotNull($duplicate_variation->getCreatedTime());
+    $this->assertTrue($variation->getCreatedTime() < $duplicate_variation->getCreatedTime());
+    $this->assertNotNull($duplicate_variation->getChangedTime());
+    $this->assertTrue($variation->getChangedTime() < $duplicate_variation->getChangedTime());
+    $product = $this->reloadEntity($product);
+    $this->assertTrue($product->hasVariation($duplicate_variation));
   }
 
 }

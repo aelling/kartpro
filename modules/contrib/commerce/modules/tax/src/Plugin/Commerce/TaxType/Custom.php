@@ -2,25 +2,26 @@
 
 namespace Drupal\commerce_tax\Plugin\Commerce\TaxType;
 
-use Drupal\commerce_price\RounderInterface;
-use Drupal\commerce_tax\Resolver\ChainTaxRateResolverInterface;
-use Drupal\commerce_tax\TaxZone;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Uuid\UuidInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Locale\CountryManager;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\commerce_price\RounderInterface;
+use Drupal\commerce_tax\Attribute\CommerceTaxType;
+use Drupal\commerce_tax\Resolver\ChainTaxRateResolverInterface;
+use Drupal\commerce_tax\TaxZone;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Provides the Custom tax type.
- *
- * @CommerceTaxType(
- *   id = "custom",
- *   label = "Custom",
- * )
  */
+#[CommerceTaxType(
+  id: "custom",
+  label: new TranslatableMarkup("Custom"),
+)]
 class Custom extends LocalTaxTypeBase {
 
   /**

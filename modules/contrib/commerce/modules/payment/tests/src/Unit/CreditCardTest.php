@@ -2,10 +2,10 @@
 
 namespace Drupal\Tests\commerce_payment\Unit;
 
-use Drupal\commerce_payment\CreditCard;
-use Drupal\commerce_payment\CreditCardType;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Tests\UnitTestCase;
+use Drupal\commerce_payment\CreditCard;
+use Drupal\commerce_payment\CreditCardType;
 
 /**
  * @coversDefaultClass \Drupal\commerce_payment\CreditCard

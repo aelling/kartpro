@@ -2,12 +2,12 @@
 
 namespace Drupal\commerce_payment\Form;
 
-use Drupal\commerce\InlineFormManager;
-use Drupal\commerce_payment\Entity\PaymentGateway;
-use Drupal\commerce_payment\PaymentGatewayManager;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\commerce\InlineFormManager;
+use Drupal\commerce_payment\Entity\PaymentGateway;
+use Drupal\commerce_payment\PaymentGatewayManager;
 use Drupal\entity\Form\EntityDuplicateFormTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

@@ -2,11 +2,9 @@
 
 namespace Drupal\commerce_product\Plugin\Field\FieldFormatter;
 
-use Drupal\commerce\EntityHelper;
-use Drupal\commerce_product\Entity\ProductAttributeInterface;
-use Drupal\commerce_product\ProductAttributeFieldManagerInterface;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
@@ -14,19 +12,20 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\commerce\EntityHelper;
+use Drupal\commerce_product\Entity\ProductAttributeInterface;
+use Drupal\commerce_product\ProductAttributeFieldManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'commerce_product_attributes_overview' formatter.
- *
- * @FieldFormatter(
- *   id = "commerce_product_attributes_overview",
- *   label = @Translation("Product attributes overview"),
- *   field_types = {
- *     "entity_reference",
- *   },
- * )
  */
+#[FieldFormatter(
+  id: "commerce_product_attributes_overview",
+  label: new TranslatableMarkup("Product attributes overview"),
+  field_types: ["entity_reference"],
+)]
 class ProductAttributesOverview extends FormatterBase implements ContainerFactoryPluginInterface {
 
   /**

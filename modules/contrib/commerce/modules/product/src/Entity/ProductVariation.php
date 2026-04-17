@@ -2,10 +2,6 @@
 
 namespace Drupal\commerce_product\Entity;
 
-use Drupal\commerce\Entity\CommerceContentEntityBase;
-use Drupal\commerce\EntityHelper;
-use Drupal\commerce\EntityOwnerTrait;
-use Drupal\commerce_price\Price;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityPublishedTrait;
@@ -13,6 +9,10 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Url;
+use Drupal\commerce\Entity\CommerceContentEntityBase;
+use Drupal\commerce\EntityHelper;
+use Drupal\commerce\EntityOwnerTrait;
+use Drupal\commerce_price\Price;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
@@ -224,21 +224,6 @@ class ProductVariation extends CommerceContentEntityBase implements ProductVaria
   /**
    * {@inheritdoc}
    */
-  public function isActive() {
-    return (bool) $this->getEntityKey('published');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setActive($active) {
-    $this->set('status', (bool) $active);
-    return $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getCreatedTime() {
     return $this->get('created')->value;
   }
@@ -354,7 +339,7 @@ class ProductVariation extends CommerceContentEntityBase implements ProductVaria
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['store']);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['url.query_args:v', 'store']);
   }
 
   /**
@@ -422,6 +407,21 @@ class ProductVariation extends CommerceContentEntityBase implements ProductVaria
         $product->save();
       }
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function createDuplicate() {
+    /** @var \Drupal\commerce_product\Entity\ProductVariationInterface $duplicate */
+    $duplicate = parent::createDuplicate();
+
+    // Reset created and changed timestamps.
+    $now = time();
+    $duplicate->setCreatedTime($now);
+    $duplicate->setChangedTime($now);
+
+    return $duplicate;
   }
 
   /**

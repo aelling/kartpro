@@ -5,7 +5,6 @@
 
 .local-actions .commerce-inbox-action-link-wrapper .button {
   display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   -ms-flex-pack: justify;
   align-items: center;

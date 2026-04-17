@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\commerce_cart\Kernel;
 
-use Drupal\commerce_order\OrderQueryAccessHandler;
 use Drupal\Core\Session\AnonymousUserSession;
+use Drupal\commerce_order\OrderQueryAccessHandler;
 use Drupal\entity\QueryAccess\Condition;
 
 /**

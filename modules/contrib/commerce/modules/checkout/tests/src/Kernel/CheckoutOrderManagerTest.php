@@ -2,11 +2,11 @@
 
 namespace Drupal\Tests\commerce_checkout\Kernel;
 
-use Drupal\commerce_checkout\Entity\CheckoutFlow;
-use Drupal\commerce_order\Entity\Order;
 use Drupal\Core\Routing\RouteObjectInterface;
 use Drupal\Core\Url;
 use Drupal\Tests\commerce_order\Kernel\OrderKernelTestBase;
+use Drupal\commerce_checkout\Entity\CheckoutFlow;
+use Drupal\commerce_order\Entity\Order;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -51,21 +51,25 @@ class CheckoutOrderManagerTest extends OrderKernelTestBase {
     $this->installConfig('commerce_checkout');
 
     $user = $this->createUser();
-    $order = Order::create([
+    $this->order = Order::create([
       'type' => 'default',
       'mail' => $user->getEmail(),
       'uid' => $user->id(),
       'store_id' => $this->store->id(),
     ]);
-    $order->save();
-    $this->order = $order;
+    $this->order->save();
 
     $this->checkoutOrderManager = $this->container->get('commerce_checkout.checkout_order_manager');
+  }
 
-    // Fake a request so that the current_route_match works.
-    // @todo Remove this when CheckoutFlowBase stops using the route match.
+  /**
+   * Fakes a request so that the current_route_match works.
+   *
+   * @todo Remove this when CheckoutFlowBase stops using the route match.
+   */
+  protected function setupRequestWithOrderParameter() {
     $url = Url::fromRoute('commerce_checkout.form', [
-      'commerce_order' => $order->id(),
+      'commerce_order' => $this->order->id(),
     ]);
     $route_provider = $this->container->get('router.route_provider');
     $route = $route_provider->getRouteByName($url->getRouteName());
@@ -73,7 +77,7 @@ class CheckoutOrderManagerTest extends OrderKernelTestBase {
     $request->setSession(new Session(new MockArraySessionStorage()));
     $request->attributes->add([
       RouteObjectInterface::ROUTE_OBJECT => $route,
-      'commerce_order' => $order,
+      'commerce_order' => $this->order,
     ]);
     $this->container->get('request_stack')->push($request);
   }
@@ -82,6 +86,8 @@ class CheckoutOrderManagerTest extends OrderKernelTestBase {
    * Tests getting the order's checkout flow.
    */
   public function testGetCheckoutFlow() {
+    $this->setupRequestWithOrderParameter();
+
     $checkout_flow = $this->checkoutOrderManager->getCheckoutFlow($this->order);
     $this->assertInstanceOf(CheckoutFlow::class, $checkout_flow);
     $this->assertEquals('default', $checkout_flow->id());
@@ -96,6 +102,8 @@ class CheckoutOrderManagerTest extends OrderKernelTestBase {
    * Tests getting the order's checkout step ID.
    */
   public function testGetCheckoutStepId() {
+    $this->setupRequestWithOrderParameter();
+
     // Empty requested step ID when no checkout step was set.
     $step_id = $this->checkoutOrderManager->getCheckoutStepId($this->order);
     $this->assertEquals('login', $step_id);
@@ -135,6 +143,42 @@ class CheckoutOrderManagerTest extends OrderKernelTestBase {
     $step_id = $this->checkoutOrderManager->getCheckoutStepId($this->order, 'review');
     $this->assertEquals('review', $step_id);
 
+  }
+
+  /**
+   * Tests getting checkout's visible steps.
+   */
+  public function testGetVisibleSteps() {
+    /** @var \Drupal\commerce_checkout\Entity\CheckoutFlowInterface $checkout_flow */
+    $checkout_flow = $this->checkoutOrderManager->getCheckoutFlow($this->order);
+
+    /** @var \Drupal\commerce_checkout\Plugin\Commerce\CheckoutFlow\CheckoutFlowInterface $checkout_flow_plugin */
+    $checkout_flow_plugin = $checkout_flow->getPlugin();
+
+    /** @var array $steps */
+    $steps = $checkout_flow_plugin->getVisibleSteps();
+
+    $expected_steps = [
+      'login',
+      'order_information',
+      'review',
+      'complete',
+    ];
+    $this->assertEquals($expected_steps, array_keys($steps));
+  }
+
+  /**
+   * Tests getting the order from the checkout flow plugin.
+   */
+  public function testGetOrderFromCheckoutPane() {
+    /** @var \Drupal\commerce_checkout\Entity\CheckoutFlowInterface $checkout_flow */
+    $checkout_flow = $this->checkoutOrderManager->getCheckoutFlow($this->order);
+
+    /** @var \Drupal\commerce_checkout\Plugin\Commerce\CheckoutFlow\CheckoutFlowInterface $checkout_flow_plugin */
+    $checkout_flow_plugin = $checkout_flow->getPlugin();
+
+    // Assert that the checkout flow plugin contains the order.
+    $this->assertSame($this->order, $checkout_flow_plugin->getOrder());
   }
 
 }

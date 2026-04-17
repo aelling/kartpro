@@ -2,9 +2,9 @@
 
 namespace Drupal\commerce_checkout\Form;
 
-use Drupal\commerce_checkout\CheckoutFlowManager;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\commerce_checkout\CheckoutFlowManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CheckoutFlowForm extends EntityForm {

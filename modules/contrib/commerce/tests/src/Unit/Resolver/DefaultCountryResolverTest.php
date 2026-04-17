@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\commerce\Unit\Resolver;
 
-use Drupal\commerce\Resolver\DefaultCountryResolver;
 use Drupal\Tests\UnitTestCase;
+use Drupal\commerce\Resolver\DefaultCountryResolver;
 
 /**
  * @coversDefaultClass \Drupal\commerce\Resolver\DefaultCountryResolver
@@ -29,13 +29,13 @@ class DefaultCountryResolverTest extends UnitTestCase {
     $config->expects($this->once())
       ->method('get')
       ->with('country.default')
-      ->will($this->returnValue('RS'));
+      ->willReturn('RS');
 
     $config_factory = $this->createMock('Drupal\Core\Config\ConfigFactoryInterface');
     $config_factory->expects($this->once())
       ->method('get')
       ->with('system.date')
-      ->will($this->returnValue($config));
+      ->willReturn($config);
 
     $this->resolver = new DefaultCountryResolver($config_factory);
   }

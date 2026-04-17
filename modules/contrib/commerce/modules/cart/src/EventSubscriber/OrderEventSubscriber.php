@@ -3,6 +3,7 @@
 namespace Drupal\commerce_cart\EventSubscriber;
 
 use Drupal\commerce_cart\CartProviderInterface;
+use Drupal\commerce_cart\CartSessionInterface;
 use Drupal\commerce_order\Event\OrderEvent;
 use Drupal\state_machine\Event\WorkflowTransitionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -10,26 +11,22 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class OrderEventSubscriber implements EventSubscriberInterface {
 
   /**
-   * The cart provider.
-   *
-   * @var \Drupal\commerce_cart\CartProviderInterface
-   */
-  protected $cartProvider;
-
-  /**
    * Constructs a new OrderEventSubscriber object.
    *
-   * @param \Drupal\commerce_cart\CartProviderInterface $cart_provider
+   * @param \Drupal\commerce_cart\CartProviderInterface $cartProvider
    *   The cart provider.
+   * @param \Drupal\commerce_cart\CartSessionInterface $cartSession
+   *   The cart session.
    */
-  public function __construct(CartProviderInterface $cart_provider) {
-    $this->cartProvider = $cart_provider;
-  }
+  public function __construct(
+    protected CartProviderInterface $cartProvider,
+    protected CartSessionInterface $cartSession,
+  ) {}
 
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     $events = [
       // We don't rely on the constant defining the checkout completion event
       // because commerce_cart doesn't depend on commerce_checkout.
@@ -40,6 +37,7 @@ class OrderEventSubscriber implements EventSubscriberInterface {
       // assigned to the customer being created by the checkout subscriber.
       'commerce_checkout.completion' => ['onCheckoutCompletion', 200],
       'commerce_order.place.pre_transition' => 'finalizeCart',
+      'commerce_order.commerce_order.delete' => ['onOrderDelete'],
     ];
     return $events;
   }
@@ -67,6 +65,19 @@ class OrderEventSubscriber implements EventSubscriberInterface {
     $order = $event->getOrder();
     if (!empty($order->cart->value)) {
       $this->cartProvider->finalizeCart($order, FALSE);
+    }
+  }
+
+  /**
+   * Removes deleted carts from the anonymous user's session.
+   *
+   * @param \Drupal\commerce_order\Event\OrderEvent $order_event
+   *   Order event.
+   */
+  public function onOrderDelete(OrderEvent $order_event): void {
+    $order = $order_event->getOrder();
+    if (!empty($order->cart->value)) {
+      $this->cartSession->deleteCartId($order->id());
     }
   }
 

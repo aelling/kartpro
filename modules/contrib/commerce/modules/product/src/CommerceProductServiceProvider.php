@@ -2,11 +2,11 @@
 
 namespace Drupal\commerce_product;
 
+use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\Core\DependencyInjection\ServiceProviderBase;
 use Drupal\commerce_product\Access\ProductAttributeTranslationAccessCheck;
 use Drupal\commerce_product\Access\ProductAttributeTranslationFormAccessCheck;
 use Drupal\commerce_product\EventSubscriber\VariationFieldComponentSubscriber;
-use Drupal\Core\DependencyInjection\ContainerBuilder;
-use Drupal\Core\DependencyInjection\ServiceProviderBase;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -24,8 +24,9 @@ class CommerceProductServiceProvider extends ServiceProviderBase {
     // Check if there is layout builder and swap field renderer service.
     if (isset($modules['layout_builder'])) {
       $definition = $container->getDefinition('commerce_product.variation_field_renderer');
-      $definition->setClass(ProductVariationFieldRendererLayoutBuilder::class)
-        ->addArgument(new Reference('entity_display.repository'));
+      $definition
+        ->setClass(ProductVariationFieldRendererLayoutBuilder::class)
+        ->addMethodCall('setEntityDisplayRepository', [new Reference('entity_display.repository')]);
     }
   }
 

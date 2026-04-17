@@ -3,20 +3,21 @@
 namespace Drupal\commerce_order\Plugin\EntityReferenceSelection;
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Entity\Attribute\EntityReferenceSelection;
 use Drupal\Core\Entity\Plugin\EntityReferenceSelection\DefaultSelection;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\user\Plugin\EntityReferenceSelection\UserSelection;
 
 /**
  * Allows user selection by name or email address.
- *
- * @EntityReferenceSelection(
- *   id = "commerce:user",
- *   label = @Translation("User selection by name or email"),
- *   entity_types = {"user"},
- *   group = "commerce",
- *   weight = 2
- * )
  */
+#[EntityReferenceSelection(
+  id: "commerce:user",
+  label: new TranslatableMarkup('User selection by name or email'),
+  group: 'commerce',
+  weight: 2,
+  entity_types: ['user'],
+)]
 class UserSearch extends UserSelection {
 
   /**

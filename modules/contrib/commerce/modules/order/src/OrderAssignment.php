@@ -2,10 +2,10 @@
 
 namespace Drupal\commerce_order;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Event\OrderAssignEvent;
 use Drupal\commerce_order\Event\OrderEvents;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -48,7 +48,11 @@ class OrderAssignment implements OrderAssignmentInterface {
     $this->eventDispatcher->dispatch($event, OrderEvents::ORDER_ASSIGN);
 
     $order->setCustomer($customer);
-    $order->setEmail($customer->getEmail());
+
+    // Only set email if not overridden.
+    if (!$order->getData('customer_email_overridden', FALSE)) {
+      $order->setEmail($customer->getEmail());
+    }
 
     if ($save_order) {
       $order->save();

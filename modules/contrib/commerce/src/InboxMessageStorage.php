@@ -28,11 +28,10 @@ class InboxMessageStorage implements InboxMessageStorageInterface {
    */
   public function save(InboxMessage $message) {
     $fields = (array) $message;
-    $result = $this->connection->merge(self::TABLE_NAME)
+    $this->connection->merge(self::TABLE_NAME)
       ->fields($fields)
       ->keys([
         'id' => $message->id,
-        'state' => 'unread',
       ])
       ->execute();
     Cache::invalidateTags(['commerce_inbox_message']);
@@ -41,7 +40,7 @@ class InboxMessageStorage implements InboxMessageStorageInterface {
   /**
    * {@inheritdoc}
    */
-  public function loadMultiple(array $conditions = [], int $limit = NULL): array {
+  public function loadMultiple(array $conditions = [], ?int $limit = NULL): array {
     $messages = [];
     $query = $this->connection->select(self::TABLE_NAME, 'm')
       ->fields('m')

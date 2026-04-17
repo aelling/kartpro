@@ -2,14 +2,14 @@
 
 namespace Drupal\commerce_product\Form;
 
-use Drupal\commerce\EntityHelper;
-use Drupal\commerce\EntityTraitManagerInterface;
-use Drupal\commerce\Form\CommerceBundleEntityFormBase;
-use Drupal\commerce_order\Entity\OrderItemTypeInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\commerce\EntityHelper;
+use Drupal\commerce\EntityTraitManagerInterface;
+use Drupal\commerce\Form\CommerceBundleEntityFormBase;
+use Drupal\commerce_order\Entity\OrderItemTypeInterface;
 use Drupal\entity\Form\EntityDuplicateFormTrait;
 use Drupal\language\Entity\ContentLanguageSettings;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -136,6 +136,10 @@ class ProductTypeForm extends CommerceBundleEntityFormBase {
     $form['variations']['injectVariationFields'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Inject product variation fields into the rendered product.'),
+      '#description' => $this->t('Only the fields enabled on a product variation
+       view mode will be injected on the product rendered on a view mode with
+       the same machine name than the product variation view mode configured. If
+       no corresponding view mode found, then fallback to the Default view mode.'),
       '#default_value' => $product_type->shouldInjectVariationFields(),
     ];
     $form['product_status'] = [
@@ -210,11 +214,10 @@ class ProductTypeForm extends CommerceBundleEntityFormBase {
       ]);
       if ($this->moduleHandler->moduleExists('commerce_order')) {
         $order_item_type_ids = $this->getOrderItemTypeIds();
-        $order_item_type_id = in_array('default', $order_item_type_ids) ? 'default' : reset($order_item_type_ids);
+        $order_item_type_id = in_array('default', $order_item_type_ids, TRUE) ? 'default' : reset($order_item_type_ids);
         $variation_type->setOrderItemTypeId($order_item_type_id);
       }
       $variation_type->save();
-      $product_type->setVariationTypeId($form_state->getValue('id'));
       $product_type->setVariationTypeIds([$form_state->getValue('id')]);
     }
   }

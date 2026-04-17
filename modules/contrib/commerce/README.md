@@ -1,15 +1,15 @@
 Drupal Commerce
 ===============
-[![Build Status](https://travis-ci.org/drupalcommerce/commerce.svg?branch=8.x-2.x)](https://travis-ci.org/drupalcommerce/commerce)
+[![Build Status](https://git.drupalcode.org/project/commerce/badges/3.0.x/pipeline.svg)](https://git.drupalcode.org/project/commerce/-/pipelines)
 
 Drupal Commerce is the leading flexible eCommerce solution for Drupal,
 powering over 60,000 online stores of all sizes.
 
-Please report bugs in the [issue queue](https://www.drupal.org/project/issues/commerce?version=8.x).
+Please report bugs in the [issue queue](https://www.drupal.org/project/issues/commerce?version=any_3.).
 
 [Documentation](http://docs.drupalcommerce.org)
 
-[Issue Tracker](https://www.drupal.org/project/issues/commerce?version=8.x)
+[Issue Tracker](https://www.drupal.org/project/issues/commerce?version=any_3.)
 
 ## Installation
 

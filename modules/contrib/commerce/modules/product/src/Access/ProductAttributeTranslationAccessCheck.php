@@ -2,10 +2,10 @@
 
 namespace Drupal\commerce_product\Access;
 
-use Drupal\config_translation\Access\ConfigTranslationOverviewAccess;
-use Drupal\config_translation\ConfigMapperInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\config_translation\Access\ConfigTranslationOverviewAccess;
+use Drupal\config_translation\ConfigMapperInterface;
 
 /**
  * Checks access for displaying the product attribute translation overview.

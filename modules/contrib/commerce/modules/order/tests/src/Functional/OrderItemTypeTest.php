@@ -20,6 +20,7 @@ class OrderItemTypeTest extends OrderBrowserTestBase {
     // The cart module is installed to confirm that it doesn't cause problems
     // when creating an add_to_cart form display for new order item types.
     'commerce_cart',
+    'commerce_product',
   ];
 
   /**

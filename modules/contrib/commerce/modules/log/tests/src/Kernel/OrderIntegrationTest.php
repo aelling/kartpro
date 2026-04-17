@@ -2,6 +2,11 @@
 
 namespace Drupal\Tests\commerce_log\Kernel;
 
+use Drupal\commerce_log\Form\LogSettingsForm;
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\Core\DependencyInjection\ServiceModifierInterface;
+use Drupal\Tests\commerce_order\Kernel\OrderKernelTestBase;
 use Drupal\commerce_order\Entity\Order;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Entity\OrderType;
@@ -9,11 +14,7 @@ use Drupal\commerce_price\Price;
 use Drupal\commerce_product\Entity\Product;
 use Drupal\commerce_product\Entity\ProductVariation;
 use Drupal\commerce_product\Entity\ProductVariationType;
-use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Core\DependencyInjection\ContainerBuilder;
-use Drupal\Core\DependencyInjection\ServiceModifierInterface;
 use Drupal\profile\Entity\Profile;
-use Drupal\Tests\commerce_order\Kernel\OrderKernelTestBase;
 use Drupal\user\Entity\User;
 
 /**
@@ -184,6 +185,24 @@ class OrderIntegrationTest extends OrderKernelTestBase implements ServiceModifie
     $build = $this->logViewBuilder->view($log);
     $this->render($build);
     $this->assertText("The order was assigned to {$new_user->getDisplayName()}.");
+  }
+
+  /**
+   * Test disable log for order reassignment.
+   */
+  public function testDisabledOrderAssignedLog() {
+    // Add the lot templates for order assignment to the disabled list.
+    $this->container->get('config.factory')
+      ->getEditable(LogSettingsForm::CONFIG_NAME)
+      ->set('disabled_templates', ['order_assigned'])
+      ->save();
+    // Reassignment is currently only done on user login.
+    $new_user = $this->createUser();
+    $order_assignment = $this->container->get('commerce_order.order_assignment');
+    $order_assignment->assign($this->order, $new_user);
+
+    $logs = $this->logStorage->loadMultipleByEntity($this->order);
+    $this->assertEquals(0, count($logs));
   }
 
   /**

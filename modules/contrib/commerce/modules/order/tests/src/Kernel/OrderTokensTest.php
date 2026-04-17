@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\commerce_order\Kernel;
 
-use Drupal\commerce_order\Entity\Order;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\commerce_order\Entity\Order;
 use Drupal\user\Entity\User;
 
 /**

@@ -2,13 +2,13 @@
 
 namespace Drupal\commerce_promotion\Entity;
 
-use Drupal\commerce\Entity\CommerceContentEntityBase;
-use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\commerce\Entity\CommerceContentEntityBase;
+use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 
 /**
@@ -33,6 +33,8 @@ use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
  *     "form" = {
  *       "add" = "Drupal\commerce_promotion\Form\CouponForm",
  *       "edit" = "Drupal\commerce_promotion\Form\CouponForm",
+ *       "enable" = "Drupal\commerce_promotion\Form\CouponEnableForm",
+ *       "disable" = "Drupal\commerce_promotion\Form\CouponDisableForm",
  *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm"
  *     },
  *    "local_task_provider" = {
@@ -56,6 +58,8 @@ use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
  *   links = {
  *     "add-form" = "/promotion/{commerce_promotion}/coupons/add",
  *     "edit-form" = "/promotion/{commerce_promotion}/coupons/{commerce_promotion_coupon}/edit",
+ *     "enable-form" = "/promotion/{commerce_promotion}/coupons/{commerce_promotion_coupon}/enable",
+ *     "disable-form" = "/promotion/{commerce_promotion}/coupons/{commerce_promotion_coupon}/disable",
  *     "delete-form" = "/promotion/{commerce_promotion}/coupons/{commerce_promotion_coupon}/delete",
  *     "collection" = "/promotion/{commerce_promotion}/coupons",
  *   },
@@ -107,7 +111,7 @@ class Coupon extends CommerceContentEntityBase implements CouponInterface {
    * {@inheritdoc}
    */
   public function getCreatedTime() {
-    return $this->get('created')->value;
+    return (int) $this->get('created')->value;
   }
 
   /**
@@ -196,7 +200,7 @@ class Coupon extends CommerceContentEntityBase implements CouponInterface {
   /**
    * {@inheritdoc}
    */
-  public function setEndDate(DrupalDateTime $end_date = NULL) {
+  public function setEndDate(?DrupalDateTime $end_date = NULL) {
     $this->get('end_date')->value = NULL;
     if ($end_date) {
       $this->get('end_date')->value = $end_date->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
@@ -224,6 +228,18 @@ class Coupon extends CommerceContentEntityBase implements CouponInterface {
     $end_date = $this->getEndDate($store_timezone);
     if ($end_date && $end_date->format('U') <= $date->format('U')) {
       return FALSE;
+    }
+
+    $promotion = $this->getPromotion();
+    $coupons = $order->get('coupons')->referencedEntities();
+    foreach ($coupons as $coupon) {
+      if (
+        $this->id() !== $coupon->id() &&
+        $promotion->id() === $coupon->getPromotionId() &&
+        !$promotion->isMultipleCouponsAllowed()
+      ) {
+        return FALSE;
+      }
     }
 
     $usage_limit = $this->getUsageLimit();
@@ -276,10 +292,13 @@ class Coupon extends CommerceContentEntityBase implements CouponInterface {
    * {@inheritdoc}
    */
   public static function postDelete(EntityStorageInterface $storage, array $entities) {
+    parent::postDelete($storage, $entities);
+
     // Delete the related usage.
     /** @var \Drupal\commerce_promotion\PromotionUsageInterface $usage */
     $usage = \Drupal::service('commerce_promotion.usage');
     $usage->deleteByCoupon($entities);
+    $coupons_id = [];
     // Delete references to those coupons in promotions.
     foreach ($entities as $coupon) {
       $coupons_id[] = $coupon->id();

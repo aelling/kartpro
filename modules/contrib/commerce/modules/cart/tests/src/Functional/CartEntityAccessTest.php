@@ -4,9 +4,9 @@ namespace Drupal\Tests\commerce_cart\Functional;
 
 use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\Mink\Session;
+use Drupal\Tests\DrupalTestBrowser;
 use Drupal\commerce_order\Entity\Order;
 use Drupal\commerce_order\Entity\OrderInterface;
-use Drupal\Tests\DrupalTestBrowser;
 use Drupal\user\RoleInterface;
 
 /**

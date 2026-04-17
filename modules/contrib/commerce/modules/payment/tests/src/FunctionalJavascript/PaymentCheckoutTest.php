@@ -2,16 +2,18 @@
 
 namespace Drupal\Tests\commerce_payment\FunctionalJavascript;
 
+use Drupal\Tests\commerce\FunctionalJavascript\CommerceWebDriverTestBase;
 use Drupal\commerce_checkout\Entity\CheckoutFlow;
 use Drupal\commerce_event_recorder_test\CommerceEventRecorder;
 use Drupal\commerce_order\Adjustment;
 use Drupal\commerce_order\Entity\Order;
 use Drupal\commerce_payment\Entity\Payment;
 use Drupal\commerce_payment\Entity\PaymentGateway;
+use Drupal\commerce_payment\Entity\PaymentInterface;
 use Drupal\commerce_payment\Entity\PaymentMethod;
 use Drupal\commerce_payment\Entity\PaymentMethodInterface;
+use Drupal\commerce_payment\PaymentStorageInterface;
 use Drupal\commerce_price\Price;
-use Drupal\Tests\commerce\FunctionalJavascript\CommerceWebDriverTestBase;
 
 /**
  * Tests the integration between payments and checkout.
@@ -81,6 +83,7 @@ class PaymentCheckoutTest extends CommerceWebDriverTestBase {
     'commerce_checkout',
     'commerce_payment',
     'commerce_payment_example',
+    'commerce_payment_test',
     'commerce_event_recorder_test',
   ];
 
@@ -289,10 +292,11 @@ class PaymentCheckoutTest extends CommerceWebDriverTestBase {
     $stored_offsite_gateway->setStatus(FALSE);
     $stored_offsite_gateway->save();
 
+    $this->drupalGet($this->product->toUrl()->toString());
+    $this->submitForm([], 'Add to cart');
     // A single radio button should be selected and hidden.
     $this->drupalGet('checkout/1');
-    $radio_button = $page->findField('Example');
-    $this->assertNull($radio_button);
+    $this->assertFalse($this->getSession()->getPage()->hasField('Example'));
     $this->assertRenderedAddress($this->defaultAddress, 'payment_information[billing_information]');
   }
 
@@ -739,7 +743,7 @@ class PaymentCheckoutTest extends CommerceWebDriverTestBase {
     $this->submitForm([], 'Add to cart');
     $this->drupalGet('checkout/1');
     $this->assertSession()->fieldNotExists('Visa ending in 1111');
-    $radio_button = $this->getSession()->getPage()->findField('Credit card (Example Stored Offsite)');
+    $radio_button = $this->getSession()->getPage()->findField('Example Stored Offsite');
     $radio_button->click();
     $this->assertSession()->assertWaitOnAjaxRequest();
     $this->assertRenderedAddress($this->defaultAddress, 'payment_information[billing_information]');
@@ -977,6 +981,139 @@ class PaymentCheckoutTest extends CommerceWebDriverTestBase {
   }
 
   /**
+   * Tests a paid order, where only the billing information is collected.
+   */
+  public function testRequirePaymentMethod() {
+    // Prepare a different address book profile to test switching.
+    $new_address = [
+      'given_name' => 'Johnny',
+      'family_name' => 'Appleseed',
+      'address_line1' => '123 New York Drive',
+      'locality' => 'New York City',
+      'administrative_area' => 'NY',
+      'postal_code' => '10001',
+      'country_code' => 'US',
+    ];
+    $new_address_book_profile = $this->createEntity('profile', [
+      'type' => 'customer',
+      'uid' => $this->adminUser->id(),
+      'address' => $new_address,
+    ]);
+
+    // Test the 'require' setting of PaymentInformation while here.
+    /** @var \Drupal\commerce_checkout\Entity\CheckoutFlow $checkout_flow */
+    $checkout_flow = CheckoutFlow::load('default');
+    $plugin = $checkout_flow->getPlugin();
+    $configuration = $plugin->getConfiguration();
+    $configuration['panes']['payment_information']['require_payment_method'] = TRUE;
+    $plugin->setConfiguration($configuration);
+    $checkout_flow->save();
+
+    $this->drupalGet($this->product->toUrl()->toString());
+    $this->submitForm([], 'Add to cart');
+
+    $order = Order::load(1);
+    $order->setTotalPaid($order->getTotalPrice());
+    $order->save();
+
+    $this->drupalGet('checkout/1');
+    $radio_button = $this->getSession()->getPage()->findField('Credit card');
+    $radio_button->click();
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->assertRenderedAddress($this->defaultAddress, 'payment_information[add_payment_method][billing_information]');
+    $this->getSession()->getPage()->pressButton('billing_edit');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    $this->submitForm([
+      'payment_information[add_payment_method][payment_details][number]' => '4012888888881881',
+      'payment_information[add_payment_method][payment_details][expiration][month]' => '02',
+      'payment_information[add_payment_method][payment_details][expiration][year]' => $this->futureYear(),
+      'payment_information[add_payment_method][payment_details][security_code]' => '123',
+      'payment_information[add_payment_method][billing_information][address][0][address][given_name]' => 'Johnny',
+      'payment_information[add_payment_method][billing_information][address][0][address][family_name]' => 'Appleseed',
+      'payment_information[add_payment_method][billing_information][address][0][address][address_line1]' => '123 New York Drive',
+      'payment_information[add_payment_method][billing_information][address][0][address][locality]' => 'New York City',
+      'payment_information[add_payment_method][billing_information][address][0][address][administrative_area]' => 'NY',
+      'payment_information[add_payment_method][billing_information][address][0][address][postal_code]' => '10001',
+    ], 'Continue to review');
+    $this->assertSession()->pageTextContains('Payment information');
+    $this->assertSession()->pageTextContains('Visa ending in 1881');
+    $this->assertSession()->pageTextContains('Expires 2/' . $this->futureYear());
+    $this->assertSession()->pageTextContains('Johnny Appleseed');
+    $this->assertSession()->pageTextContains('123 New York Drive');
+    $this->submitForm([], 'Pay and complete purchase');
+    $this->assertSession()->pageTextContains('Your order number is 1. You can view your order on your account page when logged in.');
+
+    $order = $this->reloadEntity($order);
+    $this->assertInstanceOf(PaymentMethodInterface::class, $order->get('payment_method')->entity);
+    $storage = $this->container->get('entity_type.manager')->getStorage('commerce_payment');
+    assert($storage instanceof PaymentStorageInterface);
+    $payments = $storage->loadMultipleByOrder($order);
+    $this->assertCount(1, $payments);
+    $payment = reset($payments);
+    assert($payment instanceof PaymentInterface);
+    $this->assertEquals('0.00', $payment->getAmount()->getNumber());
+    $this->assertEquals('USD', $payment->getAmount()->getCurrencyCode());
+    $this->assertInstanceOf(PaymentMethodInterface::class, $payment->getPaymentMethod());
+  }
+
+  /**
+   * Test modifying require_payment_method via EventSubscriber.
+   */
+  public function testRequirePaymentMethodEvent() {
+    // Prepare a different address book profile to test switching.
+    $new_address = [
+      'given_name' => 'Johnny',
+      'family_name' => 'Appleseed',
+      'address_line1' => '123 New York Drive',
+      'locality' => 'New York City',
+      'administrative_area' => 'NY',
+      'postal_code' => '10001',
+      'country_code' => 'US',
+    ];
+    $new_address_book_profile = $this->createEntity('profile', [
+      'type' => 'customer',
+      'uid' => $this->adminUser->id(),
+      'address' => $new_address,
+    ]);
+
+    // Test the 'require' setting of PaymentInformation while here.
+    /** @var \Drupal\commerce_checkout\Entity\CheckoutFlow $checkout_flow */
+    $checkout_flow = CheckoutFlow::load('default');
+    $plugin = $checkout_flow->getPlugin();
+    $configuration = $plugin->getConfiguration();
+    $configuration['panes']['payment_information']['require_payment_method'] = TRUE;
+    $plugin->setConfiguration($configuration);
+    $checkout_flow->save();
+
+    $this->drupalGet($this->product->toUrl()->toString());
+    $this->submitForm([], 'Add to cart');
+
+    $order = Order::load(1);
+    $order->setTotalPaid($order->getTotalPrice());
+    $order->setData('require_payment_method', FALSE);
+    $order->save();
+
+    $this->drupalGet('checkout/1');
+    $this->assertSession()->pageTextContains('Billing information');
+    $this->assertSession()->pageTextNotContains('Payment information');
+    $this->assertRenderedAddress($this->defaultAddress, 'payment_information[billing_information]');
+    $this->getSession()->getPage()->fillField('payment_information[billing_information][select_address]', $new_address_book_profile->id());
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->assertRenderedAddress($new_address, 'payment_information[billing_information]');
+
+    $this->submitForm([], 'Continue to review');
+    $this->assertSession()->pageTextContains('Billing information');
+    $this->assertSession()->pageTextNotContains('Payment information');
+    $this->assertSession()->pageTextContains('Example');
+    $this->assertSession()->pageTextContains('Johnny Appleseed');
+    $this->assertSession()->pageTextContains('123 New York Drive');
+
+    $this->submitForm([], 'Complete checkout');
+    $this->assertSession()->pageTextContains('Your order number is 1. You can view your order on your account page when logged in.');
+  }
+
+  /**
    * Tests updating a profile of a non tokenized payment method.
    */
   public function testUpdatingProfile() {
@@ -1027,6 +1164,28 @@ class PaymentCheckoutTest extends CommerceWebDriverTestBase {
 
     $this->assertSession()->pageTextContains('Johnny updated');
     $this->assertSession()->pageTextContains('125 New York Drive');
+  }
+
+  /**
+   * Tests deleting a payment method before completing checkout.
+   */
+  public function testDeletedPaymentMethod(): void {
+    $this->drupalGet($this->product->toUrl()->toString());
+    $this->submitForm([], 'Add to cart');
+    $order = Order::load(1);
+    $order->payment_method = $this->orderPaymentMethod;
+    $order->save();
+    $this->drupalGet('checkout/1');
+    $this->assertSession()->pageTextContains('Payment information');
+    $default_radio_button = $this->getSession()->getPage()->findField('Visa ending in 9999');
+    $this->assertNotEmpty($default_radio_button->getAttribute('checked'));
+    $this->submitForm([], 'Continue to review');
+    $this->assertSession()->pageTextContains('Payment information');
+    $this->assertSession()->pageTextContains('Visa ending in 9999');
+    $this->orderPaymentMethod->delete();
+    $this->submitForm([], 'Pay and complete purchase');
+    $this->assertSession()->pageTextContains('We encountered an unexpected error processing your payment. Please try again later.');
+    $this->assertSession()->addressEquals('checkout/1/order_information');
   }
 
 }

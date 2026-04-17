@@ -2,8 +2,8 @@
 
 namespace Drupal\commerce_tax\Plugin\Field\FieldType;
 
-use Drupal\commerce_tax\Plugin\Commerce\TaxNumberType\VerificationResult;
 use Drupal\Core\Field\FieldItemInterface;
+use Drupal\commerce_tax\Plugin\Commerce\TaxNumberType\VerificationResult;
 
 /**
  * Defines the interface for tax number field items.

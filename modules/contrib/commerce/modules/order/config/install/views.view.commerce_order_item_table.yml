@@ -73,21 +73,21 @@ display:
             unit_price__number:
               sortable: false
               default_sort_order: asc
-              align: ''
+              align: views-align-center
               separator: ''
               empty_column: false
               responsive: ''
             quantity:
               sortable: false
               default_sort_order: asc
-              align: ''
+              align: views-align-center
               separator: ''
               empty_column: false
               responsive: ''
             total_price__number:
               sortable: false
               default_sort_order: asc
-              align: ''
+              align: views-align-right
               separator: ''
               empty_column: false
               responsive: ''
@@ -281,12 +281,13 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: number_decimal
+          type: commerce_quantity
           settings:
             thousand_separator: ''
             prefix_suffix: true
             decimal_separator: .
             scale: 2
+            strip_trailing_zeroes: true
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -401,7 +402,6 @@ display:
           default_argument_type: fixed
           default_argument_options:
             argument: ''
-          default_argument_skip_url: false
           summary_options:
             base_path: ''
             count: true
@@ -420,7 +420,8 @@ display:
           not: false
           entity_type: commerce_order_item
           entity_field: order_item_id
-          plugin_id: numeric
+          plugin_id: entity_target_id
+          target_entity_type_id: commerce_order_item
       display_extenders: {  }
     cache_metadata:
       max-age: -1

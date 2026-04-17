@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\commerce_checkout\Kernel;
 
-use Drupal\commerce_order\Entity\Order;
 use Drupal\Tests\commerce_order\Kernel\OrderKernelTestBase;
+use Drupal\commerce_order\Entity\Order;
 
 /**
  * Tests the chain checkout flow resolver.

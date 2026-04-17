@@ -2,8 +2,6 @@
 
 namespace Drupal\commerce_product;
 
-use Drupal\commerce\EntityHelper;
-use Drupal\commerce_product\Entity\ProductInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -14,6 +12,8 @@ use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
+use Drupal\commerce\EntityHelper;
+use Drupal\commerce_product\Entity\ProductInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

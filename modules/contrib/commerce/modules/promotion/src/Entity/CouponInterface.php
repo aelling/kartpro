@@ -2,10 +2,10 @@
 
 namespace Drupal\commerce_promotion\Entity;
 
-use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
+use Drupal\commerce_order\Entity\OrderInterface;
 
 /**
  * Provides an interface for defining coupon entities.
@@ -180,7 +180,7 @@ interface CouponInterface extends ContentEntityInterface, EntityChangedInterface
    *
    * @return $this
    */
-  public function setEndDate(DrupalDateTime $end_date = NULL);
+  public function setEndDate(?DrupalDateTime $end_date = NULL);
 
   /**
    * Checks whether the coupon is available for the given order.

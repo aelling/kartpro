@@ -160,10 +160,10 @@ class DashboardController extends ControllerBase {
 
       /** @var \Drupal\Core\Menu\MenuLinkInterface $link */
       $link = $element->link;
-      $key = Html::cleanCssIdentifier($link->getRouteName(), [
+      $key = Html::getUniqueId(Html::cleanCssIdentifier($link->getRouteName(), [
         '.' => '-',
         '_' => '-',
-      ]);
+      ]));
       $links[$key] = [
         'title' => $link->getTitle(),
         'description' => $link->getDescription(),

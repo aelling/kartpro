@@ -2,22 +2,23 @@
 
 namespace Drupal\commerce_cart\Plugin\QueueWorker;
 
-use Drupal\commerce\Interval;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Queue\Attribute\QueueWorker;
 use Drupal\Core\Queue\QueueWorkerBase;
+use Drupal\commerce\Interval;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Deletes expired carts.
- *
- * @QueueWorker(
- *  id = "commerce_cart_expiration",
- *  title = @Translation("Cart expiration"),
- *  cron = {"time" = 30}
- * )
  */
+#[QueueWorker(
+  id: 'commerce_cart_expiration',
+  title: new TranslatableMarkup('Cart expiration'),
+  cron: ['time' => 30],
+)]
 class CartExpiration extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   /**
@@ -74,7 +75,7 @@ class CartExpiration extends QueueWorkerBase implements ContainerFactoryPluginIn
       // Skip the OrderRefresh process to keep the changed timestamp intact.
       /** @var \Drupal\commerce_order\Entity\OrderInterface $order */
       $order = $this->orderStorage->loadUnchanged($order_id);
-      if (!$order) {
+      if (!$order || $order->isLocked()) {
         continue;
       }
       /** @var \Drupal\commerce_order\Entity\OrderTypeInterface $order_type */
@@ -90,6 +91,9 @@ class CartExpiration extends QueueWorkerBase implements ContainerFactoryPluginIn
       $expiration_date = $interval->subtract($current_date);
       $expiration_timestamp = $expiration_date->getTimestamp();
       // Make sure that the cart order still qualifies for expiration.
+      if (($cart_expiration['anonymous_only'] ?? FALSE) && $order->getCustomerId() > 0) {
+        continue;
+      }
       if ($order->get('cart')->value && $order->getChangedTime() <= $expiration_timestamp) {
         $orders[] = $order;
       }

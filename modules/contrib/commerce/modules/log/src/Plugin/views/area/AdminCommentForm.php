@@ -2,12 +2,13 @@
 
 namespace Drupal\commerce_log\Plugin\views\area;
 
-use Drupal\commerce_log\Form\LogCommentForm;
-use Drupal\commerce_log\LogTemplateManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\commerce_log\Form\LogCommentForm;
+use Drupal\commerce_log\LogTemplateManagerInterface;
+use Drupal\views\Attribute\ViewsArea;
 use Drupal\views\Plugin\views\area\AreaPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -18,9 +19,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * log as comment.
  *
  * @ingroup views_area_handlers
- *
- * @ViewsArea("commerce_log_admin_comment_form")
  */
+#[ViewsArea("commerce_log_admin_comment_form")]
 class AdminCommentForm extends AreaPluginBase {
 
   use StringTranslationTrait;
@@ -125,6 +125,7 @@ class AdminCommentForm extends AreaPluginBase {
     if ($entity) {
       $form = $this->formBuilder->getForm(LogCommentForm::class, $source_entity_type, $source_entity_id, $log_template_id);
       $form['log_comment']['comment']['#description'] = $this->t('Your comment will only be visible to users who have access to the activity log.');
+      $form['#attached']['library'][] = 'commerce_log/admin_comment_form';
       return $form;
     }
     return [];

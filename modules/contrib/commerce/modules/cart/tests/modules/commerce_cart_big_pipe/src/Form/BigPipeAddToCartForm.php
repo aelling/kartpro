@@ -2,8 +2,8 @@
 
 namespace Drupal\commerce_cart_big_pipe\Form;
 
-use Drupal\commerce_cart\Form\AddToCartForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\commerce_cart\Form\AddToCartForm;
 
 /**
  * Provides a slow to build add to cart form, to test streaming.

@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\commerce_store\Functional;
 
-use Drupal\commerce_store\Entity\StoreType;
 use Drupal\Tests\commerce\Functional\CommerceBrowserTestBase;
+use Drupal\commerce_store\Entity\StoreType;
 
 /**
  * Tests the store type UI.

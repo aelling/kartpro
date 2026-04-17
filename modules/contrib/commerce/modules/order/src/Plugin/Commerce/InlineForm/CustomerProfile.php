@@ -2,15 +2,17 @@
 
 namespace Drupal\commerce_order\Plugin\Commerce\InlineForm;
 
-use Drupal\commerce\CurrentCountryInterface;
-use Drupal\commerce\EntityHelper;
-use Drupal\commerce\Plugin\Commerce\InlineForm\EntityInlineFormBase;
-use Drupal\commerce_order\AddressBookInterface;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\commerce\Attribute\CommerceInlineForm;
+use Drupal\commerce\CurrentCountryInterface;
+use Drupal\commerce\EntityHelper;
+use Drupal\commerce\Plugin\Commerce\InlineForm\EntityInlineFormBase;
+use Drupal\commerce_order\AddressBookInterface;
 use Drupal\profile\Entity\ProfileInterface;
 use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -23,12 +25,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Supports two modes, based on the profile type setting:
  * - Single: The customer can have only a single profile of this type.
  * - Multiple: The customer can have multiple profiles of this type.
- *
- * @CommerceInlineForm(
- *   id = "customer_profile",
- *   label = @Translation("Customer profile"),
- * )
  */
+#[CommerceInlineForm(
+  id: "customer_profile",
+  label: new TranslatableMarkup("Customer profile"),
+)]
 class CustomerProfile extends EntityInlineFormBase {
 
   /**

@@ -130,3 +130,33 @@ function commerce_update_8203() {
   );
   \Drupal::service('commerce.inbox_message_storage')->save($inbox_message);
 }
+
+/**
+ * Remove \Drupal\commerce\BundleFieldDefinition from field storage definitions.
+ */
+function commerce_update_8204() {
+  $old_string = 'O:37:"Drupal\\commerce\\BundleFieldDefinition":5:';
+  $new_string = 'O:35:"Drupal\\entity\\BundleFieldDefinition":5:';
+
+  $database = \Drupal::database();
+  $query = $database->select('key_value', 'kv')
+    ->fields('kv', ['name', 'value'])
+    ->condition('collection', 'entity.definitions.installed')
+    ->condition('name', '%.field_storage_definitions', 'LIKE');
+  $results = $query->execute();
+  $updated_count = 0;
+
+  foreach ($results as $row) {
+    $new_value = str_replace($old_string, $new_string, $row->value);
+    if ($new_value !== $row->value) {
+      $database->update('key_value')
+        ->fields(['value' => $new_value])
+        ->condition('collection', 'entity.definitions.installed')
+        ->condition('name', $row->name)
+        ->execute();
+      $updated_count++;
+    }
+  }
+
+  \Drupal::logger('commerce')->notice('Updated @count records in key_value table.', ['@count' => $updated_count]);
+}

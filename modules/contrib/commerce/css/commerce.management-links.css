@@ -16,7 +16,6 @@
 
 .commerce-dashboard--management-links .management-link a {
   display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
@@ -83,55 +82,44 @@
   background-size: 100%;
 }
 
-.commerce-dashboard--management-links
-  .management-links-toggle.active
-  .management-links-toggle__icon {
+.commerce-dashboard--management-links .management-links-toggle.active .management-links-toggle__icon {
   background-image: var(--commerce-icon--x);
 }
 
 /* Icons */
-.commerce-dashboard--management-links
-  .management-link--entity-commerce-order-collection {
+.commerce-dashboard--management-links .management-link--entity-commerce-order-collection {
   --management-icon: var(--commerce-icon--clipboard-check-fill);
 }
 
-.commerce-dashboard--management-links
-  .management-link--entity-commerce-product-collection {
+.commerce-dashboard--management-links .management-link--entity-commerce-product-collection {
   --management-icon: var(--commerce-icon--box-seam-fill);
 }
 
-.commerce-dashboard--management-links
-  .management-link--entity-commerce-promotion-collection {
+.commerce-dashboard--management-links .management-link--entity-commerce-promotion-collection {
   --management-icon: var(--commerce-icon--bookmark-star-fill);
 }
 
-.commerce-dashboard--management-links
-  .management-link--entity-commerce-license-collection {
+.commerce-dashboard--management-links .management-link--entity-commerce-license-collection {
   --management-icon: var(--commerce-icon--person-vcard-fill);
 }
 
-.commerce-dashboard--management-links
-  .management-link--entity-commerce-pricelist-collection {
+.commerce-dashboard--management-links .management-link--entity-commerce-pricelist-collection {
   --management-icon: var(--commerce-icon--tags-fill);
 }
 
-.commerce-dashboard--management-links
-  .management-link--entity-commerce-shipping-method-collection {
+.commerce-dashboard--management-links .management-link--entity-commerce-shipping-method-collection {
   --management-icon: var(--commerce-icon--truck-front-fill);
 }
 
-.commerce-dashboard--management-links
-  .management-link--entity-commerce-subscription-collection {
+.commerce-dashboard--management-links .management-link--entity-commerce-subscription-collection {
   --management-icon: var(--commerce-icon--envelope-plus-fill);
 }
 
-.commerce-dashboard--management-links
-  .management-link--entity-commerce-wishlist-collection {
+.commerce-dashboard--management-links .management-link--entity-commerce-wishlist-collection {
   --management-icon: var(--commerce-icon--bag-heart-fill);
 }
 
-.commerce-dashboard--management-links
-  .management-link--entity-commerce-invoice-collection {
+.commerce-dashboard--management-links .management-link--entity-commerce-invoice-collection {
   --management-icon: var(--commerce-icon--file-earmark-ruled-fill);
 }
 

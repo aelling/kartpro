@@ -2,48 +2,37 @@
 
 namespace Drupal\commerce_payment_example\Plugin\Commerce\PaymentGateway;
 
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\commerce_payment\Attribute\CommercePaymentGateway;
 use Drupal\commerce_payment\CreditCard;
 use Drupal\commerce_payment\Entity\PaymentInterface;
 use Drupal\commerce_payment\Entity\PaymentMethodInterface;
 use Drupal\commerce_payment\Exception\HardDeclineException;
-use Drupal\commerce_payment\PaymentMethodTypeManager;
-use Drupal\commerce_payment\PaymentTypeManager;
 use Drupal\commerce_payment\Plugin\Commerce\PaymentGateway\OnsitePaymentGatewayBase;
-use Drupal\commerce_price\MinorUnitsConverterInterface;
+use Drupal\commerce_payment\Plugin\Commerce\PaymentGateway\SupportsZeroBalanceOrderInterface;
+use Drupal\commerce_payment\PluginForm\PaymentMethodEditForm;
+use Drupal\commerce_payment_example\PluginForm\Onsite\PaymentMethodAddForm;
 use Drupal\commerce_price\Price;
-use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Provides the On-site payment gateway.
- *
- * @CommercePaymentGateway(
- *   id = "example_onsite",
- *   label = "Example (On-site)",
- *   display_label = "Example",
- *   forms = {
- *     "add-payment-method" = "Drupal\commerce_payment_example\PluginForm\Onsite\PaymentMethodAddForm",
- *     "edit-payment-method" = "Drupal\commerce_payment\PluginForm\PaymentMethodEditForm",
- *   },
- *   payment_method_types = {"credit_card"},
- *   credit_card_types = {
- *     "amex", "dinersclub", "discover", "jcb", "maestro", "mastercard", "visa",
- *   },
- *   requires_billing_information = FALSE,
- * )
  */
-class Onsite extends OnsitePaymentGatewayBase implements OnsiteInterface {
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, PaymentTypeManager $payment_type_manager, PaymentMethodTypeManager $payment_method_type_manager, TimeInterface $time, MinorUnitsConverterInterface $minor_units_converter) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $payment_type_manager, $payment_method_type_manager, $time, $minor_units_converter);
-
-    // You can create an instance of the SDK here and assign it to $this->api.
-    // Or inject Guzzle when there's no suitable SDK.
-  }
+#[CommercePaymentGateway(
+  id: "example_onsite",
+  label: new TranslatableMarkup("Example (On-site)"),
+  display_label: new TranslatableMarkup("Example"),
+  forms: [
+    "add-payment-method" => PaymentMethodAddForm::class,
+    "edit-payment-method" => PaymentMethodEditForm::class,
+  ],
+  payment_method_types: ["credit_card"],
+  credit_card_types: [
+    "amex", "dinersclub", "discover", "jcb", "maestro", "mastercard", "visa",
+  ],
+  requires_billing_information: FALSE,
+)]
+class Onsite extends OnsitePaymentGatewayBase implements OnsiteInterface, SupportsZeroBalanceOrderInterface {
 
   /**
    * {@inheritdoc}
@@ -126,7 +115,7 @@ class Onsite extends OnsitePaymentGatewayBase implements OnsiteInterface {
   /**
    * {@inheritdoc}
    */
-  public function capturePayment(PaymentInterface $payment, Price $amount = NULL) {
+  public function capturePayment(PaymentInterface $payment, ?Price $amount = NULL) {
     $this->assertPaymentState($payment, ['authorization']);
     // If not specified, capture the entire amount.
     $amount = $amount ?: $payment->getAmount();
@@ -157,7 +146,7 @@ class Onsite extends OnsitePaymentGatewayBase implements OnsiteInterface {
   /**
    * {@inheritdoc}
    */
-  public function refundPayment(PaymentInterface $payment, Price $amount = NULL) {
+  public function refundPayment(PaymentInterface $payment, ?Price $amount = NULL) {
     $this->assertPaymentState($payment, ['completed', 'partially_refunded']);
     // If not specified, refund the entire amount.
     $amount = $amount ?: $payment->getAmount();

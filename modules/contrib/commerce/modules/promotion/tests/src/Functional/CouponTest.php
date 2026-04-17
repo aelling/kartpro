@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\commerce_promotion\Functional;
 
+use Drupal\Tests\commerce\Functional\CommerceBrowserTestBase;
 use Drupal\commerce_promotion\Entity\Coupon;
 use Drupal\commerce_promotion\Entity\Promotion;
-use Drupal\Tests\commerce\Functional\CommerceBrowserTestBase;
 
 /**
  * Tests the admin UI for coupons.

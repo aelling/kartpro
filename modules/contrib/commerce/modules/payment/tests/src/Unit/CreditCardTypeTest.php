@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\commerce_payment\Unit;
 
-use Drupal\commerce_payment\CreditCardType;
 use Drupal\Tests\UnitTestCase;
+use Drupal\commerce_payment\CreditCardType;
 
 /**
  * @coversDefaultClass \Drupal\commerce_payment\CreditCardType

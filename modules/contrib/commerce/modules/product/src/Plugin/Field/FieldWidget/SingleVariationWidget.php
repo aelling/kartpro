@@ -3,25 +3,24 @@
 namespace Drupal\commerce_product\Plugin\Field\FieldWidget;
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'commerce_product_single_variation' widget.
- *
- * @FieldWidget(
- *   id = "commerce_product_single_variation",
- *   label = @Translation("Single variation (Product information)"),
- *   field_types = {
- *     "entity_reference"
- *   },
- *   multiple_values = true
- * )
  */
+#[FieldWidget(
+  id: "commerce_product_single_variation",
+  label: new TranslatableMarkup("Single variation (Product information)"),
+  field_types: ["entity_reference"],
+  multiple_values: TRUE,
+)]
 class SingleVariationWidget extends WidgetBase implements ContainerFactoryPluginInterface {
 
   /**

@@ -2,12 +2,6 @@
 
 namespace Drupal\commerce_order\Form;
 
-use Drupal\commerce\AjaxFormTrait;
-use Drupal\commerce\EntityHelper;
-use Drupal\commerce_order\Entity\OrderItemType;
-use Drupal\commerce_order\Entity\OrderItemTypeInterface;
-use Drupal\commerce_price\Calculator;
-use Drupal\commerce_store\Entity\StoreInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Datetime\DrupalDateTime;
@@ -15,6 +9,12 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Site\Settings;
+use Drupal\commerce\AjaxFormTrait;
+use Drupal\commerce\EntityHelper;
+use Drupal\commerce_order\Entity\OrderItemType;
+use Drupal\commerce_order\Entity\OrderItemTypeInterface;
+use Drupal\commerce_price\Calculator;
+use Drupal\commerce_store\Entity\StoreInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -499,7 +499,7 @@ class DashboardMetricsForm extends FormBase {
    * @return int
    *   The carts count for the given period.
    */
-  protected function getCartsCountForPeriod(int|array $period, int $store_id = NULL): int {
+  protected function getCartsCountForPeriod(int|array $period, ?int $store_id = NULL): int {
     $carts_query = $this->connection->select('commerce_order');
     $period_operator = is_array($period) ? 'BETWEEN' : '>=';
     $or_condition = $carts_query->orConditionGroup();
@@ -540,7 +540,7 @@ class DashboardMetricsForm extends FormBase {
    *    - gross_total: The gross total.
    *    - gross_total: The gross total.
    */
-  protected function getOrderMetricsForPeriod(int|array $period, int $store_id = NULL): array {
+  protected function getOrderMetricsForPeriod(int|array $period, ?int $store_id = NULL): array {
     $query = $this->connection->select('commerce_order', 'co');
     $query->addField('co', 'total_price__currency_code', 'currency_code');
     $query->addExpression('COUNT(co.order_id)', 'count_orders');
@@ -570,7 +570,7 @@ class DashboardMetricsForm extends FormBase {
    * @return array
    *   An array keyed by product ID whose values are the product sold counts.
    */
-  protected function getBestSellingProductIds(int $period_timestamp, int $store_id = NULL): array {
+  protected function getBestSellingProductIds(int $period_timestamp, ?int $store_id = NULL): array {
     // Get the order item types referencing product variations.
     $qualifying_order_item_types = array_filter(OrderItemType::loadMultiple(), function (OrderItemTypeInterface $order_item_type) {
       return $order_item_type->getPurchasableEntityTypeId() === 'commerce_product_variation';
@@ -611,7 +611,7 @@ class DashboardMetricsForm extends FormBase {
    * @return array
    *   An array keyed by promotion ID whose values are the promotion usage.
    */
-  protected function getMostUsedPromotionIds(int $period_timestamp, int $store_id = NULL): array {
+  protected function getMostUsedPromotionIds(int $period_timestamp, ?int $store_id = NULL): array {
     $query = $this->connection->select('commerce_promotion_usage', 'cpu');
     $query->addField('cpu', 'promotion_id');
     $query->addExpression('COUNT(cpu.usage_id)', 'usage_count');

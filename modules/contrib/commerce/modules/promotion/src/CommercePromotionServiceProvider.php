@@ -2,9 +2,9 @@
 
 namespace Drupal\commerce_promotion;
 
-use Drupal\commerce_promotion\EventSubscriber\CartEventSubscriber;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceProviderBase;
+use Drupal\commerce_promotion\EventSubscriber\CartEventSubscriber;
 
 /**
  * Registers event subscribers for installed Commerce modules.

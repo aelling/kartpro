@@ -2,12 +2,12 @@
 
 namespace Drupal\commerce_order\EntityPrint;
 
-use Drupal\commerce_order\Entity\OrderInterface;
-use Drupal\commerce_order\OrderTotalSummaryInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface as CoreRendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\commerce_order\Entity\OrderInterface;
+use Drupal\commerce_order\OrderTotalSummaryInterface;
 use Drupal\entity_print\Asset\AssetRendererInterface;
 use Drupal\entity_print\FilenameGeneratorInterface;
 use Drupal\entity_print\Renderer\ContentEntityRenderer;

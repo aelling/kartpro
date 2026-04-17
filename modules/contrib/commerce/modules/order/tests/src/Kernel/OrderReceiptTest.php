@@ -2,16 +2,16 @@
 
 namespace Drupal\Tests\commerce_order\Kernel;
 
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Language\Language;
+use Drupal\Core\Site\Settings;
+use Drupal\Core\Test\AssertMailTrait;
 use Drupal\commerce_order\Entity\Order;
 use Drupal\commerce_order\Entity\OrderType;
 use Drupal\commerce_payment\Entity\PaymentGateway;
 use Drupal\commerce_price\Price;
 use Drupal\commerce_product\Entity\Product;
 use Drupal\commerce_product\Entity\ProductVariation;
-use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Core\Language\Language;
-use Drupal\Core\Site\Settings;
-use Drupal\Core\Test\AssertMailTrait;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\profile\Entity\Profile;
 

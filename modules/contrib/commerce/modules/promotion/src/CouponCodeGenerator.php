@@ -7,21 +7,12 @@ use Drupal\Core\Database\Connection;
 class CouponCodeGenerator implements CouponCodeGeneratorInterface {
 
   /**
-   * The database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $connection;
-
-  /**
    * Constructs a new CouponCodeGenerator object.
    *
    * @param \Drupal\Core\Database\Connection $connection
    *   The database connection.
    */
-  public function __construct(Connection $connection) {
-    $this->connection = $connection;
-  }
+  public function __construct(protected Connection $connection) {}
 
   /**
    * {@inheritdoc}

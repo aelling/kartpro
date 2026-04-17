@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\commerce_order\Kernel;
 
+use Drupal\Tests\commerce\Kernel\CommerceKernelTestBase;
 use Drupal\commerce_order\Comparator\AdjustmentComparator;
 use Drupal\commerce_order\Entity\OrderItemType;
-use Drupal\Tests\commerce\Kernel\CommerceKernelTestBase;
 use SebastianBergmann\Comparator\Factory as PhpUnitComparatorFactory;
 
 /**

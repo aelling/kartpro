@@ -2,6 +2,8 @@
 
 namespace Drupal\Tests\commerce_order\Kernel;
 
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\commerce_order\Entity\Order;
 use Drupal\commerce_order\Entity\OrderType;
 use Drupal\commerce_order\OrderRefresh;
@@ -9,8 +11,6 @@ use Drupal\commerce_price\Price;
 use Drupal\commerce_product\Entity\Product;
 use Drupal\commerce_product\Entity\ProductVariation;
 use Drupal\commerce_product\Entity\ProductVariationType;
-use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\profile\Entity\Profile;
 
 /**

@@ -5,6 +5,15 @@ namespace Drupal\commerce_payment\Event;
 final class PaymentEvents {
 
   /**
+   * Name of the event fired when payment information pane is rendered.
+   *
+   * @Event
+   *
+   * @see \Drupal\commerce_payment\Event\RequirePaymentMethodEvent
+   */
+  const REQUIRE_PAYMENT_METHOD = 'commerce_payment.require_payment_method';
+
+  /**
    * Name of the event fired when payment gateways are loaded for an order.
    *
    * @Event

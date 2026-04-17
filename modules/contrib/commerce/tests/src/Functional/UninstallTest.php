@@ -4,7 +4,6 @@ namespace Drupal\Tests\commerce\Functional;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\BrowserTestBase;
-use Drupal\Tests\commerce\Traits\DeprecationSuppressionTrait;
 
 /**
  * Tests module uninstallation.
@@ -13,24 +12,7 @@ use Drupal\Tests\commerce\Traits\DeprecationSuppressionTrait;
  */
 class UninstallTest extends BrowserTestBase {
 
-  use DeprecationSuppressionTrait;
   use StringTranslationTrait;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp(): void {
-    $this->setErrorHandler();
-    parent::setUp();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function tearDown(): void {
-    parent::tearDown();
-    $this->restoreErrorHandler();
-  }
 
   /**
    * {@inheritdoc}

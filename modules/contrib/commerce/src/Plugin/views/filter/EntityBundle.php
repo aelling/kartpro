@@ -4,6 +4,7 @@ namespace Drupal\commerce\Plugin\views\filter;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\views\Attribute\ViewsFilter;
 use Drupal\views\Plugin\views\filter\Bundle;
 
 /**
@@ -13,9 +14,8 @@ use Drupal\views\Plugin\views\filter\Bundle;
  * bundle.
  *
  * @ingroup views_filter_handlers
- *
- * @ViewsFilter("commerce_entity_bundle")
  */
+#[ViewsFilter("commerce_entity_bundle")]
 class EntityBundle extends Bundle {
 
   /**

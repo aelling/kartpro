@@ -2,11 +2,11 @@
 
 namespace Drupal\Tests\commerce_cart\Kernel;
 
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\commerce_order\Entity\OrderType;
 use Drupal\commerce_order\Entity\OrderTypeInterface;
 use Drupal\commerce_order\OrderRefresh;
-use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Core\Session\AnonymousUserSession;
 
 /**
  * Tests the order refresh process.
@@ -76,7 +76,7 @@ class CartOrderRefreshTest extends CartKernelTestBase {
     $this->entityTypeManager->getAccessControlHandler('commerce_order')->resetCache();
     // We should appear as we are in a different session, at least from the
     // perspective of commerce_cart.cart_session.
-    $this->assertEmpty($order_refresh->shouldRefresh($this->cart));
+    $this->assertFalse($order_refresh->shouldRefresh($this->cart));
   }
 
   /**

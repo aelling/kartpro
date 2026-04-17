@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\commerce_cart\Functional;
 
-use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\commerce_order\Functional\OrderBrowserTestBase;
+use Drupal\commerce_order\Entity\OrderInterface;
 
 /**
  * Tests the cart page.
@@ -44,6 +44,7 @@ class CartTest extends OrderBrowserTestBase {
   protected static $modules = [
     'commerce_cart',
     'commerce_checkout',
+    'commerce_product',
   ];
 
   /**

@@ -2,9 +2,9 @@
 
 namespace Drupal\commerce_checkout\Event;
 
+use Drupal\Core\Session\AccountInterface;
 use Drupal\commerce\EventBase;
 use Drupal\commerce_order\Entity\OrderInterface;
-use Drupal\Core\Session\AccountInterface;
 
 /**
  * Defines the register during checkout event.

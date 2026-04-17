@@ -2,10 +2,10 @@
 
 namespace Drupal\Tests\commerce_payment\FunctionalJavascript;
 
-use Drupal\commerce_payment\Entity\PaymentGateway;
-use Drupal\commerce_payment\Entity\PaymentGatewayInterface;
 use Drupal\Core\Url;
 use Drupal\Tests\commerce\FunctionalJavascript\CommerceWebDriverTestBase;
+use Drupal\commerce_payment\Entity\PaymentGateway;
+use Drupal\commerce_payment\Entity\PaymentGatewayInterface;
 
 /**
  * Tests the payment gateway form.
@@ -61,8 +61,8 @@ class PaymentGatewayFormTest extends CommerceWebDriverTestBase {
     $this->assertSession()->fieldExists('Name');
     $this->assertSession()->fieldExists('API key');
 
-    $page->fillField('configuration[example_onsite][api_key]', 'MyAPIKey');
     $this->getSession()->getPage()->fillField('label', 'My onsite name');
+    $page->fillField('configuration[example_onsite][api_key]', 'MyAPIKey');
     // The following line is a hack, but for whatever reason the machine name
     // isn't set properly and the usual hacks didn't work.
     $this->getSession()->evaluateScript("jQuery('input[name=\"id\"]').val('my_onsite_name')");
