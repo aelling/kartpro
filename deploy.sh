@@ -12,9 +12,10 @@ ssh -i $SSH_KEY $VPS_USER@$VPS_HOST << ENDSSH
   chmod 755 $SITE_PATH/sites/default
   chmod 644 $SITE_PATH/sites/default/settings.php
   cd $SITE_PATH
-  git pull origin main
-  php vendor/bin/drush cache:rebuild
-  php vendor/bin/drush updatedb -y
-  php vendor/bin/drush config:import -y
+  git fetch origin
+  git checkout origin/main -- $(git diff --name-only HEAD origin/main | grep -v sites/default/settings.php | tr '\n' ' ')
+  php $SITE_PATH/vendor/drush/drush/drush.php cache:rebuild
+php $SITE_PATH/vendor/drush/drush/drush.php updatedb -y
+php $SITE_PATH/vendor/drush/drush/drush.php config:import -y
   echo "Deploy complete!"
 ENDSSH
