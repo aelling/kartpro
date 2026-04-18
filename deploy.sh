@@ -10,11 +10,11 @@ echo "Deploying to VPS..."
 
 ssh -i $SSH_KEY $VPS_USER@$VPS_HOST << ENDSSH
   cd $SITE_PATH
-  # Back up settings.php
-  cp sites/default/settings.php /tmp/settings.php.bak
-  # Force sync with GitHub
+  # Preserve settings.php
+  mv sites/default/settings.php /tmp/settings.php.bak
+  # Sync with GitHub
   git fetch origin
-  git reset --hard origin/main --no-sparse-checkout 2>/dev/null || git checkout -f origin/main
+  git reset --hard origin/main
   # Restore settings.php
   cp /tmp/settings.php.bak sites/default/settings.php
   # Run Drupal updates
