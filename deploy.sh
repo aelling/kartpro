@@ -9,14 +9,12 @@ SSH_KEY="$HOME/.ssh/kartpro_deploy"
 echo "Deploying to VPS..."
 
 ssh -i $SSH_KEY $VPS_USER@$VPS_HOST << ENDSSH
-  chmod 755 $SITE_PATH/sites/default
-  chmod 644 $SITE_PATH/sites/default/settings.php
   cd $SITE_PATH
   git fetch origin
+  git stash
   git reset --hard origin/main
-  git checkout origin/main -- $(git diff --name-only HEAD origin/main | grep -v sites/default/settings.php | tr '\n' ' ')
+  git update-index --skip-worktree sites/default/settings.php
   php $SITE_PATH/vendor/drush/drush/drush.php cache:rebuild
-php $SITE_PATH/vendor/drush/drush/drush.php updatedb -y
-php $SITE_PATH/vendor/drush/drush/drush.php config:import -y
+  php $SITE_PATH/vendor/drush/drush/drush.php updatedb -y
   echo "Deploy complete!"
 ENDSSH
