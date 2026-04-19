@@ -24,6 +24,7 @@
         "drupal/core-vendor-hardening": "^10.2",
         "drupal/inline_entity_form": "^1.0@RC",
         "drupal/pathauto": "^1.12",
+        "drupal/smtp": "^1.4",
         "drush/drush": "^13.6"
     },
     "conflict": {
