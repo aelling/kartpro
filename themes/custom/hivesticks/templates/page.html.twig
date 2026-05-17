@@ -1,0 +1,103 @@
+{#
+/**
+ * @file
+ * HiveSticks general page template (non-front pages).
+ * Used for blog posts, contact page, product detail pages, etc.
+ */
+#}
+
+{# Nav is shared with the front page #}
+<nav class="hs-nav" id="hs-nav" role="navigation" aria-label="{{ 'Site navigation'|t }}">
+  <div class="hs-nav__inner">
+    <a href="{{ path('<front>') }}" class="hs-nav__logo" rel="home">
+      <svg class="hs-nav__logo-mark" viewBox="0 0 38 38" fill="none" aria-hidden="true">
+        <polygon points="19,2 36,11 36,27 19,36 2,27 2,11" fill="#D4820A"/>
+        <polygon points="19,7 31.5,13.5 31.5,24.5 19,31 6.5,24.5 6.5,13.5" fill="#F5B342" opacity="0.3"/>
+        <path d="M14 18 Q15.5 14 19 13 Q22.5 14 24 18 Q22.5 25 19 26 Q15.5 25 14 18Z" fill="#FFF8ED"/>
+        <circle cx="19" cy="19" r="2.5" fill="#D4820A"/>
+      </svg>
+      <span class="hs-nav__logo-text">Hive<span>Sticks</span></span>
+    </a>
+    <ul class="hs-nav__links" role="list">
+      <li><a href="{{ path('<front>') }}#hs-products">{{ 'Shop'|t }}</a></li>
+      <li><a href="{{ path('<front>') }}#hs-athletes">{{ 'For Athletes'|t }}</a></li>
+      <li><a href="{{ path('<front>') }}#hs-story">{{ 'Our Story'|t }}</a></li>
+      <li><a href="{{ path('<front>') }}#hs-products" class="hs-btn hs-btn--primary hs-nav__cta">{{ 'Buy Now'|t }}</a></li>
+    </ul>
+    <button class="hs-nav__mobile-toggle" aria-controls="hs-nav-mobile" aria-expanded="false" aria-label="{{ 'Toggle navigation'|t }}">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="hs-nav__mobile-drawer" id="hs-nav-mobile" hidden>
+    <ul role="list">
+      <li><a href="{{ path('<front>') }}#hs-products">{{ 'Shop'|t }}</a></li>
+      <li><a href="{{ path('<front>') }}#hs-athletes">{{ 'For Athletes'|t }}</a></li>
+      <li><a href="{{ path('<front>') }}#hs-story">{{ 'Our Story'|t }}</a></li>
+    </ul>
+  </div>
+</nav>
+
+{% if page.header %}
+  <header class="hs-drupal-header" role="banner">{{ page.header }}</header>
+{% endif %}
+
+<main id="main-content" class="hs-inner-page" tabindex="-1">
+  <div class="hs-container">
+    {% if page.highlighted %}
+      <div class="hs-highlighted">{{ page.highlighted }}</div>
+    {% endif %}
+
+    <div class="hs-inner-page__layout {% if page.sidebar_first or page.sidebar_second %}hs-inner-page__layout--with-sidebar{% endif %}">
+
+      {% if page.sidebar_first %}
+        <aside class="hs-sidebar hs-sidebar--first" role="complementary">
+          {{ page.sidebar_first }}
+        </aside>
+      {% endif %}
+
+      <div class="hs-inner-page__content">
+        {{ page.content }}
+      </div>
+
+      {% if page.sidebar_second %}
+        <aside class="hs-sidebar hs-sidebar--second" role="complementary">
+          {{ page.sidebar_second }}
+        </aside>
+      {% endif %}
+
+    </div>
+  </div>
+</main>
+
+<footer class="hs-footer" role="contentinfo">
+  <div class="hs-container">
+    <div class="hs-footer__inner">
+      <div class="hs-footer__brand">
+        <a href="{{ path('<front>') }}" class="hs-nav__logo-text">Hive<span>Sticks</span></a>
+        <p>{{ 'Raw honey from our Iowa hives — in a portable stick you can take anywhere. Nothing added, nothing taken out.'|t }}</p>
+      </div>
+      <div class="hs-footer__col">
+        <div class="hs-footer__col-title">{{ 'Shop'|t }}</div>
+        <ul class="hs-footer__links" role="list">
+          <li><a href="{{ path('<front>') }}#hs-products">{{ '25-Pack'|t }}</a></li>
+          <li><a href="{{ path('<front>') }}#hs-products">{{ '50-Pack'|t }}</a></li>
+          <li><a href="{{ path('<front>') }}#hs-products">{{ '100-Pack'|t }}</a></li>
+          <li><a href="#">{{ 'Wholesale'|t }}</a></li>
+        </ul>
+      </div>
+      <div class="hs-footer__col">
+        <div class="hs-footer__col-title">{{ 'Company'|t }}</div>
+        <ul class="hs-footer__links" role="list">
+          <li><a href="{{ path('<front>') }}#hs-story">{{ 'Our Story'|t }}</a></li>
+          <li><a href="{{ path('<front>') }}#hs-athletes">{{ 'For Athletes'|t }}</a></li>
+          <li><a href="#">{{ 'Contact'|t }}</a></li>
+          <li><a href="https://iowabee.com">{{ 'Iowa Bee →'|t }}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="hs-footer__bottom">
+      <p>© {{ "now"|date("Y") }} HiveSticks / Iowa Bee. {{ 'All rights reserved.'|t }}</p>
+      <div class="hs-footer__iowa">{{ 'A'|t }} <span>{{ 'beekeeper-owned'|t }}</span> {{ 'Iowa farm brand.'|t }}</div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,34 @@
+<section{{ attributes.addClass('hs-hero') }} id="hs-hero" aria-labelledby="hs-hero-title">
+  {{ title_prefix }}
+  <svg class="hs-hero__hc" viewBox="0 0 400 400" aria-hidden="true" fill="#F5B342"><polygon points="50,25 75,12.5 100,25 100,50 75,62.5 50,50"/><polygon points="100,25 125,12.5 150,25 150,50 125,62.5 100,50"/><polygon points="150,25 175,12.5 200,25 200,50 175,62.5 150,50"/><polygon points="200,25 225,12.5 250,25 250,50 225,62.5 200,50"/><polygon points="250,25 275,12.5 300,25 300,50 275,62.5 250,50"/><polygon points="300,25 325,12.5 350,25 350,50 325,62.5 300,50"/><polygon points="25,62.5 50,50 75,62.5 75,87.5 50,100 25,87.5"/><polygon points="75,62.5 100,50 125,62.5 125,87.5 100,100 75,87.5"/><polygon points="125,62.5 150,50 175,62.5 175,87.5 150,100 125,87.5"/><polygon points="175,62.5 200,50 225,62.5 225,87.5 200,100 175,87.5"/><polygon points="225,62.5 250,50 275,62.5 275,87.5 250,100 225,87.5"/><polygon points="275,62.5 300,50 325,62.5 325,87.5 300,100 275,87.5"/><polygon points="325,62.5 350,50 375,62.5 375,87.5 350,100 325,87.5"/><polygon points="50,100 75,87.5 100,100 100,125 75,137.5 50,125"/><polygon points="100,100 125,87.5 150,100 150,125 125,137.5 100,125"/><polygon points="150,100 175,87.5 200,100 200,125 175,137.5 150,125"/><polygon points="200,100 225,87.5 250,100 250,125 225,137.5 200,125"/><polygon points="250,100 275,87.5 300,100 300,125 275,137.5 250,125"/><polygon points="300,100 325,87.5 350,100 350,125 325,137.5 300,125"/></svg>
+  <div class="hs-container hs-hero__container">
+    <div class="hs-hero__content">
+      {% if content.field_eyebrow %}<div class="hs-hero__eyebrow"><svg viewBox="0 0 16 16"><path d="M8 1C8 1 4 4 4 8C4 10.2 5.8 12 8 12C10.2 12 12 10.2 12 8C12 4 8 1 8 1Z"/></svg>{{ content.field_eyebrow[0] }}</div>{% endif %}
+      {% if content.field_title %}<h1 class="hs-hero__title" id="hs-hero-title">{{ content.field_title[0] }}</h1>{% endif %}
+      {% if content.field_subtitle %}<p class="hs-hero__sub">{{ content.field_subtitle[0] }}</p>{% endif %}
+      <div class="hs-hero__actions">
+        {% if content.field_button_text and content.field_button_url %}<a href="{{ content.field_button_url|render|striptags|trim }}" class="hs-btn hs-btn--primary">{{ content.field_button_text[0] }}</a>{% endif %}
+        <a href="#hs-athletes" class="hs-btn hs-btn--ghost">For Athletes →</a>
+      </div>
+      <div class="hs-hero__stats">
+        <div class="hs-hero__stat"><span class="hs-hero__stat-num">100%</span><span class="hs-hero__stat-label">Raw honey</span></div>
+        <div class="hs-hero__stat"><span class="hs-hero__stat-num">0</span><span class="hs-hero__stat-label">Additives</span></div>
+        <div class="hs-hero__stat"><span class="hs-hero__stat-num">~150</span><span class="hs-hero__stat-label">Years of farm heritage</span></div>
+      </div>
+    </div>
+    <div class="hs-hero__visual" aria-hidden="true">
+      <div class="hs-stick-card">
+        <div class="hs-stick-card__badge">New Batch</div>
+        <div class="hs-stick-pills">
+          <div class="hs-stick-pill hs-stick-pill--short"></div><div class="hs-stick-pill"></div><div class="hs-stick-pill hs-stick-pill--tall"></div><div class="hs-stick-pill"></div><div class="hs-stick-pill hs-stick-pill--short"></div><div class="hs-stick-pill hs-stick-pill--tall"></div><div class="hs-stick-pill"></div><div class="hs-stick-pill hs-stick-pill--short"></div>
+        </div>
+        <div class="hs-stick-card__label">Classic Honey Sticks</div>
+        <div class="hs-stick-card__sub">Raw Iowa Honey · No additives</div>
+      </div>
+      <div class="hs-hero__tags">
+        <span class="hs-hero__tag">Tear &amp; Go</span><span class="hs-hero__tag">Kid Friendly</span><span class="hs-hero__tag">Athlete Approved</span><span class="hs-hero__tag">Pocket Sized</span>
+      </div>
+    </div>
+  </div>
+  {{ title_suffix }}
+</section>

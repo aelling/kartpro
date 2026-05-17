@@ -1,0 +1,95 @@
+{#
+/**
+ * @file
+ * HiveSticks — Full-width page template for Commerce product pages.
+ * Removes sidebars so the PDP can use the full viewport width.
+ */
+#}
+
+<nav class="hs-nav" id="hs-nav" role="navigation" aria-label="{{ 'Site navigation'|t }}">
+  <div class="hs-nav__inner">
+    <a href="{{ path('<front>') }}" class="hs-nav__logo" rel="home" aria-label="{{ 'HiveSticks home'|t }}">
+      <svg class="hs-nav__logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="19,2 36,11 36,27 19,36 2,27 2,11" fill="#D4820A"/>
+        <polygon points="19,7 31.5,13.5 31.5,24.5 19,31 6.5,24.5 6.5,13.5" fill="#F5B342" opacity="0.3"/>
+        <path d="M14 18 Q15.5 14 19 13 Q22.5 14 24 18 Q22.5 25 19 26 Q15.5 25 14 18Z" fill="#FFF8ED"/>
+        <circle cx="19" cy="19" r="2.5" fill="#D4820A"/>
+      </svg>
+      <span class="hs-nav__logo-text">Hive<span>Sticks</span></span>
+    </a>
+
+    <ul class="hs-nav__links" role="list">
+      <li><a href="/store">{{ 'Shop'|t }}</a></li>
+      <li><a href="/for-athletes">{{ 'For Athletes'|t }}</a></li>
+      <li><a href="/our-story">{{ 'Our Story'|t }}</a></li>
+      <li><a href="/store" class="hs-btn hs-btn--primary hs-nav__cta">{{ 'Buy Now'|t }}</a></li>
+    </ul>
+
+    <button class="hs-nav__mobile-toggle" aria-controls="hs-nav-mobile" aria-expanded="false" aria-label="{{ 'Toggle navigation'|t }}">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="hs-nav__mobile-drawer" id="hs-nav-mobile" hidden>
+    <ul role="list">
+      <li><a href="/store">{{ 'Shop'|t }}</a></li>
+      <li><a href="/for-athletes">{{ 'For Athletes'|t }}</a></li>
+      <li><a href="/our-story">{{ 'Our Story'|t }}</a></li>
+      <li><a href="/store" class="hs-btn hs-btn--primary">{{ 'Buy Now'|t }}</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main-content" class="hs-pdp-page" role="main">
+  {% if page.highlighted %}
+    <div class="hs-messages">{{ page.highlighted }}</div>
+  {% endif %}
+  {{ page.content }}
+</main>
+
+<footer class="hs-footer" role="contentinfo">
+  <div class="hs-footer__inner">
+    <div class="hs-footer__brand">
+      <a href="{{ path('<front>') }}" class="hs-nav__logo">
+        <svg class="hs-nav__logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:28px;height:28px;">
+          <polygon points="19,2 36,11 36,27 19,36 2,27 2,11" fill="#D4820A"/>
+          <polygon points="19,7 31.5,13.5 31.5,24.5 19,31 6.5,24.5 6.5,13.5" fill="#F5B342" opacity="0.3"/>
+          <circle cx="19" cy="19" r="2.5" fill="#D4820A"/>
+        </svg>
+        <span class="hs-nav__logo-text">Hive<span>Sticks</span></span>
+      </a>
+      <p class="hs-footer__tagline">{{ 'A small Iowa apiary putting raw honey into stick form. Family-run since 2019.'|t }}</p>
+    </div>
+    <div class="hs-footer__cols">
+      <div class="hs-footer__col">
+        <div class="hs-footer__col-title">{{ 'SHOP'|t }}</div>
+        <ul>
+          <li><a href="/store">{{ 'All flavors'|t }}</a></li>
+          <li><a href="/store">{{ 'Variety packs'|t }}</a></li>
+          <li><a href="/store">{{ 'Subscribe & save'|t }}</a></li>
+          <li><a href="/wholesale">{{ 'Wholesale'|t }}</a></li>
+        </ul>
+      </div>
+      <div class="hs-footer__col">
+        <div class="hs-footer__col-title">{{ 'ABOUT'|t }}</div>
+        <ul>
+          <li><a href="/our-story">{{ 'Our story'|t }}</a></li>
+          <li><a href="/our-hives">{{ 'Our hives'|t }}</a></li>
+          <li><a href="/contact">{{ 'Contact'|t }}</a></li>
+        </ul>
+      </div>
+      <div class="hs-footer__col">
+        <div class="hs-footer__col-title">{{ 'HELP'|t }}</div>
+        <ul>
+          <li><a href="/faq">{{ 'FAQ'|t }}</a></li>
+          <li><a href="/shipping">{{ 'Shipping'|t }}</a></li>
+          <li><a href="/returns">{{ 'Returns'|t }}</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="hs-footer__bottom">
+    <span>{{ '© 2026 HiveSticks Apiary, Story County, IA'|t }}</span>
+    <span>{{ 'Built with bees · Privacy · Terms'|t }}</span>
+  </div>
+</footer>

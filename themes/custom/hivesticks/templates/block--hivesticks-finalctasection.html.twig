@@ -1,0 +1,11 @@
+<div{{ attributes.addClass('hs-cta-block', 'hs-text-center') }}>
+  {{ title_prefix }}
+  {% if content.field_title %}<h2 class="hs-section-title hs-section-title--light">{{ content.field_title[0] }}</h2>{% endif %}
+  {% if content.field_subtitle %}<p class="hs-section-sub hs-section-sub--light hs-mx-auto">{{ content.field_subtitle[0] }}</p>{% endif %}
+  <div class="hs-final-cta__actions">
+    {% if content.field_button_text and content.field_button_url %}<a href="{{ content.field_button_url|render|striptags|trim }}" class="hs-btn hs-btn--white">{{ content.field_button_text[0] }}</a>{% endif %}
+    <a href="#hs-athletes" class="hs-btn hs-btn--ghost-white">For Athletes →</a>
+  </div>
+  <p class="hs-cta-guarantee">★★★★★ &nbsp; Satisfaction guaranteed. If you don't like it, we'll make it right.</p>
+  {{ title_suffix }}
+</div>

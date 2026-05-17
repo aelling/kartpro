@@ -1,0 +1,40 @@
+global:
+  version: 1.0
+  css:
+    theme:
+      css/global.css: {}
+  js:
+    js/global.js: {}
+  dependencies:
+    - core/drupal
+
+pdp:
+  version: 1.0
+  css:
+    theme:
+      # Google Fonts: Fraunces + JetBrains Mono (for PDP serif/mono text)
+      'https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,500;9..144,0,600;9..144,0,700;9..144,1,400;9..144,1,500&family=JetBrains+Mono:wght@400;500;600&display=swap':
+        type: external
+        minified: true
+      css/pdp.css: {}
+  js:
+    js/pdp.js: {}
+  dependencies:
+    - core/drupal
+    - hivesticks/global
+
+homepage:
+  version: 1.0
+  css:
+    theme:
+      # Google Fonts: Inter (body) + Fraunces (headings) + JetBrains Mono (labels)
+      'https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,500;9..144,0,600;9..144,0,700;9..144,1,400;9..144,1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap':
+        type: external
+        minified: true
+      css/homepage.css: {}
+  js:
+    js/homepage.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - hivesticks/global

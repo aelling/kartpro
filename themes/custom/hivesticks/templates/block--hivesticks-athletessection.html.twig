@@ -1,0 +1,24 @@
+<div{{ attributes.addClass('hs-athletes-block') }}>
+  {{ title_prefix }}
+  <svg class="hs-athletes__hc" viewBox="0 0 300 400" fill="#F5B342" aria-hidden="true"><polygon points="50,25 75,12.5 100,25 100,50 75,62.5 50,50"/><polygon points="100,25 125,12.5 150,25 150,50 125,62.5 100,50"/><polygon points="150,25 175,12.5 200,25 200,50 175,62.5 150,50"/><polygon points="200,25 225,12.5 250,25 250,50 225,62.5 200,50"/><polygon points="25,62.5 50,50 75,62.5 75,87.5 50,100 25,87.5"/><polygon points="75,62.5 100,50 125,62.5 125,87.5 100,100 75,87.5"/><polygon points="125,62.5 150,50 175,62.5 175,87.5 150,100 125,87.5"/><polygon points="175,62.5 200,50 225,62.5 225,87.5 200,100 175,87.5"/><polygon points="225,62.5 250,50 275,62.5 275,87.5 250,100 225,87.5"/><polygon points="50,100 75,87.5 100,100 100,125 75,137.5 50,125"/><polygon points="100,100 125,87.5 150,100 150,125 125,137.5 100,125"/><polygon points="150,100 175,87.5 200,100 200,125 175,137.5 150,125"/></svg>
+  <div class="hs-athletes__container">
+    <div class="hs-athletes__copy">
+      {% if content.field_eyebrow %}<div class="hs-eyebrow hs-eyebrow--light">{{ content.field_eyebrow[0] }}</div>{% endif %}
+      {% if content.field_title %}<h2 class="hs-section-title hs-section-title--light">{{ content.field_title[0] }}</h2>{% endif %}
+      {% if content.field_subtitle %}<p class="hs-section-sub hs-section-sub--light">{{ content.field_subtitle[0] }}</p>{% endif %}
+      {% if content.field_body %}<blockquote class="hs-athlete-quote">{{ content.field_body[0] }}</blockquote>{% endif %}
+      {% if content.field_button_text and content.field_button_url %}<a href="{{ content.field_button_url|render|striptags|trim }}" class="hs-btn hs-btn--primary">{{ content.field_button_text[0] }}</a>{% endif %}
+    </div>
+    <div class="hs-athletes__uses">
+      <ul class="hs-athlete-uses" role="list">
+        <li class="hs-athlete-use"><div class="hs-athlete-use__dot"></div><div><strong>Pre-match fuel</strong><span>Fast carbs, no stomach issues, nothing artificial</span></div></li>
+        <li class="hs-athlete-use"><div class="hs-athlete-use__dot"></div><div><strong>Weight class sports</strong><span>Wrestling, MMA, rowing — precise, light fuel</span></div></li>
+        <li class="hs-athlete-use"><div class="hs-athlete-use__dot"></div><div><strong>Team sports</strong><span>Football, track, basketball — easy to share, easy to pack</span></div></li>
+        <li class="hs-athlete-use"><div class="hs-athlete-use__dot"></div><div><strong>Parent approved</strong><span>No artificial stimulants. Just honey.</span></div></li>
+        <li class="hs-athlete-use"><div class="hs-athlete-use__dot"></div><div><strong>No prep needed</strong><span>Tear it, take it. Ready in two seconds.</span></div></li>
+        <li class="hs-athlete-use"><div class="hs-athlete-use__dot"></div><div><strong>Clean label</strong><span>Nothing to hide. One ingredient.</span></div></li>
+      </ul>
+    </div>
+  </div>
+  {{ title_suffix }}
+</div>

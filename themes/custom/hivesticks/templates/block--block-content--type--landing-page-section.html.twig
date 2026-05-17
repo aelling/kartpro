@@ -1,0 +1,21 @@
+<div{{ attributes.addClass('hs-landing-section') }}>
+  {{ title_prefix }}
+  {% if content.field_eyebrow %}
+    <div class="hs-eyebrow">{{ content.field_eyebrow[0] }}</div>
+  {% endif %}
+  {% if content.field_title %}
+    <h2 class="hs-section-title">{{ content.field_title[0] }}</h2>
+  {% endif %}
+  {% if content.field_subtitle %}
+    <p class="hs-section-sub">{{ content.field_subtitle[0] }}</p>
+  {% endif %}
+  {% if content.field_body %}
+    <div class="hs-section-body">{{ content.field_body[0] }}</div>
+  {% endif %}
+  {% if content.field_button_text and content.field_button_url %}
+    <a href="{{ content.field_button_url|render|striptags|trim }}" class="hs-btn hs-btn--primary">
+      {{ content.field_button_text[0] }}
+    </a>
+  {% endif %}
+  {{ title_suffix }}
+</div>

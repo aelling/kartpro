@@ -1,0 +1,604 @@
+{#
+/**
+ * @file
+ * HiveSticks — Commerce product display (Default view mode).
+ *
+ * Variables:
+ *   - product_entity: \Drupal\commerce_product\Entity\ProductInterface
+ *   - product: Render array of displayed product fields.
+ *     - product.title
+ *     - product.variations  (contains the inline add-to-cart form)
+ *     - product['field_images'] (optional)
+ *     - product['field_description'] (optional)
+ */
+#}
+
+<div class="hs-pdp" data-product-id="{{ product_entity.id }}">
+
+  {# ── Breadcrumb ─────────────────────────────────────────────────────── #}
+  <nav class="hs-pdp__breadcrumb" aria-label="{{ 'Breadcrumb'|t }}">
+    <a href="{{ path('<front>') }}">{{ 'Shop'|t }}</a>
+    <span class="hs-pdp__bc-sep">/</span>
+    <a href="{{ path('<front>') }}">{{ 'Honey Sticks'|t }}</a>
+    <span class="hs-pdp__bc-sep">/</span>
+    <span>{{ product_entity.getTitle() }}</span>
+  </nav>
+
+  {# ── Main grid: gallery left + buy column right ──────────────────────── #}
+  <div class="hs-pdp__main">
+
+    {# Gallery #}
+    <div class="hs-pdp__gallery" aria-label="{{ 'Product images'|t }}">
+
+      <div class="hs-pdp__thumbs" role="list">
+        {% set gallery_views = [
+          { key: 'hero',  label: 'Single stick' },
+          { key: 'fan',   label: 'Box of 30' },
+          { key: 'tea',   label: 'In tea' },
+          { key: 'hand',  label: 'In hand' },
+          { key: 'farm',  label: 'On the farm' },
+        ] %}
+        {% for view in gallery_views %}
+          <button class="hs-pdp__thumb {% if loop.first %}is-active{% endif %}"
+            data-gallery-view="{{ view.key }}"
+            aria-label="{{ view.label }}"
+            role="listitem">
+            <div class="hs-pdp__thumb-inner hs-pdp__thumb-inner--{{ view.key }}">
+              {% if view.key == 'hero' %}
+                {# SVG honey stick thumb #}
+                <svg width="44" height="72" viewBox="0 0 44 72" class="hs-pdp__stick-svg" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="st-thumb-h" x1="0" x2="1" y1="0" y2="0">
+                      <stop offset="0" stop-color="#c8851a" stop-opacity=".85"/>
+                      <stop offset=".3" stop-color="#f0a929"/>
+                      <stop offset=".55" stop-color="#fff3c8" stop-opacity=".9"/>
+                      <stop offset=".75" stop-color="#f0a929"/>
+                      <stop offset="1" stop-color="#c8851a" stop-opacity=".85"/>
+                    </linearGradient>
+                  </defs>
+                  <rect x="2" y="6" width="40" height="60" rx="20" fill="url(#st-thumb-h)" stroke="rgba(42,26,8,.15)" stroke-width=".8"/>
+                  <ellipse cx="22" cy="4" rx="18" ry="6" fill="#c8851a" opacity=".8"/>
+                  <ellipse cx="22" cy="68" rx="18" ry="6" fill="#c8851a" opacity=".8"/>
+                  <rect x="19" y="8" width="2" height="56" rx="1" fill="#fff" opacity=".4"/>
+                </svg>
+              {% else %}
+                <div class="hs-pdp__thumb-placeholder">
+                  <span class="hs-pdp__thumb-label">{{ view.label }}</span>
+                </div>
+              {% endif %}
+            </div>
+          </button>
+        {% endfor %}
+      </div>
+
+      <div class="hs-pdp__main-image">
+        {# Gallery panels #}
+        {% if product['field_images'] %}
+          <div class="hs-pdp__gallery-panel is-active" data-panel="hero">
+            {{ product['field_images'] }}
+          </div>
+        {% else %}
+          <div class="hs-pdp__gallery-panel is-active" data-panel="hero">
+            <div class="hs-pdp__hero-tile">
+              <div class="hs-pdp__hero-bg-pattern"></div>
+              {# Large SVG honey stick illustration #}
+              <svg class="hs-pdp__big-stick" width="64" height="540" viewBox="0 0 64 540" aria-hidden="true">
+                <defs>
+                  <linearGradient id="bs-main-h" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="0" stop-color="#c8851a" stop-opacity=".85"/>
+                    <stop offset=".18" stop-color="#f0a929"/>
+                    <stop offset=".45" stop-color="#fff3c8" stop-opacity=".95"/>
+                    <stop offset=".7" stop-color="#f0a929"/>
+                    <stop offset="1" stop-color="#c8851a" stop-opacity=".85"/>
+                  </linearGradient>
+                </defs>
+                <rect x="2" y="20" width="60" height="500" rx="30" fill="url(#bs-main-h)" stroke="rgba(42,26,8,.18)" stroke-width=".8"/>
+                <ellipse cx="32" cy="14" rx="26" ry="10" fill="#c8851a" opacity=".85"/>
+                <ellipse cx="32" cy="526" rx="26" ry="10" fill="#c8851a" opacity=".85"/>
+                <rect x="26" y="24" width="3" height="492" rx="1.5" fill="#fff" opacity=".45"/>
+                <rect x="36" y="30" width="1.5" height="480" rx=".75" fill="#fff" opacity=".25"/>
+                <rect x="8" y="242" width="48" height="56" rx="3" fill="#fbf6ec" opacity=".92"/>
+                <text x="32" y="262" font-size="6" font-family="JetBrains Mono, monospace" fill="#2a1a08" text-anchor="middle" letter-spacing="1.5" font-weight="600">HIVE</text>
+                <text x="32" y="272" font-size="6" font-family="JetBrains Mono, monospace" fill="#2a1a08" text-anchor="middle" letter-spacing="1.5" font-weight="600">STICKS</text>
+                <text x="32" y="284" font-size="4.2" font-family="JetBrains Mono, monospace" fill="#c8851a" text-anchor="middle" letter-spacing="1">WILDFLOWER</text>
+                <line x1="12" y1="288" x2="52" y2="288" stroke="#c8851a" stroke-width=".4" opacity=".5"/>
+                <text x="32" y="293" font-size="2.8" font-family="JetBrains Mono, monospace" fill="#c8851a" text-anchor="middle" letter-spacing=".8">RAW · IOWA · 7g</text>
+              </svg>
+              <div class="hs-pdp__hero-counter">01 / 05 — <span class="hs-pdp__hero-flavor-label">WILDFLOWER</span></div>
+              <div class="hs-pdp__hero-nav">
+                <button class="hs-pdp__gallery-prev" aria-label="{{ 'Previous image'|t }}">‹</button>
+                <button class="hs-pdp__gallery-next" aria-label="{{ 'Next image'|t }}">›</button>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="hs-pdp__gallery-panel" data-panel="fan">
+          <div class="hs-pdp__placeholder-panel">
+            <div class="hs-pdp__placeholder-label">Box of 30 — lifestyle photo</div>
+          </div>
+        </div>
+        <div class="hs-pdp__gallery-panel" data-panel="tea">
+          <div class="hs-pdp__placeholder-panel">
+            <div class="hs-pdp__placeholder-label">In tea — lifestyle photo</div>
+          </div>
+        </div>
+        <div class="hs-pdp__gallery-panel" data-panel="hand">
+          <div class="hs-pdp__placeholder-panel">
+            <div class="hs-pdp__placeholder-label">In hand — lifestyle photo</div>
+          </div>
+        </div>
+        <div class="hs-pdp__gallery-panel" data-panel="farm">
+          <div class="hs-pdp__placeholder-panel">
+            <div class="hs-pdp__placeholder-label">On the farm — lifestyle photo</div>
+          </div>
+        </div>
+      </div>
+    </div>{# /.hs-pdp__gallery #}
+
+    {# ── Buy column ─────────────────────────────────────────────────────── #}
+    <div class="hs-pdp__buy">
+
+      {# Chips #}
+      <div class="hs-pdp__chips">
+        <span class="hs-chip hs-chip--default">{{ 'RAW · UNFILTERED'|t }}</span>
+        <span class="hs-chip hs-chip--amber">{{ "NEW BATCH · MAY '26"|t }}</span>
+      </div>
+
+      {# Title #}
+      <h1 class="hs-pdp__title serif">
+        {{ 'Classic Raw '|t }}<em class="hs-pdp__title-em">{{ 'Honey Sticks'|t }}</em>
+      </h1>
+
+      {# Rating row #}
+      <div class="hs-pdp__rating-row">
+        <div class="hs-stars" aria-label="4.9 out of 5 stars">
+          {% for i in 1..5 %}
+            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M8 1.5l2.06 4.18L14.5 6.3l-3.25 3.17.77 4.5L8 11.85l-4.02 2.12.77-4.5L1.5 6.3l4.44-.62z"
+                fill="{{ i <= 5 ? '#d9871a' : 'rgba(42,26,8,.18)' }}"/>
+            </svg>
+          {% endfor %}
+        </div>
+        <span class="hs-pdp__rating-val">4.9</span>
+        <a href="#hs-pdp-reviews" class="hs-pdp__review-count">{{ '1,284 reviews'|t }}</a>
+        <span class="hs-pdp__rating-sep">·</span>
+        <span class="hs-pdp__order-count">{{ '4,200+ orders this month'|t }}</span>
+      </div>
+
+      {# Description #}
+      <p class="hs-pdp__desc">
+        {% if product['field_description'] %}
+          {{ product['field_description'] }}
+        {% else %}
+          {{ 'Single-serve raw honey from our Iowa apiary. Tear, squeeze, toss — that\'s it. No mess, no measuring, no plastic bear.'|t }}
+        {% endif %}
+      </p>
+
+      <div class="hs-pdp__divider"></div>
+
+      {# Flavor picker (visual) #}
+      <div class="hs-pdp__section">
+        <div class="hs-pdp__section-header">
+          <span class="hs-label-mono">{{ 'FLAVOR'|t }}</span>
+          <span class="hs-pdp__section-detail">
+            <em class="serif hs-pdp__selected-flavor-name">Wildflower</em>
+            <span class="hs-pdp__selected-flavor-notes">Floral · Honeysuckle · Light</span>
+          </span>
+        </div>
+        <div class="hs-pdp__flavor-grid">
+          {% set flavors = [
+            { id: 'wildflower', name: 'Wildflower',     swatch: '#f0a929', deep: '#c8851a', notes: 'Floral · Honeysuckle · Light' },
+            { id: 'clover',     name: 'Clover',         swatch: '#fde18a', deep: '#d9b24a', notes: 'Mellow · Buttery · Smooth' },
+            { id: 'buckwheat',  name: 'Buckwheat',      swatch: '#7a4a14', deep: '#4a2c0c', notes: 'Robust · Malty · Earthy' },
+            { id: 'cinnamon',   name: 'Cinnamon',       swatch: '#c45a1a', deep: '#7a3508', notes: 'Warm · Spiced · Cozy' },
+            { id: 'lemon',      name: 'Lemon Ginger',   swatch: '#e8b84a', deep: '#a8841a', notes: 'Bright · Zesty · Soothing' },
+            { id: 'orange',     name: 'Orange Blossom', swatch: '#e89a3a', deep: '#a86a14', notes: 'Citrus · Fragrant · Light' },
+          ] %}
+          {% for f in flavors %}
+            <button class="hs-pdp__flavor-btn {% if loop.first %}is-selected{% endif %}"
+              data-flavor-id="{{ f.id }}"
+              data-flavor-name="{{ f.name }}"
+              data-flavor-notes="{{ f.notes }}"
+              data-swatch="{{ f.swatch }}"
+              aria-pressed="{{ loop.first ? 'true' : 'false' }}">
+              <span class="hs-pdp__flavor-swatch"
+                style="background: linear-gradient(135deg, {{ f.swatch }}, {{ f.deep }})"></span>
+              <span class="hs-pdp__flavor-name">{{ f.name }}</span>
+            </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      {# Pack size picker #}
+      <div class="hs-pdp__section">
+        <div class="hs-pdp__section-header">
+          <span class="hs-label-mono">{{ 'PACK SIZE'|t }}</span>
+          <span class="hs-pdp__per-stick" data-per="0.67">$0.67 {{ 'per stick'|t }}</span>
+        </div>
+        <div class="hs-pdp__pack-grid">
+          {% set packs = [
+            { id: 'try',      count: 10,  price: 8,  per: 0.80, label: 'Try Pack',  note: '7-day taste',   badge: '' },
+            { id: 'standard', count: 30,  price: 20, per: 0.67, label: 'Standard',  note: '~1 month',      badge: 'POPULAR' },
+            { id: 'family',   count: 60,  price: 36, per: 0.60, label: 'Family',    note: '~2 months',     badge: 'SAVE 10%' },
+            { id: 'bulk',     count: 120, price: 64, per: 0.53, label: 'Bulk',      note: '~4 months',     badge: 'SAVE 20%' },
+          ] %}
+          {% for p in packs %}
+            <button class="hs-pdp__pack-btn {% if p.id == 'standard' %}is-selected{% endif %}"
+              data-pack-id="{{ p.id }}"
+              data-pack-count="{{ p.count }}"
+              data-pack-price="{{ p.price }}"
+              data-pack-per="{{ p.per }}"
+              aria-pressed="{{ p.id == 'standard' ? 'true' : 'false' }}">
+              {% if p.badge %}
+                <span class="hs-pdp__pack-badge hs-pdp__pack-badge--{{ p.id == 'standard' ? 'dark' : 'amber' }}">
+                  {{ p.badge }}
+                </span>
+              {% endif %}
+              <div class="hs-pdp__pack-top">
+                <span class="hs-pdp__pack-count serif">{{ p.count }}</span>
+                <span class="hs-pdp__pack-price">${{ p.price }}</span>
+              </div>
+              <div class="hs-pdp__pack-sub">{{ p.label }} · {{ p.note }}</div>
+            </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      {# Subscribe toggle #}
+      <div class="hs-pdp__section">
+        <div class="hs-pdp__subscribe-toggle" role="group" aria-label="{{ 'Purchase type'|t }}">
+          <button class="hs-pdp__sub-btn is-selected" data-sub="onetime" aria-pressed="true">
+            <div class="hs-pdp__sub-label">{{ 'One-time'|t }}</div>
+            <div class="hs-pdp__sub-price">$<span class="hs-js-onetime-price">20.00</span></div>
+          </button>
+          <button class="hs-pdp__sub-btn" data-sub="subscribe" aria-pressed="false">
+            <span class="hs-pdp__sub-save-badge">{{ 'SAVE 15%'|t }}</span>
+            <div class="hs-pdp__sub-label">{{ 'Subscribe'|t }}</div>
+            <div class="hs-pdp__sub-price">$<span class="hs-js-sub-price">17.00</span> / {{ 'month'|t }}</div>
+          </button>
+        </div>
+      </div>
+
+      {# Add-to-cart row #}
+      <div class="hs-pdp__atc-row">
+        {# Quantity stepper #}
+        <div class="hs-pdp__qty" aria-label="{{ 'Quantity'|t }}">
+          <button class="hs-pdp__qty-btn" data-qty="dec" aria-label="{{ 'Decrease quantity'|t }}">−</button>
+          <span class="hs-pdp__qty-val" aria-live="polite">1</span>
+          <button class="hs-pdp__qty-btn" data-qty="inc" aria-label="{{ 'Increase quantity'|t }}">+</button>
+        </div>
+
+        {# Commerce add-to-cart form (hidden visually, synced via JS) #}
+        <div class="hs-pdp__commerce-form" aria-hidden="true">
+          {{ product.variations }}
+        </div>
+
+        {# Styled ATC button that submits the Commerce form #}
+        <button class="hs-pdp__atc-btn" type="button" id="hs-pdp-atc-trigger">
+          <span>{{ 'Add to cart'|t }}</span>
+          <span class="hs-pdp__atc-price mono">$<span class="hs-js-atc-price">20.00</span></span>
+        </button>
+      </div>
+
+      {# Buy-now #}
+      <button class="hs-pdp__buy-now">{{ 'Buy now — Checkout'|t }}</button>
+
+      {# Trust micro-copy #}
+      <div class="hs-pdp__trust">
+        <div class="hs-pdp__trust-item">
+          <span class="hs-pdp__trust-icon" aria-hidden="true">🚚</span>
+          <div>
+            <div class="hs-pdp__trust-title">{{ 'Free shipping'|t }}</div>
+            <div class="hs-pdp__trust-sub">{{ 'On orders $25+'|t }}</div>
+          </div>
+        </div>
+        <div class="hs-pdp__trust-item">
+          <span class="hs-pdp__trust-icon" aria-hidden="true">🌱</span>
+          <div>
+            <div class="hs-pdp__trust-title">{{ 'Compostable'|t }}</div>
+            <div class="hs-pdp__trust-sub">{{ 'Plant-based wrappers'|t }}</div>
+          </div>
+        </div>
+        <div class="hs-pdp__trust-item">
+          <span class="hs-pdp__trust-icon" aria-hidden="true">↩️</span>
+          <div>
+            <div class="hs-pdp__trust-title">{{ '30-day returns'|t }}</div>
+            <div class="hs-pdp__trust-sub">{{ 'Keep the sticks'|t }}</div>
+          </div>
+        </div>
+        <div class="hs-pdp__trust-item">
+          <span class="hs-pdp__trust-icon" aria-hidden="true">🐝</span>
+          <div>
+            <div class="hs-pdp__trust-title">{{ 'Iowa-harvested'|t }}</div>
+            <div class="hs-pdp__trust-sub">{{ 'Single-origin, traceable'|t }}</div>
+          </div>
+        </div>
+      </div>
+
+    </div>{# /.hs-pdp__buy #}
+  </div>{# /.hs-pdp__main #}
+
+  {# ── Highlights row ─────────────────────────────────────────────────── #}
+  <section class="hs-pdp__highlights">
+    <div class="hs-pdp__highlights-grid">
+      {% set highlights = [
+        { n: '01', t: 'Just honey',  d: 'No HFCS, no syrup, no flavoring fillers. Single ingredient: raw honey.' },
+        { n: '02', t: '7 g per stick', d: 'About 1½ teaspoons. Perfect dose for one tea, one toast, one trail mile.' },
+        { n: '03', t: 'Iowa hives',  d: 'Hand-harvested from 240 hives in Story County. Harvest date on every box.' },
+        { n: '04', t: 'No mess',     d: 'No drips, no sticky jar, no plastic bear. Just tear and squeeze.' },
+      ] %}
+      {% for h in highlights %}
+        <div class="hs-pdp__highlight-item">
+          <div class="hs-label-mono hs-pdp__highlight-num">{{ h.n }}</div>
+          <h3 class="serif hs-pdp__highlight-title">{{ h.t }}</h3>
+          <p class="hs-pdp__highlight-desc">{{ h.d }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  {# ── Tabbed product details ──────────────────────────────────────────── #}
+  <section class="hs-pdp__details">
+    <div class="hs-pdp__details-inner">
+      <div class="hs-pdp__details-lead">
+        <div class="hs-label-mono">{{ 'PRODUCT DETAILS'|t }}</div>
+        <h2 class="serif hs-pdp__details-heading">
+          {{ 'Everything you\'d want in '|t }}<em>{{ 'a teaspoon of honey'|t }}</em>{{ ', in a stick.'|t }}
+        </h2>
+        <p class="hs-pdp__details-intro">
+          {{ 'We started HiveSticks because we got tired of sticky drawers, half-crystallized jars, and honey-bear bottles you can\'t recycle. Each stick holds 7 grams of raw, unfiltered honey from our family\'s 240 hives in Story County, Iowa.'|t }}
+        </p>
+      </div>
+
+      <div class="hs-pdp__tabs-wrap">
+        <div class="hs-pdp__tabs" role="tablist">
+          {% set tabs = [
+            { id: 'details',      label: 'Details' },
+            { id: 'ingredients',  label: 'Ingredients' },
+            { id: 'nutrition',    label: 'Nutrition' },
+            { id: 'shipping',     label: 'Shipping & returns' },
+          ] %}
+          {% for tab in tabs %}
+            <button class="hs-pdp__tab {% if loop.first %}is-active{% endif %}"
+              role="tab"
+              data-tab="{{ tab.id }}"
+              aria-selected="{{ loop.first ? 'true' : 'false' }}"
+              aria-controls="hs-tab-{{ tab.id }}">
+              {{ tab.label|t }}
+            </button>
+          {% endfor %}
+        </div>
+
+        <div id="hs-tab-details" class="hs-pdp__tab-panel is-active" role="tabpanel">
+          <div class="hs-pdp__detail-grid">
+            {% set detail_rows = [
+              { k: 'Net weight',    v: '7 g per stick' },
+              { k: 'Pack contents', v: 'Sticks in compostable wrap, kraft box' },
+              { k: 'Origin',        v: 'Story County, Iowa, USA' },
+              { k: 'Harvest',       v: 'May 2026 batch' },
+              { k: 'Shelf life',    v: '2 years; honey doesn\'t spoil' },
+              { k: 'Storage',       v: 'Room temp. May crystallize — warm to liquefy.' },
+              { k: 'Allergens',     v: 'None. Made in honey-only facility.' },
+              { k: 'Certifications', v: 'USDA True Source · Non-GMO' },
+            ] %}
+            {% for row in detail_rows %}
+              <div class="hs-pdp__detail-row">
+                <div class="hs-label-mono hs-pdp__detail-key">{{ row.k|upper }}</div>
+                <div class="hs-pdp__detail-val">{{ row.v }}</div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div id="hs-tab-ingredients" class="hs-pdp__tab-panel" role="tabpanel" hidden>
+          <div class="hs-pdp__tab-content">
+            <p><strong>{{ 'Classic / Wildflower / Clover / Buckwheat / Orange Blossom:'|t }}</strong>
+            {{ 'Raw, unfiltered honey. That\'s the whole list.'|t }}</p>
+            <p><strong>{{ 'Cinnamon:'|t }}</strong> {{ 'Raw wildflower honey, organic Saigon cinnamon.'|t }}</p>
+            <p><strong>{{ 'Lemon Ginger:'|t }}</strong> {{ 'Raw wildflower honey, organic dried lemon zest, organic ginger root.'|t }}</p>
+            <p>{{ 'No added sugar. No high-fructose corn syrup. No "natural flavoring."'|t }}</p>
+          </div>
+        </div>
+
+        <div id="hs-tab-nutrition" class="hs-pdp__tab-panel" role="tabpanel" hidden>
+          <div class="hs-pdp__nutrition-label">
+            <div class="hs-pdp__nut-header">{{ 'Nutrition Facts'|t }}</div>
+            <div class="hs-pdp__nut-serving">{{ 'Serving size: 1 stick (7 g)'|t }}</div>
+            <div class="hs-pdp__nut-rule-thick"></div>
+            <div class="hs-pdp__nut-row hs-pdp__nut-row--cal">
+              <span>{{ 'Calories'|t }}</span><span>20</span>
+            </div>
+            <div class="hs-pdp__nut-row"><span>{{ 'Total Carbohydrate'|t }}</span><span>6 g</span></div>
+            <div class="hs-pdp__nut-row hs-pdp__nut-row--indent"><span>{{ 'Total Sugars'|t }}</span><span>6 g</span></div>
+            <div class="hs-pdp__nut-row hs-pdp__nut-row--indent"><span>{{ 'Includes Added Sugars'|t }}</span><span>0 g</span></div>
+            <div class="hs-pdp__nut-row"><span>{{ 'Protein'|t }}</span><span>0 g</span></div>
+            <div class="hs-pdp__nut-note">{{ 'Not a significant source of fat, sodium, fiber, vitamins.'|t }}</div>
+          </div>
+        </div>
+
+        <div id="hs-tab-shipping" class="hs-pdp__tab-panel" role="tabpanel" hidden>
+          <div class="hs-pdp__tab-content">
+            <p><strong>{{ 'Free USPS Ground'|t }}</strong> {{ 'on orders $25 and up. $4.50 below that.'|t }}</p>
+            <p>{{ 'Ships from our Iowa farm within 1–2 business days. You\'ll get a tracking link the moment it leaves the kitchen table.'|t }}</p>
+            <p>{{ 'Subscriptions ship monthly on the day you ordered. Skip, swap, or cancel anytime in your account.'|t }}</p>
+            <p><strong>{{ '30-day no-questions returns.'|t }}</strong>
+            {{ 'If you don\'t love it, email hello@hivesticks.com for a full refund — keep the sticks.'|t }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ── Reviews ────────────────────────────────────────────────────────── #}
+  <section class="hs-pdp__reviews" id="hs-pdp-reviews" aria-label="{{ 'Customer reviews'|t }}">
+    <div class="hs-label-mono">{{ 'REVIEWS'|t }}</div>
+    <h2 class="serif hs-pdp__section-title">{{ '1,284 people have something to say.'|t }}</h2>
+
+    <div class="hs-pdp__reviews-layout">
+      {# Summary card #}
+      <div class="hs-pdp__review-summary">
+        <div class="hs-pdp__review-avg">
+          <span class="serif hs-pdp__review-big-num">4.9</span>
+          <span class="hs-pdp__review-denom">/ 5</span>
+        </div>
+        <div class="hs-stars hs-stars--lg" aria-label="4.9 out of 5 stars">
+          {% for i in 1..5 %}
+            <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M8 1.5l2.06 4.18L14.5 6.3l-3.25 3.17.77 4.5L8 11.85l-4.02 2.12.77-4.5L1.5 6.3l4.44-.62z" fill="#d9871a"/>
+            </svg>
+          {% endfor %}
+        </div>
+        <div class="hs-pdp__review-count-sub">{{ '1,284 verified reviews'|t }}</div>
+        <div class="hs-pdp__review-bars">
+          {% for row in [
+            { stars: 5, pct: 86 },
+            { stars: 4, pct: 11 },
+            { stars: 3, pct: 2  },
+            { stars: 2, pct: 1  },
+            { stars: 1, pct: 0  },
+          ] %}
+            <div class="hs-pdp__review-bar-row">
+              <span class="hs-pdp__review-star-lbl">{{ row.stars }}★</span>
+              <div class="hs-pdp__bar-track">
+                <div class="hs-pdp__bar-fill" style="width: {{ row.pct }}%"></div>
+              </div>
+              <span class="hs-pdp__bar-pct">{{ row.pct }}%</span>
+            </div>
+          {% endfor %}
+        </div>
+        <button class="hs-pdp__write-review-btn">{{ 'Write a review'|t }}</button>
+      </div>
+
+      {# Review list #}
+      <div class="hs-pdp__review-list-wrap">
+        <div class="hs-pdp__review-filters" role="group" aria-label="{{ 'Filter by flavor'|t }}">
+          {% for f in ['all', 'wildflower', 'clover', 'buckwheat', 'lemon ginger'] %}
+            <button class="hs-pdp__filter-btn {% if loop.first %}is-active{% endif %}"
+              data-filter="{{ f }}"
+              aria-pressed="{{ loop.first ? 'true' : 'false' }}">
+              {{ f|capitalize }}
+            </button>
+          {% endfor %}
+        </div>
+
+        <div class="hs-pdp__review-list">
+          {% set reviews = [
+            { name: 'Sarah K.',  flavor: 'Wildflower',   stars: 5, title: 'Perfect for my morning tea',  date: '2 weeks ago',
+              body: 'I keep a jar at my desk. One stick stirs into hot tea with zero mess and tastes way fresher than the bear-shaped bottle I used to buy.' },
+            { name: 'Marcus T.', flavor: 'Lemon Ginger',  stars: 5, title: 'Trail running fuel',          date: '1 month ago',
+              body: 'Light, fast, no sticky pack to fight with. Pop the top, swallow, recycle the wrapper at the next aid station.' },
+            { name: 'Priya R.',  flavor: 'Clover',        stars: 4, title: 'Kids love them',              date: '3 weeks ago',
+              body: 'My 7-year-old asks for "honey straws" in her lunchbox now. Wish the variety pack had more clover.' },
+            { name: 'David W.',  flavor: 'Buckwheat',     stars: 5, title: 'Tastes like real honey',      date: '6 days ago',
+              body: 'I was skeptical — most honey-stick brands use HFCS or thinned-out honey. This is the real thing. Buckwheat is intense in the best way.' },
+          ] %}
+          {% for r in reviews %}
+            <div class="hs-pdp__review" data-review-flavor="{{ r.flavor|lower }}">
+              <div class="hs-pdp__review-meta">
+                <div class="hs-pdp__review-avatar" aria-hidden="true">{{ r.name|first }}</div>
+                <div class="hs-pdp__review-who">
+                  <span class="hs-pdp__review-name">{{ r.name }}</span>
+                  <span class="hs-pdp__review-verified">{{ '✓ Verified buyer'|t }}</span>
+                  <div class="hs-pdp__review-detail">{{ r.flavor }} · {{ r.date }}</div>
+                </div>
+                <div class="hs-stars" aria-label="{{ r.stars }} out of 5 stars">
+                  {% for i in 1..5 %}
+                    <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
+                      <path d="M8 1.5l2.06 4.18L14.5 6.3l-3.25 3.17.77 4.5L8 11.85l-4.02 2.12.77-4.5L1.5 6.3l4.44-.62z"
+                        fill="{{ i <= r.stars ? '#d9871a' : 'rgba(42,26,8,.18)' }}"/>
+                    </svg>
+                  {% endfor %}
+                </div>
+              </div>
+              <h4 class="serif hs-pdp__review-title">{{ r.title }}</h4>
+              <p class="hs-pdp__review-body">{{ r.body }}</p>
+            </div>
+          {% endfor %}
+        </div>
+        <button class="hs-pdp__load-more">{{ 'Load 1,280 more reviews →'|t }}</button>
+      </div>
+    </div>
+  </section>
+
+  {# ── FAQ ────────────────────────────────────────────────────────────── #}
+  <section class="hs-pdp__faq" aria-label="{{ 'Frequently asked questions'|t }}">
+    <div class="hs-pdp__faq-inner">
+      <div class="hs-pdp__faq-lead">
+        <div class="hs-label-mono">{{ 'FAQ'|t }}</div>
+        <h2 class="serif hs-pdp__section-title">{{ 'Things people ask.'|t }}</h2>
+        <p class="hs-pdp__faq-contact">
+          {{ 'Still have questions? Email '|t }}
+          <a href="mailto:hello@hivesticks.com">hello@hivesticks.com</a>
+          {{ '— a real human replies within a day.'|t }}
+        </p>
+      </div>
+
+      <div class="hs-pdp__faq-list">
+        {% set faqs = [
+          { q: "What's actually in a stick?",
+            a: "Just raw, unfiltered honey from our Iowa apiaries. Nothing else — no syrup, no fillers, no flavoring (except in our infused varieties, which use real spices and dried citrus zest)." },
+          { q: "How long do they last?",
+            a: "Honey is one of the few foods that doesn't spoil. Best taste within 2 years of harvest — the harvest date is printed on every box." },
+          { q: "Can kids eat them?",
+            a: "Yes — for kids over 12 months. Honey is not safe for infants under 1 year old." },
+          { q: "How does shipping work?",
+            a: "Free USPS Ground on orders $25+. Ships in compostable mailers from our Iowa farm within 1–2 business days." },
+          { q: "What's your return policy?",
+            a: "Don't love it? Email us within 30 days for a full refund. Keep the sticks." },
+        ] %}
+        {% for i, f in faqs %}
+          <div class="hs-pdp__faq-item {% if i == 0 %}is-open{% endif %}">
+            <button class="hs-pdp__faq-q" aria-expanded="{{ i == 0 ? 'true' : 'false' }}"
+              aria-controls="hs-faq-{{ i }}">
+              <span class="serif">{{ f.q }}</span>
+              <span class="hs-pdp__faq-icon" aria-hidden="true">+</span>
+            </button>
+            <div id="hs-faq-{{ i }}" class="hs-pdp__faq-a" {% if i != 0 %}hidden{% endif %}>
+              {{ f.a }}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+</div>{# /.hs-pdp #}
+
+{# ── Sticky add-to-cart bar ──────────────────────────────────────────── #}
+<div class="hs-pdp__sticky-bar" id="hs-pdp-sticky-bar" aria-hidden="true">
+  <div class="hs-pdp__sticky-inner">
+    <div class="hs-pdp__sticky-product">
+      <div class="hs-pdp__sticky-thumb">
+        <svg width="28" height="40" viewBox="0 0 44 72" aria-hidden="true">
+          <defs>
+            <linearGradient id="st-sticky" x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0" stop-color="#c8851a" stop-opacity=".85"/>
+              <stop offset=".3" stop-color="#f0a929"/>
+              <stop offset=".55" stop-color="#fff3c8" stop-opacity=".9"/>
+              <stop offset=".75" stop-color="#f0a929"/>
+              <stop offset="1" stop-color="#c8851a" stop-opacity=".85"/>
+            </linearGradient>
+          </defs>
+          <rect x="2" y="6" width="40" height="60" rx="20" fill="url(#st-sticky)"/>
+          <ellipse cx="22" cy="4" rx="18" ry="6" fill="#c8851a" opacity=".8"/>
+          <ellipse cx="22" cy="68" rx="18" ry="6" fill="#c8851a" opacity=".8"/>
+        </svg>
+      </div>
+      <div>
+        <div class="hs-pdp__sticky-name">{{ 'Classic Honey Sticks'|t }}</div>
+        <div class="hs-pdp__sticky-detail">
+          <span class="hs-js-sticky-flavor">Wildflower</span> ·
+          <span class="hs-js-sticky-pack">30 ct</span> ·
+          qty <span class="hs-js-sticky-qty">1</span>
+        </div>
+      </div>
+    </div>
+    <div class="hs-pdp__sticky-action">
+      <span class="serif hs-pdp__sticky-price">$<span class="hs-js-sticky-price">20.00</span></span>
+      <button class="hs-pdp__sticky-atc" type="button" id="hs-pdp-sticky-atc">
+        {{ 'Add to cart'|t }}
+      </button>
+    </div>
+  </div>
+</div>

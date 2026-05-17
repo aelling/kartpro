@@ -1,0 +1,14 @@
+<div{{ attributes.addClass('hs-benefits-block') }}>
+  {{ title_prefix }}
+  <div class="hs-section-head">
+    {% if content.field_eyebrow %}<div class="hs-eyebrow">{{ content.field_eyebrow[0] }}</div>{% endif %}
+    {% if content.field_title %}<h2 class="hs-section-title">{{ content.field_title[0] }}</h2>{% endif %}
+  </div>
+  <ul class="hs-benefits__grid" role="list">
+    <li class="hs-benefit-card"><div class="hs-benefit-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="#D4820A" stroke-width="2" stroke-linecap="round"><path d="M12 2C12 2 6 7 6 13a6 6 0 0012 0C18 7 12 2 12 2z"/></svg></div><h3 class="hs-benefit-card__title">Pure Raw Honey</h3><p class="hs-benefit-card__text">No fillers. No corn syrup. No shortcuts. Just the honey we pulled from our own hives.</p></li>
+    <li class="hs-benefit-card"><div class="hs-benefit-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="#D4820A" stroke-width="2" stroke-linecap="round"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M9 12h6M12 9v6"/></svg></div><h3 class="hs-benefit-card__title">Zero Mess</h3><p class="hs-benefit-card__text">Honey bottles are great — until they're in your bag. HiveSticks are sealed, clean, and easy to handle anywhere.</p></li>
+    <li class="hs-benefit-card"><div class="hs-benefit-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="#D4820A" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><h3 class="hs-benefit-card__title">Fast Natural Energy</h3><p class="hs-benefit-card__text">Honey is one of the oldest natural energy sources there is. HiveSticks put it in your hands in seconds.</p></li>
+    <li class="hs-benefit-card"><div class="hs-benefit-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="#D4820A" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div><h3 class="hs-benefit-card__title">Works for Everyone</h3><p class="hs-benefit-card__text">Athletes. Parents. Kids. Road warriors. If you want real honey that's actually convenient, this is it.</p></li>
+  </ul>
+  {{ title_suffix }}
+</div>

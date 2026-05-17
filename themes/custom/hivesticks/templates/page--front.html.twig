@@ -1,0 +1,314 @@
+{#
+/**
+ * @file
+ * HiveSticks homepage — matches hivesticks-app.jsx design.
+ * Cream palette, Fraunces headings, honey accents, fanned sticks hero.
+ */
+#}
+
+{# ── NAV ──────────────────────────────────────────────────────────────── #}
+<nav class="hs-nav" id="hs-nav" role="navigation" aria-label="{{ 'Site navigation'|t }}">
+  <div class="hs-nav__inner">
+    <a href="{{ path('<front>') }}" class="hs-nav__logo" rel="home" aria-label="{{ 'HiveSticks home'|t }}">
+      <svg class="hs-nav__logo-mark" viewBox="0 0 38 38" fill="none" aria-hidden="true">
+        <polygon points="19,2 36,11 36,27 19,36 2,27 2,11" fill="#d9871a"/>
+        <polygon points="19,7 31.5,13.5 31.5,24.5 19,31 6.5,24.5 6.5,13.5" fill="#f0a929" opacity="0.3"/>
+        <path d="M14 18 Q15.5 14 19 13 Q22.5 14 24 18 Q22.5 25 19 26 Q15.5 25 14 18Z" fill="#fbf6ec"/>
+        <circle cx="19" cy="19" r="2.5" fill="#d9871a"/>
+      </svg>
+      <span class="hs-nav__logo-text serif">Hive<em>Sticks</em></span>
+    </a>
+
+    <ul class="hs-nav__links" role="list">
+      <li><a href="#hs-shop">{{ 'Shop'|t }}</a></li>
+      <li><a href="#hs-flavors">{{ 'Flavors'|t }}</a></li>
+      <li><a href="#hs-story">{{ 'Our Story'|t }}</a></li>
+      <li><a href="#hs-athletes">{{ 'For Families'|t }}</a></li>
+      <li><a href="#hs-faq">{{ 'FAQ'|t }}</a></li>
+    </ul>
+
+    <div class="hs-nav__actions">
+      <a href="{{ path('commerce_cart.page') }}" class="hs-nav__cart">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M2 4L4 4L5 11L13 11L14 6L5 6" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="6" cy="13.5" r="1" fill="currentColor"/>
+          <circle cx="12" cy="13.5" r="1" fill="currentColor"/>
+        </svg>
+        {{ 'Cart'|t }}
+      </a>
+      <a href="#hs-shop" class="hs-btn hs-btn--honey">{{ 'Buy Now'|t }}</a>
+    </div>
+
+    <button class="hs-nav__mobile-toggle" aria-controls="hs-nav-mobile" aria-expanded="false" aria-label="{{ 'Toggle navigation'|t }}">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="hs-nav__mobile-drawer" id="hs-nav-mobile" hidden>
+    <ul role="list">
+      <li><a href="#hs-shop">{{ 'Shop'|t }}</a></li>
+      <li><a href="#hs-flavors">{{ 'Flavors'|t }}</a></li>
+      <li><a href="#hs-story">{{ 'Our Story'|t }}</a></li>
+      <li><a href="#hs-athletes">{{ 'For Families'|t }}</a></li>
+      <li><a href="#hs-faq">{{ 'FAQ'|t }}</a></li>
+      <li><a href="{{ path('commerce_cart.page') }}">{{ 'Cart'|t }}</a></li>
+    </ul>
+  </div>
+</nav>
+
+{% if page.header %}
+  <div class="hs-drupal-messages">{{ page.header }}</div>
+{% endif %}
+
+{# ── HERO ──────────────────────────────────────────────────────────────── #}
+<section class="hs-hero" id="hs-shop">
+  {# Radial glow blobs #}
+  <div class="hs-hero__blob hs-hero__blob--top" aria-hidden="true"></div>
+  <div class="hs-hero__blob hs-hero__blob--bottom" aria-hidden="true"></div>
+  {# Honeycomb dot pattern #}
+  <div class="hs-hero__hc-pattern" aria-hidden="true"></div>
+
+  <div class="hs-hero__intro hs-hero__intro--centered">
+    <div class="hs-pill hs-pill--honey">
+      <svg width="10" height="12" viewBox="0 0 10 14" fill="currentColor" aria-hidden="true"><path d="M5 0C5 0 1 4 1 8C1 10.8 2.8 13 5 13C7.2 13 9 10.8 9 8C9 4 5 0 5 0Z"/></svg>
+      {{ 'From our Iowa hives · Est. 2020'|t }}
+    </div>
+    <h1 class="hs-hero__title serif">
+      {{ 'Real honey. No mess. '|t }}<em>{{ 'Ready to go.'|t }}</em>
+    </h1>
+    <p class="hs-hero__sub">
+      {{ "Single-serve sticks of raw, unfiltered honey from our family farm. Tear it open, squeeze it in — that's it. Lunchbox-friendly, pocket-sized, never sticky."|t }}
+    </p>
+    <div class="hs-hero__ctas">
+      <a href="/store" class="hs-btn hs-btn--honey">{{ 'Shop All Flavors'|t }}</a>
+      <a href="#hs-how" class="hs-btn hs-btn--outline">{{ 'How It Works'|t }}</a>
+    </div>
+  </div>
+
+
+</section>
+
+{# ── MARQUEE ───────────────────────────────────────────────────────────── #}
+<div class="hs-marquee" aria-hidden="true">
+  <div class="hs-marquee__track">
+    {% set items = ['Raw & Unfiltered', 'Single-Origin Iowa', 'Lunchbox-Friendly', 'Bee-Friendly Hives', 'Cold-Pack Process', 'No Additives, Ever', 'Family-Run Since 2014', 'One Ingredient'] %}
+    {% for pass in 0..2 %}
+      {% for item in items %}
+        <span class="hs-marquee__item serif">
+          <svg width="14" height="16" viewBox="0 0 10 14" fill="#d9871a" aria-hidden="true"><path d="M5 0C5 0 1 4 1 8C1 10.8 2.8 13 5 13C7.2 13 9 10.8 9 8C9 4 5 0 5 0Z"/></svg>
+          {{ item }}
+        </span>
+      {% endfor %}
+    {% endfor %}
+  </div>
+</div>
+
+
+{# ── HOW IT WORKS ──────────────────────────────────────────────────────── #}
+<section class="hs-section hs-section--tinted" id="hs-how" aria-labelledby="hs-how-title">
+  <div class="hs-section__center">
+    <div class="hs-eyebrow"><span class="mono">02</span> {{ 'How It Works'|t }}</div>
+    <h2 id="hs-how-title" class="serif hs-section__title hs-section__title--center">
+      {{ 'Bite. Squeeze. '|t }}<em>{{ 'Enjoy.'|t }}</em>
+    </h2>
+  </div>
+  <div class="hs-steps">
+    {% for step in [
+      { n: '01', t: 'Bite',    d: 'Pinch one end, hold the seal vertical, and bite down. It opens cleanly — no scissors, no mess.' },
+      { n: '02', t: 'Squeeze', d: 'Work from the bottom up. Straight into your mouth, your tea, over yogurt, or onto toast.' },
+      { n: '03', t: 'Enjoy',   d: '7g of pure raw single-origin honey. Nothing added, nothing removed.' },
+    ] %}
+      <div class="hs-step">
+        <div class="mono hs-step__num">{{ step.n }}</div>
+        <h3 class="serif hs-step__title">{{ step.t }}</h3>
+        <p class="hs-step__desc">{{ step.d }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{# ── STORY ─────────────────────────────────────────────────────────────── #}
+<section class="hs-section" id="hs-story" aria-labelledby="hs-story-title">
+  <div class="hs-story">
+    <div class="hs-story__text">
+      <div class="hs-eyebrow"><span class="mono">03</span> {{ 'Our Story'|t }}</div>
+      <h2 id="hs-story-title" class="serif hs-section__title">
+        {{ 'A farm, '|t }}<em>{{ '3,200 hives'|t }}</em>{{ ', and one stubborn idea.'|t }}
+      </h2>
+      <p class="hs-story__body">
+        {{ "We started in 2014 with twelve hives behind the barn and a hunch that great honey didn't need to live in a plastic bear on a shelf. Twelve years later, our bees forage 4,000 acres of unsprayed Iowa farmland — and our honey ships in single-serve sticks, the way coffee should."|t }}
+      </p>
+      <p class="hs-story__body">
+        {{ "Every batch is cold-packed within 48 hours of extraction. We don't pasteurize, we don't filter, we don't blend across seasons. What's in the stick is what was in the comb that week."|t }}
+      </p>
+      <a href="/our-story" class="hs-btn hs-btn--outline">
+        {{ 'Visit the farm'|t }} <span style="color:var(--honey)">→</span>
+      </a>
+    </div>
+    <div class="hs-story__photos" aria-hidden="true">
+      <div class="hs-story__col">
+        <div class="hs-photo-placeholder hs-photo-placeholder--tall">HIVES IN FIELD</div>
+        <div class="hs-photo-placeholder hs-photo-placeholder--square hs-photo-placeholder--dark">HONEY EXTRACTION</div>
+      </div>
+      <div class="hs-story__col hs-story__col--offset">
+        <div class="hs-photo-placeholder hs-photo-placeholder--square hs-photo-placeholder--dark">BEEKEEPER PORTRAIT</div>
+        <div class="hs-photo-placeholder hs-photo-placeholder--tall">STICKS ON LINE</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ── USE CASES ─────────────────────────────────────────────────────────── #}
+<section class="hs-section hs-section--tinted" id="hs-athletes" aria-labelledby="hs-athletes-title">
+  <div class="hs-eyebrow"><span class="mono">04</span> {{ 'Wherever you are'|t }}</div>
+  <h2 id="hs-athletes-title" class="serif hs-section__title">
+    {{ 'One stick. '|t }}<em>{{ 'Endless'|t }}</em>{{ ' excuses to use it.'|t }}
+  </h2>
+  <div class="hs-usecases">
+    {% for c in [
+      { t: 'In your tea',    d: 'No drips, no spoons, no half-stuck jar in the office cabinet.',     accent: '#f0a929' },
+      { t: 'On the trail',   d: 'Pocket-sized fuel. 17 calories of fast-burning natural sugar.',      accent: '#ffce5c' },
+      { t: 'For the kids',   d: 'Lunchbox-friendly. No sticky fingers, no plastic spoon.',            accent: '#ff9b3a' },
+      { t: 'Before the gym', d: 'Athletes use it for pre-workout carbs. Real food, real fast.',       accent: '#e89320' },
+    ] %}
+      <div class="hs-usecase">
+        <div class="hs-usecase__icon" style="border-color:{{ c.accent }}">
+          <svg width="22" height="26" viewBox="0 0 10 14" fill="{{ c.accent }}" aria-hidden="true">
+            <path d="M5 0C5 0 1 4 1 8C1 10.8 2.8 13 5 13C7.2 13 9 10.8 9 8C9 4 5 0 5 0Z"/>
+          </svg>
+        </div>
+        <h3 class="serif hs-usecase__title">{{ c.t }}</h3>
+        <p class="hs-usecase__desc">{{ c.d }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{# ── REVIEWS ───────────────────────────────────────────────────────────── #}
+<section class="hs-section" id="hs-reviews" aria-labelledby="hs-reviews-title">
+  <div class="hs-reviews__header">
+    <div>
+      <div class="hs-eyebrow"><span class="mono">05</span> {{ 'Reviews'|t }}</div>
+      <h2 id="hs-reviews-title" class="serif hs-section__title">
+        <em>{{ '2,841'|t }}</em>{{ ' people. One sticky thumb up.'|t }}
+      </h2>
+    </div>
+    <div class="hs-reviews__aggregate">
+      <div class="hs-stars-lg" aria-label="4.9 out of 5 stars">★★★★★</div>
+      <div class="serif hs-reviews__avg">4.9 / 5</div>
+      <div class="mono hs-reviews__count">{{ 'BASED ON 2,841 REVIEWS'|t }}</div>
+    </div>
+  </div>
+  <div class="hs-reviews__grid">
+    {% for r in [
+      { name: 'Maya R.',   role: 'Wildflower x60',   q: "I keep one in every bag. Tea at the office, oatmeal on the go, and my four-year-old thinks they're candy." },
+      { name: 'Eli T.',    role: 'Buckwheat x30',    q: "The buckwheat is unreal in coffee. Tastes like the honey my grandfather kept on the farm — actual honey, not the squeeze-bottle stuff." },
+      { name: 'Priya S.',  role: 'Subscription',     q: "Switched from a big jar that lived sticky in the cabinet for a year. These ship every month, never go off, never make a mess." },
+      { name: 'Jordan K.', role: 'Orange Blossom',   q: "Trail running fuel. Beats every gel I've tried, no weird aftertaste, hits fast." },
+    ] %}
+      <div class="hs-review">
+        <div class="hs-review__stars" aria-label="5 stars">★★★★★</div>
+        <blockquote class="serif hs-review__quote">"{{ r.q }}"</blockquote>
+        <div class="hs-review__byline">
+          <div class="hs-review__avatar" aria-hidden="true">{{ r.name|first }}</div>
+          <div>
+            <div class="hs-review__name">{{ r.name }}</div>
+            <div class="mono hs-review__role">{{ 'VERIFIED BUYER · '|t }}{{ r.role|upper }}</div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{# ── FAQ ───────────────────────────────────────────────────────────────── #}
+<section class="hs-section hs-section--tinted" id="hs-faq" aria-labelledby="hs-faq-title">
+  <div class="hs-faq__inner">
+    <div class="hs-eyebrow"><span class="mono">06</span> {{ 'Common questions'|t }}</div>
+    <h2 id="hs-faq-title" class="serif hs-section__title">
+      {{ 'Sticky details, '|t }}<em>{{ 'cleared up.'|t }}</em>
+    </h2>
+    <div class="hs-faq__list">
+      {% for i, f in [
+        { q: "Is this real honey or syrup?", a: "Real, raw, unfiltered honey. Nothing else. We harvest it ourselves at our Iowa farm and cold-pack within 48 hours. The ingredient list is one word: honey." },
+        { q: "How much honey is in each stick?", a: "Each stick contains 5 grams (about a teaspoon) of pure raw honey. Roughly 17 calories, 4.5g of natural sugar, zero additives." },
+        { q: "Does honey expire?", a: "No. Honey is one of the few foods that doesn't spoil. Our sticks have a 24-month best-by date for taste, not safety." },
+        { q: "Are the wrappers actually compostable?", a: "Yes. Our sticks use a plant-based film made from sugarcane and PLA. They break down in home compost in about 90 days." },
+        { q: "Why is the color different in each pack?", a: "Because we don't blend. Honey color depends on what the bees foraged — clover gives pale gold, buckwheat is nearly black. Variation is proof it's real." },
+        { q: "Can kids eat them?", a: "Anyone over the age of one. Honey isn't recommended for babies under 12 months." },
+      ] %}
+        <div class="hs-faq__item {% if i == 0 %}is-open{% endif %}">
+          <button class="hs-faq__q" aria-expanded="{{ i == 0 ? 'true' : 'false' }}" aria-controls="hsfaq-{{ i }}">
+            <span class="serif">{{ f.q }}</span>
+            <span class="hs-faq__icon" aria-hidden="true">+</span>
+          </button>
+          <div id="hsfaq-{{ i }}" class="hs-faq__a" {% if i != 0 %}hidden{% endif %}>{{ f.a }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ── FINAL CTA ─────────────────────────────────────────────────────────── #}
+<section class="hs-cta" aria-label="{{ 'Final call to action'|t }}">
+  <div class="hs-cta__glow" aria-hidden="true"></div>
+  <div class="hs-cta__inner">
+    <h2 class="serif hs-cta__title">
+      {{ 'Skip the jar.'|t }}<br>
+      <em>{{ 'Pocket the hive.'|t }}</em>
+    </h2>
+    <p class="hs-cta__sub">
+      {{ "Start with the Classic 30-pack. If it isn't the best honey you've put in your tea, we'll send your money back — keep the sticks."|t }}
+    </p>
+    <a href="#hs-shop" class="hs-btn hs-btn--dark hs-btn--lg">
+      {{ 'Order the Classic 30-pack — $19'|t }}
+    </a>
+    <div class="mono hs-cta__note">{{ 'FREE SHIPPING · 30-DAY GUARANTEE · SHIPS IN 24H'|t }}</div>
+  </div>
+</section>
+
+{# ── FOOTER ────────────────────────────────────────────────────────────── #}
+<footer class="hs-footer" role="contentinfo">
+  <div class="hs-footer__inner">
+    <div class="hs-footer__brand">
+      <a href="{{ path('<front>') }}" class="hs-nav__logo" aria-label="{{ 'HiveSticks home'|t }}">
+        <svg class="hs-nav__logo-mark" viewBox="0 0 38 38" fill="none" aria-hidden="true">
+          <polygon points="19,2 36,11 36,27 19,36 2,27 2,11" fill="#d9871a"/>
+          <polygon points="19,7 31.5,13.5 31.5,24.5 19,31 6.5,24.5 6.5,13.5" fill="#f0a929" opacity="0.3"/>
+          <path d="M14 18 Q15.5 14 19 13 Q22.5 14 24 18 Q22.5 25 19 26 Q15.5 25 14 18Z" fill="#fbf6ec"/>
+          <circle cx="19" cy="19" r="2.5" fill="#d9871a"/>
+        </svg>
+        <span class="hs-nav__logo-text serif">Hive<em>Sticks</em></span>
+      </a>
+      <p class="hs-footer__tagline">{{ 'Single-origin raw honey from our family farm in Iowa. Family-run since 2014.'|t }}</p>
+    </div>
+    <div class="hs-footer__col">
+      <div class="mono hs-footer__col-title">{{ 'SHOP'|t }}</div>
+      <ul>
+        <li><a href="/store">{{ 'All flavors'|t }}</a></li>
+        <li><a href="/store">{{ 'Variety pack'|t }}</a></li>
+        <li><a href="/store">{{ 'Subscription'|t }}</a></li>
+        <li><a href="/wholesale">{{ 'Wholesale'|t }}</a></li>
+      </ul>
+    </div>
+    <div class="hs-footer__col">
+      <div class="mono hs-footer__col-title">{{ 'ABOUT'|t }}</div>
+      <ul>
+        <li><a href="/our-story">{{ 'Our story'|t }}</a></li>
+        <li><a href="/our-story">{{ 'The farm'|t }}</a></li>
+        <li><a href="/contact">{{ 'Contact'|t }}</a></li>
+      </ul>
+    </div>
+    <div class="hs-footer__col">
+      <div class="mono hs-footer__col-title">{{ 'HELP'|t }}</div>
+      <ul>
+        <li><a href="/faq">{{ 'FAQ'|t }}</a></li>
+        <li><a href="/shipping">{{ 'Shipping'|t }}</a></li>
+        <li><a href="/returns">{{ 'Returns'|t }}</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="hs-footer__bottom">
+    <span class="mono">{{ '© 2026 HIVESTICKS APIARY · IOWA'|t }}</span>
+    <span class="mono">{{ 'BUILT BY BEEKEEPERS · NOT MARKETERS'|t }}</span>
+  </div>
+</footer>

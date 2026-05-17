@@ -1,0 +1,21 @@
+name: HiveSticks
+type: theme
+description: 'Custom storefront theme for HiveSticks.com — raw Iowa honey sticks.'
+package: Custom
+core_version_requirement: ^9 || ^10
+base theme: false
+
+libraries:
+  - hivesticks/global
+
+regions:
+  header: 'Header'
+  primary_menu: 'Primary Menu'
+  hero: 'Hero'
+  highlighted: 'Highlighted'
+  content: 'Content'
+  sidebar_first: 'Left Sidebar'
+  sidebar_second: 'Right Sidebar'
+  footer_first: 'Footer First'
+  footer_second: 'Footer Second'
+  footer_third: 'Footer Third'

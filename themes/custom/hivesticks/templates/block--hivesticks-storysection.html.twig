@@ -1,0 +1,24 @@
+<div{{ attributes.addClass('hs-story-block') }}>
+  {{ title_prefix }}
+  <div class="hs-story__container">
+    <div class="hs-story__visual" aria-hidden="true">
+      <div class="hs-farm-frame">
+        <div class="hs-farm-frame__badge">Iowa Bee</div>
+        <svg class="hs-farm-icon" viewBox="0 0 80 80"><ellipse cx="40" cy="65" rx="22" ry="6" fill="#C07208" opacity="0.4"/><rect x="20" y="30" width="40" height="36" rx="4" fill="#E8900A"/><rect x="22" y="30" width="36" height="10" rx="2" fill="#F5B342"/><rect x="22" y="42" width="36" height="10" rx="2" fill="#F0A830"/><rect x="22" y="54" width="36" height="10" rx="2" fill="#E8900A"/><rect x="33" y="60" width="14" height="5" rx="2" fill="#2C1202"/><polygon points="15,30 40,12 65,30" fill="#A66208"/><polygon points="18,30 40,15 62,30" fill="#C07208"/><circle cx="30" cy="36" r="2.5" fill="#2C1202" opacity="0.5"/><circle cx="40" cy="36" r="2.5" fill="#2C1202" opacity="0.5"/><circle cx="50" cy="36" r="2.5" fill="#2C1202" opacity="0.5"/><ellipse cx="62" cy="20" rx="5" ry="3.5" fill="#F5B342"/><ellipse cx="60" cy="17" rx="3" ry="1.5" fill="rgba(255,255,255,0.6)"/><ellipse cx="64" cy="17" rx="3" ry="1.5" fill="rgba(255,255,255,0.6)"/></svg>
+        <div class="hs-farm-heritage"><div class="hs-farm-heritage__num">~150</div><div class="hs-farm-heritage__label">Years of Iowa farming</div></div>
+      </div>
+    </div>
+    <div class="hs-story__copy">
+      {% if content.field_eyebrow %}<div class="hs-eyebrow">{{ content.field_eyebrow[0] }}</div>{% endif %}
+      {% if content.field_title %}<h2 class="hs-section-title">{{ content.field_title[0] }}</h2>{% endif %}
+      {% if content.field_body %}<div class="hs-story__body">{{ content.field_body[0] }}</div>{% endif %}
+      <dl class="hs-story-facts">
+        <div class="hs-story-fact"><dt class="hs-story-fact__num">30+</dt><dd class="hs-story-fact__label">Active hives on our Iowa farm</dd></div>
+        <div class="hs-story-fact"><dt class="hs-story-fact__num">0</dt><dd class="hs-story-fact__label">Middlemen between hive and stick</dd></div>
+        <div class="hs-story-fact"><dt class="hs-story-fact__num">1</dt><dd class="hs-story-fact__label">Ingredient in every stick</dd></div>
+        <div class="hs-story-fact"><dt class="hs-story-fact__num">100%</dt><dd class="hs-story-fact__label">Beekeeper-owned &amp; operated</dd></div>
+      </dl>
+    </div>
+  </div>
+  {{ title_suffix }}
+</div>

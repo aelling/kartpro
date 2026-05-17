@@ -1,0 +1,14 @@
+<div{{ attributes.addClass('hs-how-block') }}>
+  {{ title_prefix }}
+  <div class="hs-section-head hs-text-center">
+    {% if content.field_eyebrow %}<div class="hs-eyebrow">{{ content.field_eyebrow[0] }}</div>{% endif %}
+    {% if content.field_title %}<h2 class="hs-section-title">{{ content.field_title[0] }}</h2>{% endif %}
+    {% if content.field_subtitle %}<p class="hs-section-sub hs-mx-auto hs-text-center">{{ content.field_subtitle[0] }}</p>{% endif %}
+  </div>
+  <ol class="hs-how-steps" role="list">
+    <li class="hs-how-step"><div class="hs-how-step__num">1</div><h3 class="hs-how-step__title">Tear it open.</h3><p class="hs-how-step__text">Grab a stick. Tear off the end. No knife, no spoon, no mess. It's designed to open clean.</p></li>
+    <li class="hs-how-step"><div class="hs-how-step__num">2</div><h3 class="hs-how-step__title">Take it.</h3><p class="hs-how-step__text">Squeeze the honey straight in. Or add it to your water bottle, oatmeal, or coffee. Your call.</p></li>
+    <li class="hs-how-step"><div class="hs-how-step__num">3</div><h3 class="hs-how-step__title">Go.</h3><p class="hs-how-step__text">That's it. You're done. Toss the empty, keep moving. No cleanup, no sticky hands.</p></li>
+  </ol>
+  {{ title_suffix }}
+</div>

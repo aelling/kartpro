@@ -1,0 +1,84 @@
+<?php
+
+/**
+ * @file
+ * HiveSticks theme hooks and preprocessing functions.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_preprocess_HOOK() for html.html.twig.
+ */
+function hivesticks_preprocess_html(&$variables) {
+  // Add body classes for front page detection.
+  $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page.html.twig.
+ */
+function hivesticks_preprocess_page(&$variables) {
+  $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
+  $variables['site_name'] = \Drupal::config('system.site')->get('name');
+  $variables['site_slogan'] = \Drupal::config('system.site')->get('slogan');
+
+  // Attach homepage library on the front page.
+  if ($variables['is_front']) {
+    $variables['#attached']['library'][] = 'hivesticks/homepage';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node.html.twig.
+ */
+function hivesticks_preprocess_node(&$variables) {
+  $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for commerce_product.html.twig.
+ *
+ * Attaches the PDP library (CSS + JS) on all product display pages.
+ */
+function hivesticks_preprocess_commerce_product(&$variables) {
+  $variables['#attached']['library'][] = 'hivesticks/pdp';
+}
+
+/**
+ * Implements hook_theme_suggestions_page_alter().
+ *
+ * Adds page--commerce-product.html.twig suggestion for product canonical pages.
+ * This gives Commerce product pages a full-width layout (no sidebars).
+ */
+function hivesticks_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  // Check if we're on a route that serves a commerce_product entity.
+  $route_match = \Drupal::routeMatch();
+  $route_name  = $route_match->getRouteName();
+
+  // commerce_product canonical URLs resolve to entity.commerce_product.canonical.
+  if ($route_name === 'entity.commerce_product.canonical') {
+    $suggestions[] = 'page__commerce_product';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page--front.html.twig.
+ *
+ * Attaches the homepage library (CSS + JS) on the front page only.
+ */
+function hivesticks_preprocess_page__front(&$variables) {
+  $variables['#attached']['library'][] = 'hivesticks/homepage';
+}
+
+/**
+ * Implements hook_theme_suggestions_commerce_product_alter().
+ *
+ * Ensures commerce-product--default.html.twig is preferred for Default view mode.
+ */
+function hivesticks_theme_suggestions_commerce_product_alter(array &$suggestions, array $variables) {
+  if (isset($variables['elements']['#view_mode'])
+      && $variables['elements']['#view_mode'] === 'default') {
+    $suggestions[] = 'commerce_product__default';
+  }
+}
