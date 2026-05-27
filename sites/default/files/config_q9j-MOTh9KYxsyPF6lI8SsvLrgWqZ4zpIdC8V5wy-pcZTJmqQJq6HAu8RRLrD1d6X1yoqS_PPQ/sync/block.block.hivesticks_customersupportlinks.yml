@@ -1,0 +1,25 @@
+uuid: f13ed395-be2f-4e19-849c-5838806ecd27
+langcode: en
+status: false
+dependencies:
+  content:
+    - 'block_content:basic:5076d7a2-efd0-43d6-bb9d-4396f950a6b3'
+  module:
+    - block_content
+  theme:
+    - hivesticks
+id: hivesticks_customersupportlinks
+theme: hivesticks
+region: footer_third
+weight: -16
+provider: null
+plugin: 'block_content:5076d7a2-efd0-43d6-bb9d-4396f950a6b3'
+settings:
+  id: 'block_content:5076d7a2-efd0-43d6-bb9d-4396f950a6b3'
+  label: 'Customer Support'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

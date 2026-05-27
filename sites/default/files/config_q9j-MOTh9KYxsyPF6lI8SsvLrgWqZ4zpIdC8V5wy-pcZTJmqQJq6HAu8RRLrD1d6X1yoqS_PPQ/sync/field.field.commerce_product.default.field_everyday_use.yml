@@ -1,0 +1,22 @@
+uuid: 6ae5fc8c-0fad-47be-9c24-0854dfafa56d
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.default
+    - field.storage.commerce_product.field_everyday_use
+  module:
+    - text
+id: commerce_product.default.field_everyday_use
+field_name: field_everyday_use
+entity_type: commerce_product
+bundle: default
+label: 'Everyday Use'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

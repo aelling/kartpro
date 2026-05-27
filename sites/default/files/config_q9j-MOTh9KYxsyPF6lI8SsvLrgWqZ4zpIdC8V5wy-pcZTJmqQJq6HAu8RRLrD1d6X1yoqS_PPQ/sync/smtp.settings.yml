@@ -13,8 +13,8 @@ smtp_from: noreply@hivesticks.com
 smtp_fromname: HiveSticks.com
 smtp_client_hostname: ''
 smtp_client_helo: ''
-smtp_allowhtml: false
-smtp_test_address: aelling@gmail.com
+smtp_allowhtml: true
+smtp_test_address: ''
 smtp_reroute_address: aelling@gmail.com
 smtp_debugging: false
 smtp_debug_level: 1

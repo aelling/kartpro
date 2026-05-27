@@ -1,0 +1,25 @@
+uuid: 8ce67cf4-e58b-4971-a279-55bb38106683
+langcode: en
+status: false
+dependencies:
+  content:
+    - 'block_content:basic:548edd0f-223f-40fd-b59e-6f9ee62f9116'
+  module:
+    - block_content
+  theme:
+    - hivesticks
+id: hivesticks_headertopmenu
+theme: hivesticks
+region: header
+weight: 0
+provider: null
+plugin: 'block_content:548edd0f-223f-40fd-b59e-6f9ee62f9116'
+settings:
+  id: 'block_content:548edd0f-223f-40fd-b59e-6f9ee62f9116'
+  label: 'Header top menu'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

@@ -1,0 +1,22 @@
+uuid: 0191e1a7-a45c-474a-8a56-5d93f258456d
+langcode: en
+status: false
+dependencies:
+  theme:
+    - hivesticks
+_core:
+  default_config_hash: nGE3EoPQQaQCuqTUtZgw0-KIzmrqdKDzdNQf2JyPUt4
+id: hivesticks_primary_local_tasks
+theme: hivesticks
+region: content
+weight: -7
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: 'Primary tabs'
+  label_display: '0'
+  provider: core
+  primary: true
+  secondary: false
+visibility: {  }

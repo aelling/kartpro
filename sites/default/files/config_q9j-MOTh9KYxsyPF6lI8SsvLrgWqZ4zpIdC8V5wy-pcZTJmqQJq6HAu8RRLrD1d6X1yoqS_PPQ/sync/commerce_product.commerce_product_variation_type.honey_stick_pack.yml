@@ -1,0 +1,10 @@
+uuid: 5f8fa6ec-0285-4ebf-879c-64ba2eb66da2
+langcode: en
+status: true
+dependencies: {  }
+id: honey_stick_pack
+label: 'Honey Stick Pack'
+traits: {  }
+locked: false
+orderItemType: default
+generateTitle: true

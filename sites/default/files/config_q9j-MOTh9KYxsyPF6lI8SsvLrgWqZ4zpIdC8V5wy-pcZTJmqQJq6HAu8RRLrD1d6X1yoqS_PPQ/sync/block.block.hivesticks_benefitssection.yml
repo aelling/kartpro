@@ -1,0 +1,31 @@
+uuid: b0023532-623b-4627-8f51-13375d5f6bbb
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:landing_page_section:9807d23e-1229-4c5f-ad33-627145f38cb0'
+  module:
+    - block_content
+    - system
+  theme:
+    - hivesticks
+id: hivesticks_benefitssection
+theme: hivesticks
+region: highlighted
+weight: 0
+provider: null
+plugin: 'block_content:9807d23e-1229-4c5f-ad33-627145f38cb0'
+settings:
+  id: 'block_content:9807d23e-1229-4c5f-ad33-627145f38cb0'
+  label: 'Benefits Section'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: '<front>'

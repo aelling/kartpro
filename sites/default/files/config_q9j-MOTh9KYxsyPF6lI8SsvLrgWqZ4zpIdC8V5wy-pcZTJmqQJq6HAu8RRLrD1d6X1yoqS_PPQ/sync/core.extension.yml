@@ -3,6 +3,7 @@ _core:
 module:
   address: 0
   admin_toolbar: 0
+  admin_toolbar_tools: 0
   announcements_feed: 0
   automated_cron: 0
   big_pipe: 0
@@ -71,4 +72,5 @@ theme:
   claro: 0
   stable9: 0
   kartpro: 0
+  hivesticks: 0
 profile: standard

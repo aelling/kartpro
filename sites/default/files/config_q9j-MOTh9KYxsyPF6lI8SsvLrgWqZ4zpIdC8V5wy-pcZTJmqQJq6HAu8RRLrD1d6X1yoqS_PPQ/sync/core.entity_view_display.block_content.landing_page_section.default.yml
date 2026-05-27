@@ -1,0 +1,67 @@
+uuid: 69178363-5f34-4177-9e96-1ff6a50b326c
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.landing_page_section
+    - field.field.block_content.landing_page_section.body
+    - field.field.block_content.landing_page_section.field_button_text
+    - field.field.block_content.landing_page_section.field_button_url
+    - field.field.block_content.landing_page_section.field_eyebrow
+    - field.field.block_content.landing_page_section.field_subtitle
+    - field.field.block_content.landing_page_section.field_title
+  module:
+    - text
+id: block_content.landing_page_section.default
+targetEntityType: block_content
+bundle: landing_page_section
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_button_text:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_button_url:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_eyebrow:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_subtitle:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden: {  }

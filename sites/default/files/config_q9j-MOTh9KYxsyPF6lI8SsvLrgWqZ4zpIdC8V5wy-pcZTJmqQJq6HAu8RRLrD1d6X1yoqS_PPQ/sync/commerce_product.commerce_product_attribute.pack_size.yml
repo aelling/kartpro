@@ -1,0 +1,7 @@
+uuid: 68644b87-ed9e-42a5-96ce-dca0b46385b0
+langcode: en
+status: true
+dependencies: {  }
+id: pack_size
+label: 'Pack Size'
+elementType: select

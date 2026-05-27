@@ -1,0 +1,20 @@
+uuid: 61222254-d8fa-4e87-8295-3a948ed01f6b
+langcode: en
+status: false
+dependencies:
+  theme:
+    - hivesticks
+_core:
+  default_config_hash: Q9_2whdOj1YIomfvsIfopROW4FT_X5pY0DjdOiOaQ5U
+id: hivesticks_primary_admin_actions
+theme: hivesticks
+region: content
+weight: -6
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility: {  }

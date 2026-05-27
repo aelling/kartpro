@@ -1,0 +1,31 @@
+uuid: f0033577-271b-4e89-8590-3eeab94a9fed
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:landing_page_section:1b20425d-dc3d-43e9-be1f-b82d5d1cced5'
+  module:
+    - block_content
+    - system
+  theme:
+    - hivesticks
+id: hivesticks_finalctasection
+theme: hivesticks
+region: footer_second
+weight: 0
+provider: null
+plugin: 'block_content:1b20425d-dc3d-43e9-be1f-b82d5d1cced5'
+settings:
+  id: 'block_content:1b20425d-dc3d-43e9-be1f-b82d5d1cced5'
+  label: 'Final CTA Section'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: '<front>'

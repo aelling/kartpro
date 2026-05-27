@@ -1,0 +1,25 @@
+uuid: 66ae43ab-2687-4e21-8591-1d27ba789051
+langcode: en
+status: false
+dependencies:
+  content:
+    - 'block_content:basic:a2c5ad2e-3a64-4c62-9b65-b2a9bf517b75'
+  module:
+    - block_content
+  theme:
+    - hivesticks
+id: hivesticks_headertopcontact
+theme: hivesticks
+region: header
+weight: 0
+provider: null
+plugin: 'block_content:a2c5ad2e-3a64-4c62-9b65-b2a9bf517b75'
+settings:
+  id: 'block_content:a2c5ad2e-3a64-4c62-9b65-b2a9bf517b75'
+  label: 'Header top contact'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

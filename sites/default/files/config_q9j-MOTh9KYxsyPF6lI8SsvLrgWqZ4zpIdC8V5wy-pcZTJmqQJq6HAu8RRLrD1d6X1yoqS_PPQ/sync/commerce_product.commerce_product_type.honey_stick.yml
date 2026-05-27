@@ -1,0 +1,13 @@
+uuid: 17b362b3-8339-4667-ba0a-fc62e4e429b5
+langcode: en
+status: true
+dependencies: {  }
+id: honey_stick
+label: 'Honey Stick'
+traits: {  }
+locked: false
+description: ''
+variationTypes:
+  - honey_stick_pack
+multipleVariations: true
+injectVariationFields: true

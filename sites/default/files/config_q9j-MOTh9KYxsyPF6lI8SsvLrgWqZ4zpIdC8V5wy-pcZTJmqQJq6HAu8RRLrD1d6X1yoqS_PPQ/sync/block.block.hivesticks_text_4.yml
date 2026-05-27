@@ -1,0 +1,30 @@
+uuid: e68c1c44-a2c7-4972-8086-fd9980cf0400
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:eeeffe05-8f18-46c5-bad5-cb5a9c0bdefb'
+  module:
+    - block_content
+    - system
+  theme:
+    - hivesticks
+id: hivesticks_text_4
+theme: hivesticks
+region: sidebar_second
+weight: 0
+provider: null
+plugin: 'block_content:eeeffe05-8f18-46c5-bad5-cb5a9c0bdefb'
+settings:
+  id: 'block_content:eeeffe05-8f18-46c5-bad5-cb5a9c0bdefb'
+  label: Text
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/node/10\r\n/node/11"

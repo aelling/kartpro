@@ -1,0 +1,25 @@
+uuid: 732c50c2-f92a-4205-99bc-3c5433aac360
+langcode: en
+status: false
+dependencies:
+  content:
+    - 'block_content:basic:eeeffe05-8f18-46c5-bad5-cb5a9c0bdefb'
+  module:
+    - block_content
+  theme:
+    - hivesticks
+id: hivesticks_text
+theme: hivesticks
+region: header
+weight: 0
+provider: null
+plugin: 'block_content:eeeffe05-8f18-46c5-bad5-cb5a9c0bdefb'
+settings:
+  id: 'block_content:eeeffe05-8f18-46c5-bad5-cb5a9c0bdefb'
+  label: 'Text One'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

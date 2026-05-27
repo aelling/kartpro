@@ -1,0 +1,23 @@
+uuid: fae9234a-69b4-43d4-b27e-dc9de3c22b1b
+langcode: en
+status: false
+dependencies:
+  module:
+    - node
+  theme:
+    - hivesticks
+_core:
+  default_config_hash: 0gq3VPg-_UM69FCCWurLFIrrnIjC2HLKhwo9iQNtcUo
+id: hivesticks_syndicate
+theme: hivesticks
+region: header
+weight: -6
+provider: null
+plugin: node_syndicate_block
+settings:
+  id: node_syndicate_block
+  label: 'RSS feed'
+  label_display: '0'
+  provider: node
+  block_count: 10
+visibility: {  }

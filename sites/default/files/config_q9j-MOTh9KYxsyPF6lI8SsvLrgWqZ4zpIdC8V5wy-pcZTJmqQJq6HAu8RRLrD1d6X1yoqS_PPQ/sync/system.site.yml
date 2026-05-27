@@ -2,9 +2,9 @@ _core:
   default_config_hash: VDJxTZtQR21qB4lvOq8zszJZLvLKrSPQpdn2E3T71Ww
 langcode: en
 uuid: d1661644-23df-41ef-bd0d-49dd5626d31d
-name: KartPro
-mail: admin@wampserver.invalid
-slogan: 'Drupal Commerce Theme'
+name: Hivesticks
+mail: noreply@hivesticks.com
+slogan: ''
 page:
   403: ''
   404: ''

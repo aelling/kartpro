@@ -1,0 +1,25 @@
+uuid: 9827519e-35f7-400b-b6df-9e3546d5459c
+langcode: en
+status: false
+dependencies:
+  content:
+    - 'block_content:basic:01c23462-91c7-4735-9696-7eab3c8296da'
+  module:
+    - block_content
+  theme:
+    - hivesticks
+id: hivesticks_mobileapp
+theme: hivesticks
+region: header
+weight: -11
+provider: null
+plugin: 'block_content:01c23462-91c7-4735-9696-7eab3c8296da'
+settings:
+  id: 'block_content:01c23462-91c7-4735-9696-7eab3c8296da'
+  label: 'Mobile App'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

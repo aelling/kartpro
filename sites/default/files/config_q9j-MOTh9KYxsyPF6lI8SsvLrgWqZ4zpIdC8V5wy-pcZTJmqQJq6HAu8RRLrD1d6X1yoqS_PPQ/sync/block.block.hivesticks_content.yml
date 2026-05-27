@@ -1,0 +1,22 @@
+uuid: 26a5b57b-7482-4d55-b895-665c37abfcca
+langcode: en
+status: false
+dependencies:
+  module:
+    - system
+  theme:
+    - hivesticks
+_core:
+  default_config_hash: erQSEZF2XUjNmgTl0uNRBzmg18ZGXwUcw2FhApoeuHk
+id: hivesticks_content
+theme: hivesticks
+region: content
+weight: -4
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

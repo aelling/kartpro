@@ -4,6 +4,9 @@ status: true
 dependencies:
   config:
     - commerce_product.commerce_product_variation_type.default
+    - field.field.commerce_product_variation.default.attribute_flavor
+    - field.field.commerce_product_variation.default.attribute_pack_size
+    - field.field.commerce_product_variation.default.field_pack_description
   module:
     - commerce_price
 id: commerce_product_variation.default.default
@@ -30,6 +33,9 @@ content:
     weight: 0
     region: content
 hidden:
+  attribute_flavor: true
+  attribute_pack_size: true
+  field_pack_description: true
   product_id: true
   sku: true
   title: true
