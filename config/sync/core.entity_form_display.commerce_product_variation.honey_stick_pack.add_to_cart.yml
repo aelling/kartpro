@@ -1,7 +1,0 @@
-content:
-  attribute_flavor:
-    type: commerce_product_variation_attributes
-    weight: 0
-    region: content
-    settings: {  }
-    third_party_settings: {  }
