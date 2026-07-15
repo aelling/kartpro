@@ -906,3 +906,11 @@ $settings['https'] = TRUE;
 
 // HiveSticks: config sync relocated into the repo so it deploys via git.
 $settings['config_sync_directory'] = 'config/sync';
+
+// Local (DDEV) Stripe test keys from env — keeps secrets out of exported config.
+if (getenv('IS_DDEV_PROJECT') === 'true') {
+  $gw = 'commerce_payment.commerce_payment_gateway.stripe_standard';
+  $config[$gw]['configuration']['mode'] = 'test';
+  if ($pk = getenv('STRIPE_PUBLISHABLE_KEY')) { $config[$gw]['configuration']['publishable_key'] = $pk; }
+  if ($sk = getenv('STRIPE_SECRET_KEY'))      { $config[$gw]['configuration']['secret_key'] = $sk; }
+}
