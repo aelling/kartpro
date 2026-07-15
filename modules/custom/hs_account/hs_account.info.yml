@@ -1,0 +1,5 @@
+name: 'HiveSticks Account'
+type: module
+description: 'Forces the front-end theme on customer account pages (profile / edit) so they match the branded account area.'
+core_version_requirement: ^10 || ^11
+package: HiveSticks

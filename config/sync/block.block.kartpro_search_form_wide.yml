@@ -1,0 +1,23 @@
+uuid: af6bcc11-1cd6-44ee-8afa-8f4373a5ed4a
+langcode: en
+status: true
+dependencies:
+  module:
+    - search
+  theme:
+    - kartpro
+_core:
+  default_config_hash: imMyHD6LYci0gtXq56qr9ZKGHzbEG9uFydrN5EhKtSU
+id: kartpro_search_form_wide
+theme: kartpro
+region: search_box
+weight: -7
+provider: null
+plugin: search_form_block
+settings:
+  id: search_form_block
+  label: 'Search form (wide)'
+  label_display: '0'
+  provider: search
+  page_id: ''
+visibility: {  }

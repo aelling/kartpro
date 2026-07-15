@@ -1,0 +1,19 @@
+uuid: 544a7f81-aba7-48c7-8d9e-e1da2717b87f
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_attribute.flavor
+    - field.storage.commerce_product_attribute_value.field_swatch_color
+id: commerce_product_attribute_value.flavor.field_swatch_color
+field_name: field_swatch_color
+entity_type: commerce_product_attribute_value
+bundle: flavor
+label: 'Swatch Color (hex)'
+description: 'Primary swatch hex, e.g. #f0a929'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

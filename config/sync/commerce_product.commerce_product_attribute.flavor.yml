@@ -1,0 +1,7 @@
+uuid: 310fc090-e338-4a07-9bc8-7b0c452ae24d
+langcode: en
+status: true
+dependencies: {  }
+id: flavor
+label: Flavor
+elementType: select

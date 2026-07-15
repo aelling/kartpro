@@ -1,0 +1,31 @@
+uuid: b6cf0a99-7011-4956-8b84-1c835d1488c1
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:landing_page_section:474d7b70-8dbb-40b7-a447-54b9bf7734dd'
+  module:
+    - block_content
+    - system
+  theme:
+    - hivesticks
+id: hivesticks_athletessection
+theme: hivesticks
+region: sidebar_first
+weight: 0
+provider: null
+plugin: 'block_content:474d7b70-8dbb-40b7-a447-54b9bf7734dd'
+settings:
+  id: 'block_content:474d7b70-8dbb-40b7-a447-54b9bf7734dd'
+  label: 'Athletes Section'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: '<front>'

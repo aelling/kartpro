@@ -1,0 +1,21 @@
+uuid: 45094558-b496-4d54-a9ae-9b5d104562d1
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_product
+id: commerce_product_attribute_value.field_swatch_color
+field_name: field_swatch_color
+entity_type: commerce_product_attribute_value
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

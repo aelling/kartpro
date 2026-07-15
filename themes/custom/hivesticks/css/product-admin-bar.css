@@ -1,0 +1,83 @@
+/*
+  product-admin-bar.css
+  ─────────────────────
+  Admin-only UI: inline edit bar on the product page + local task tabs styling.
+  Only the edit bar is visibility-controlled in Twig (logged-in users with edit
+  access only). Tabs are rendered by Drupal core and hidden for non-admins automatically.
+*/
+
+/* ── Inline "Edit this product" bar ── */
+.product-admin-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: #1a1a2e;
+  border-bottom: 2px solid #e8a917;
+  font-size: 13px;
+  font-family: sans-serif;
+}
+
+.product-admin-bar__edit-link {
+  color: #e8a917;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.product-admin-bar__edit-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* ── Local task tabs (View | Edit) ── */
+/* These appear site-wide via page.html.twig, so scope to .tabs if your
+   theme uses a different wrapper class — adjust the selector as needed. */
+nav.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 6px 16px 0;
+  background: #f5f0e8;
+  border-bottom: 2px solid #e8a917;
+  font-size: 13px;
+  font-family: sans-serif;
+}
+
+nav.tabs ul {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav.tabs li {
+  margin: 0;
+}
+
+nav.tabs a {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 4px 4px 0 0;
+  color: #6b4f1a;
+  text-decoration: none;
+  font-weight: 500;
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+nav.tabs a:hover {
+  background: #fffaf0;
+  color: #3a2a08;
+}
+
+nav.tabs .is-active a,
+nav.tabs a.is-active {
+  background: #fff;
+  color: #1a1a1a;
+  border-color: #e8a917;
+  border-bottom-color: #fff;
+  font-weight: 600;
+}

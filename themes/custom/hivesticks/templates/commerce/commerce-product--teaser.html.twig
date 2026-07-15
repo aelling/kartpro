@@ -1,0 +1,159 @@
+{#
+  commerce-product--teaser.html.twig
+  ────────────────────────────────────
+  Deploy to: themes/custom/hivesticks/templates/commerce/commerce-product--teaser.html.twig
+
+  Renders one product card in the /shop catalog grid.
+  Matches the design in hivesticks-products.jsx.
+
+  Variables provided by Commerce:
+    product_entity  — the Commerce product object
+    url             — canonical product URL
+
+  Variables added by hivesticks_preprocess_commerce_product__teaser() in hivesticks.theme:
+    price_from      — formatted "From" price string, e.g. "$8"
+    is_subscription — bool, true for subscription-category products
+
+  Fields used (all set up by add-pdp-fields.sh / add-badge-fields.sh):
+    field_swatch_color   — hex string, e.g. "#f0a929"
+    field_badge          — optional text: "Bestseller", "New", "Infused", "Save 20%", etc.
+    field_flavor_notes   — mono tagline, e.g. "Floral · Honeysuckle · Light"
+    field_rating         — decimal, e.g. 4.9
+    field_review_count   — integer, e.g. 1284
+    field_image          — main product image (optional; falls back to color stick)
+    field_category       — taxonomy ref (not displayed on card, used for filtering)
+#}
+
+{% set swatch = product_entity.field_swatch_color.value ?? '#f0a929' %}
+{% set badge  = product_entity.field_badge.value ?? '' %}
+{% set notes  = product_entity.field_flavor_notes.value ?? '' %}
+{% set rating = product_entity.field_rating.value ?? 0 %}
+{% set reviews= product_entity.field_review_count.value ?? 0 %}
+{% set has_image = product_entity.field_image.entity is defined and product_entity.field_image.entity %}
+
+{# Badge CSS modifier class #}
+{% set badge_class = '' %}
+{% if badge %}
+  {% set badge_lower = badge|lower %}
+  {% if 'bestseller' in badge_lower %}   {% set badge_class = 'hs-card__badge--bestseller' %}
+  {% elseif 'most loved' in badge_lower %}{% set badge_class = 'hs-card__badge--most-loved' %}
+  {% elseif badge_lower == 'new' %}      {% set badge_class = 'hs-card__badge--new' %}
+  {% elseif 'subscribe' in badge_lower %} {% set badge_class = 'hs-card__badge--subscribe' %}
+  {% elseif 'infused' in badge_lower %}  {% set badge_class = 'hs-card__badge--infused' %}
+  {% elseif 'save' in badge_lower %}     {% set badge_class = 'hs-card__badge--save' %}
+  {% endif %}
+{% endif %}
+
+{# Star rating (filled / empty ★ characters) #}
+{% set rating_round = rating|round(0, 'floor')|number_format(0) %}
+
+<article class="hs-card" itemscope itemtype="https://schema.org/Product">
+
+  {# ── Media ──────────────────────────────────────────────────── #}
+  <a class="hs-card__media"
+     href="{{ url }}"
+     aria-label="{{ product_entity.title.value }}"
+     style="--swatch: {{ swatch }};">
+
+    {% if badge %}
+      <span class="hs-card__badge hs-mono {{ badge_class }}" aria-label="{{ 'Badge: '|t }}{{ badge }}">
+        {{ badge }}
+      </span>
+    {% endif %}
+
+    {% if has_image %}
+      {{- product_entity.field_image.entity|view('thumbnail') -}}
+    {% else %}
+      {# Honey stick SVG placeholder — tinted to the flavor swatch color #}
+      <svg class="hs-card__stick" width="38" height="160" viewBox="0 0 38 160"
+           fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="1" y="10" width="36" height="140" rx="18" fill="{{ swatch }}" opacity="0.9"/>
+        <rect x="1" y="10" width="36" height="140" rx="18"
+              fill="url(#stick-grad-{{ product_entity.id() }})" opacity="0.5"/>
+        <rect x="4" y="16" width="10" height="60" rx="5"
+              fill="white" opacity="0.22"/>
+        <rect x="1" y="1" width="36" height="18" rx="9"
+              fill="{{ swatch }}" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
+        <rect x="4" y="3" width="30" height="12" rx="6"
+              fill="white" opacity="0.15"/>
+        <defs>
+          <linearGradient id="stick-grad-{{ product_entity.id() }}" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="white" stop-opacity="0.18"/>
+            <stop offset="50%" stop-color="white" stop-opacity="0"/>
+            <stop offset="100%" stop-color="black" stop-opacity="0.08"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    {% endif %}
+
+  </a>
+
+  {# ── Card body ───────────────────────────────────────────────── #}
+  <div class="hs-card__body">
+
+    {# Rating row #}
+    {% if rating > 0 %}
+      <div class="hs-card__rating">
+        <span class="hs-card__stars" aria-label="{{ 'Rating: '|t }}{{ rating }} {{ 'out of 5'|t }}">
+          {% for i in 1..5 %}
+            {% if i <= rating_round %}
+              <span class="hs-star-filled" aria-hidden="true">★</span>
+            {% else %}
+              <span class="hs-star-empty" aria-hidden="true">★</span>
+            {% endif %}
+          {% endfor %}
+        </span>
+        <span class="hs-card__rating-text">
+          {{ rating }} · {{ reviews|number_format }}
+        </span>
+      </div>
+    {% endif %}
+
+    {# Title #}
+    <a class="hs-card__title hs-serif"
+       href="{{ url }}"
+       itemprop="name">{{ product_entity.title.value }}</a>
+
+    {# Flavor notes #}
+    {% if notes %}
+      <p class="hs-card__notes hs-mono">{{ notes }}</p>
+    {% endif %}
+
+    {# Footer: price + action button #}
+    <div class="hs-card__foot">
+
+      <div class="hs-card__price" itemprop="offers" itemscope itemtype="https://schema.org/AggregateOffer">
+        <span class="hs-card__from">
+          {{ is_subscription ? 'From / month'|t : 'From'|t }}
+        </span>
+        <span class="hs-card__amount hs-serif" itemprop="lowPrice">
+          {{ price_from ?? '' }}
+        </span>
+      </div>
+
+      {#
+        Quick-add vs. Choose options:
+        • Single-variation products (1 pack size): show "Quick add" via Commerce add-to-cart form.
+          The form is small and submits via AJAX. Styled by .hs-card__add.
+        • Multi-variation / bundle / subscription products: link to the PDP.
+          (Visitor needs to pick pack size on the product page.)
+        The preprocess hook sets `single_variation` = true when the product has exactly 1 variation.
+      #}
+      {% if single_variation and add_to_cart_form is defined %}
+        <div class="hs-card__add-wrap">
+          {{ add_to_cart_form }}
+        </div>
+      {% else %}
+        <a class="hs-card__add" href="{{ url }}">
+          {% if product_entity.bundle() == 'honey_stick' %}
+            {{ 'Choose options'|t }}
+          {% else %}
+            {{ 'Add to cart'|t }}
+          {% endif %}
+        </a>
+      {% endif %}
+
+    </div>
+  </div>
+
+</article>

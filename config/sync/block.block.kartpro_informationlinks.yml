@@ -1,0 +1,25 @@
+uuid: 06288d5c-b891-45d4-872b-e263c0c848f6
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:d2a8ae97-f352-46d6-831d-22415ab4fc0a'
+  module:
+    - block_content
+  theme:
+    - kartpro
+id: kartpro_informationlinks
+theme: kartpro
+region: footer
+weight: -13
+provider: null
+plugin: 'block_content:d2a8ae97-f352-46d6-831d-22415ab4fc0a'
+settings:
+  id: 'block_content:d2a8ae97-f352-46d6-831d-22415ab4fc0a'
+  label: Information
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

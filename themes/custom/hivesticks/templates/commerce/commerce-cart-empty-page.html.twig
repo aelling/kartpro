@@ -1,0 +1,35 @@
+{#
+  commerce-cart-empty-page.html.twig
+  Overrides the default Commerce empty-cart output at /cart.
+  Styled empty state using the .hs-cart-empty block from cart.css.
+#}
+{{ attach_library('hivesticks/cart') }}
+
+<div class="view-commerce-cart-form">
+
+  {# ── Breadcrumb ─────────────────────────────────────────────────────────── #}
+  <nav class="hs-breadcrumb hs-mono" aria-label="{{ 'Breadcrumb'|t }}">
+    <a href="/shop">{{ 'Shop'|t }}</a>
+    <span class="hs-breadcrumb__sep">/</span>
+    <span>{{ 'Cart'|t }}</span>
+  </nav>
+
+  {# ── Empty state ─────────────────────────────────────────────────────────── #}
+  <div class="hs-cart-empty">
+    <div class="hs-cart-empty__icon">
+      <svg width="72" height="120" viewBox="0 0 72 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="6"  y="10" width="60" height="96" rx="30" fill="#f0a929" opacity=".18"/>
+        <rect x="14" y="18" width="44" height="80" rx="22" fill="#f0a929" opacity=".35"/>
+        <rect x="20" y="24" width="32" height="68" rx="16" fill="#f0a929"/>
+        <rect x="28" y="4"  width="16" height="20" rx="6"  fill="#d9871a"/>
+        <rect x="31" y="0"  width="10" height="8"  rx="3"  fill="#a8640e"/>
+      </svg>
+    </div>
+    <h1 class="hs-cart-empty__title hs-serif">{{ "Your cart's empty."|t }}</h1>
+    <p class="hs-cart-empty__body">
+      {{ "No honey yet. Pick your flavors and we'll ship them from the Iowa farm in compostable mailers."|t }}
+    </p>
+    <a class="hs-btn hs-btn--honey" href="/shop">{{ 'Shop honey sticks'|t }}</a>
+  </div>
+
+</div>{# /.view-commerce-cart-form #}

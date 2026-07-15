@@ -1,0 +1,9 @@
+name: 'HiveSticks Subscribe'
+type: module
+description: 'Wires the PDP "Subscribe & save" toggle to create discounted Commerce Recurring subscriptions.'
+core_version_requirement: ^10 || ^11
+package: HiveSticks
+dependencies:
+  - commerce:commerce_cart
+  - commerce:commerce_order
+  - commerce_recurring:commerce_recurring

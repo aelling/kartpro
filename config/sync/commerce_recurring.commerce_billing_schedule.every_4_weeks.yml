@@ -1,0 +1,22 @@
+uuid: 912d7c30-3902-4fda-ab15-5cdd04b5200d
+langcode: en
+status: true
+dependencies: {  }
+id: every_4_weeks
+label: 'Every 4 weeks'
+displayLabel: 'Every 4 weeks'
+billingType: prepaid
+combineSubscriptions: false
+retrySchedule:
+  - 1
+  - 3
+  - 5
+unpaidSubscriptionState: active
+plugin: rolling
+configuration:
+  trial_interval: {  }
+  interval:
+    number: 4
+    unit: week
+prorater: proportional
+proraterConfiguration: {  }

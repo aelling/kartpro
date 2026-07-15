@@ -1,95 +1,70 @@
 {#
-/**
- * @file
- * HiveSticks — Full-width page template for Commerce product pages.
- * Removes sidebars so the PDP can use the full viewport width.
- */
+  page.html.twig — HiveSticks inner page wrapper
+  Deploy to: themes/custom/hivesticks/templates/layout/page.html.twig
 #}
 
-<nav class="hs-nav" id="hs-nav" role="navigation" aria-label="{{ 'Site navigation'|t }}">
+{{ attach_library('hivesticks/header') }}
+
+<a class="hs-skip-link" href="#main-content">{{ 'Skip to main content'|t }}</a>
+
+{% if page.highlighted %}
+  <div class="hs-messages">{{ page.highlighted }}</div>
+{% endif %}
+
+<header class="hs-nav" data-behavior="hs-nav" role="banner">
   <div class="hs-nav__inner">
-    <a href="{{ path('<front>') }}" class="hs-nav__logo" rel="home" aria-label="{{ 'HiveSticks home'|t }}">
-      <svg class="hs-nav__logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <polygon points="19,2 36,11 36,27 19,36 2,27 2,11" fill="#D4820A"/>
-        <polygon points="19,7 31.5,13.5 31.5,24.5 19,31 6.5,24.5 6.5,13.5" fill="#F5B342" opacity="0.3"/>
-        <path d="M14 18 Q15.5 14 19 13 Q22.5 14 24 18 Q22.5 25 19 26 Q15.5 25 14 18Z" fill="#FFF8ED"/>
-        <circle cx="19" cy="19" r="2.5" fill="#D4820A"/>
-      </svg>
-      <span class="hs-nav__logo-text">Hive<span>Sticks</span></span>
+
+    <a href="{{ path('<front>') }}" class="hs-nav__logo-link" aria-label="{{ 'HiveSticks — return to homepage'|t }}">
+      {% if logo_url %}
+        <img src="{{ logo_url }}" alt="{{ 'HiveSticks'|t }}" class="hs-nav__logo-img">
+      {% else %}
+        <span class="hs-nav__logo-wrap">
+          <svg class="hs-nav__hex" width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true">
+            <path d="M15 2 L27 9 L27 21 L15 28 L3 21 L3 9 Z" fill="#d9871a"/>
+            <path d="M15 8 C15 8 10 15 10 18.5 C10 21.54 12.24 24 15 24 C17.76 24 20 21.54 20 18.5 C20 15 15 8 15 8Z" fill="white" opacity="0.92"/>
+          </svg>
+          <span class="hs-nav__logo-text hs-serif">Hive<em>Sticks</em></span>
+        </span>
+      {% endif %}
     </a>
 
-    <ul class="hs-nav__links" role="list">
-      <li><a href="/store">{{ 'Shop'|t }}</a></li>
-      <li><a href="/for-athletes">{{ 'For Athletes'|t }}</a></li>
-      <li><a href="/our-story">{{ 'Our Story'|t }}</a></li>
-      <li><a href="/store" class="hs-btn hs-btn--primary hs-nav__cta">{{ 'Buy Now'|t }}</a></li>
-    </ul>
+    <nav class="hs-nav__menu" aria-label="{{ 'Primary'|t }}">
+      <ul class="hs-nav__links" role="list">
+        <li><a href="/shop">{{ 'Shop'|t }}</a></li>
+        <li><a href="/shop">{{ 'Flavors'|t }}</a></li>
+        <li><a href="/our-story">{{ 'Our Story'|t }}</a></li>
+        <li><a href="/for-families">{{ 'For Families'|t }}</a></li>
+        <li><a href="{{ path('<front>') }}#hs-faq">{{ 'FAQ'|t }}</a></li>
+      </ul>
+    </nav>
 
-    <button class="hs-nav__mobile-toggle" aria-controls="hs-nav-mobile" aria-expanded="false" aria-label="{{ 'Toggle navigation'|t }}">
-      <span></span><span></span><span></span>
-    </button>
+    <div class="hs-nav__actions">
+      {% if logged_in %}
+        <a href="/user/{{ user.id }}/orders" class="hs-nav__account-link" aria-label="{{ 'My orders'|t }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span class="hs-nav__account-text">{{ 'My Orders'|t }}</span>
+        </a>
+        <a href="{{ path('user.logout') }}" class="hs-nav__signout-link">{{ 'Sign out'|t }}</a>
+      {% else %}
+        <a href="{{ path('user.login') }}" class="hs-nav__account-link" aria-label="{{ 'Sign in'|t }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span class="hs-nav__account-text">{{ 'Sign in'|t }}</span>
+        </a>
+      {% endif %}
+      <a href="{{ path('commerce_cart.page') }}" class="hs-nav__cart-link" aria-label="{{ 'Cart'|t }}" data-behavior="hs-cart-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="17" height="17"
+             fill="none" stroke="currentColor" stroke-width="1.8"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span class="hs-nav__cart-text">{{ 'Cart'|t }} &middot; <span class="hs-nav__cart-count" aria-live="polite">{{ cart_count|default(0) }}</span></span>
+      </a>
+      </div>
+
   </div>
+</header>
 
-  <div class="hs-nav__mobile-drawer" id="hs-nav-mobile" hidden>
-    <ul role="list">
-      <li><a href="/store">{{ 'Shop'|t }}</a></li>
-      <li><a href="/for-athletes">{{ 'For Athletes'|t }}</a></li>
-      <li><a href="/our-story">{{ 'Our Story'|t }}</a></li>
-      <li><a href="/store" class="hs-btn hs-btn--primary">{{ 'Buy Now'|t }}</a></li>
-    </ul>
-  </div>
-</nav>
-
-<main id="main-content" class="hs-pdp-page" role="main">
-  {% if page.highlighted %}
-    <div class="hs-messages">{{ page.highlighted }}</div>
-  {% endif %}
+<main id="main-content" class="hs-page-main" role="main">
   {{ page.content }}
 </main>
-
-<footer class="hs-footer" role="contentinfo">
-  <div class="hs-footer__inner">
-    <div class="hs-footer__brand">
-      <a href="{{ path('<front>') }}" class="hs-nav__logo">
-        <svg class="hs-nav__logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:28px;height:28px;">
-          <polygon points="19,2 36,11 36,27 19,36 2,27 2,11" fill="#D4820A"/>
-          <polygon points="19,7 31.5,13.5 31.5,24.5 19,31 6.5,24.5 6.5,13.5" fill="#F5B342" opacity="0.3"/>
-          <circle cx="19" cy="19" r="2.5" fill="#D4820A"/>
-        </svg>
-        <span class="hs-nav__logo-text">Hive<span>Sticks</span></span>
-      </a>
-      <p class="hs-footer__tagline">{{ 'A small Iowa apiary putting raw honey into stick form. Family-run since 2019.'|t }}</p>
-    </div>
-    <div class="hs-footer__cols">
-      <div class="hs-footer__col">
-        <div class="hs-footer__col-title">{{ 'SHOP'|t }}</div>
-        <ul>
-          <li><a href="/store">{{ 'All flavors'|t }}</a></li>
-          <li><a href="/store">{{ 'Variety packs'|t }}</a></li>
-          <li><a href="/store">{{ 'Subscribe & save'|t }}</a></li>
-          <li><a href="/wholesale">{{ 'Wholesale'|t }}</a></li>
-        </ul>
-      </div>
-      <div class="hs-footer__col">
-        <div class="hs-footer__col-title">{{ 'ABOUT'|t }}</div>
-        <ul>
-          <li><a href="/our-story">{{ 'Our story'|t }}</a></li>
-          <li><a href="/our-hives">{{ 'Our hives'|t }}</a></li>
-          <li><a href="/contact">{{ 'Contact'|t }}</a></li>
-        </ul>
-      </div>
-      <div class="hs-footer__col">
-        <div class="hs-footer__col-title">{{ 'HELP'|t }}</div>
-        <ul>
-          <li><a href="/faq">{{ 'FAQ'|t }}</a></li>
-          <li><a href="/shipping">{{ 'Shipping'|t }}</a></li>
-          <li><a href="/returns">{{ 'Returns'|t }}</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="hs-footer__bottom">
-    <span>{{ '© 2026 HiveSticks Apiary, Story County, IA'|t }}</span>
-    <span>{{ 'Built with bees · Privacy · Terms'|t }}</span>
-  </div>
-</footer>

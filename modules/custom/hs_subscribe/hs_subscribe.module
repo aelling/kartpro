@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * @file
+ * HiveSticks Subscribe — wires the PDP subscribe toggle to real subscriptions.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Adds a hidden "subscribe" flag to the add-to-cart form. pdp.js sets its value
+ * from the Subscribe/One-time toggle; the pre-submit handler records the choice
+ * on the order item so the discount processor + order subscriber can act on it.
+ */
+function hs_subscribe_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (strpos($form_id, 'commerce_order_item_add_to_cart_form') === 0) {
+    $form['hs_subscribe'] = [
+      '#type' => 'hidden',
+      '#default_value' => 0,
+      '#attributes' => ['class' => ['hs-subscribe-flag']],
+    ];
+    if (isset($form['actions']['submit'])) {
+      array_unshift($form['actions']['submit']['#submit'], 'hs_subscribe_atc_presubmit');
+    }
+    elseif (isset($form['#submit'])) {
+      array_unshift($form['#submit'], 'hs_subscribe_atc_presubmit');
+    }
+  }
+}
+
+/**
+ * Records the subscribe choice on the order item before it's added to the cart.
+ */
+function hs_subscribe_atc_presubmit(array &$form, FormStateInterface $form_state) {
+  $order_item = $form_state->getFormObject()->getEntity();
+  if ($order_item) {
+    $order_item->setData('hs_subscribe', (bool) $form_state->getValue('hs_subscribe'));
+  }
+}

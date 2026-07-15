@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * HiveSticks Rewards — Honey Points loyalty.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function hs_rewards_theme() {
+  return [
+    'hs_rewards_page' => [
+      'variables' => [
+        'points' => 0,
+        'tier' => '',
+        'next_tier' => '',
+        'to_next' => 0,
+        'pct' => 0,
+        'perk' => '',
+        'referral' => '',
+        'uid' => NULL,
+      ],
+    ],
+  ];
+}

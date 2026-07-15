@@ -1,0 +1,22 @@
+uuid: da60ecd1-4e2b-4226-bb33-79fb28984134
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - kartpro
+_core:
+  default_config_hash: erQSEZF2XUjNmgTl0uNRBzmg18ZGXwUcw2FhApoeuHk
+id: kartpro_content
+theme: kartpro
+region: content
+weight: -4
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

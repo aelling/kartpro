@@ -1,0 +1,19 @@
+uuid: a31c80d9-413b-4a45-8f5c-f57a81aaf4c2
+langcode: en
+status: true
+dependencies: {  }
+id: manual
+label: 'Manual (test)'
+weight: null
+plugin: manual
+configuration:
+  display_label: 'Pay by check / invoice'
+  mode: n/a
+  payment_method_types:
+    - credit_card
+  collect_billing_information: true
+  instructions:
+    value: 'Mail a check to HiveSticks, 123 Farm Road, Des Moines IA 50309. Orders ship once payment clears.'
+    format: plain_text
+conditions: {  }
+conditionOperator: AND

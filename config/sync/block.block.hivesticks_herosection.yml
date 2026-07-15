@@ -1,0 +1,31 @@
+uuid: d682fcdc-612c-4610-8658-18665e734d8b
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:landing_page_section:040144fb-e386-429e-8091-7dd3cad8276f'
+  module:
+    - block_content
+    - system
+  theme:
+    - hivesticks
+id: hivesticks_herosection
+theme: hivesticks
+region: hero
+weight: 0
+provider: null
+plugin: 'block_content:040144fb-e386-429e-8091-7dd3cad8276f'
+settings:
+  id: 'block_content:040144fb-e386-429e-8091-7dd3cad8276f'
+  label: 'Hero Section'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: '<front>'

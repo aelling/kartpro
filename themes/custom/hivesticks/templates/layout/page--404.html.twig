@@ -1,0 +1,105 @@
+{#
+  page--404.html.twig — HiveSticks "Page not found" error page
+  ──────────────────────────────────────────────────────────────
+  Deploy to: themes/custom/hivesticks/templates/layout/page--404.html.twig
+#}
+
+{{ attach_library('hivesticks/header') }}
+
+<a class="hs-skip-link" href="#main-content">{{ 'Skip to main content'|t }}</a>
+
+{# ══════════════════════════════════════════════════════════════════════════
+   NAVIGATION
+   ══════════════════════════════════════════════════════════════════════════ #}
+<header class="hs-nav" data-behavior="hs-nav" role="banner">
+  <div class="hs-nav__inner">
+
+    <a href="{{ path('<front>') }}" class="hs-nav__logo-link" aria-label="{{ 'HiveSticks — return to homepage'|t }}">
+      {% if logo_url %}
+        <img src="{{ logo_url }}" alt="{{ 'HiveSticks'|t }}" class="hs-nav__logo-img">
+      {% else %}
+        <span class="hs-nav__logo-wrap">
+          <svg class="hs-nav__hex" width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true">
+            <path d="M15 2 L27 9 L27 21 L15 28 L3 21 L3 9 Z" fill="#d9871a"/>
+            <path d="M15 8 C15 8 10 15 10 18.5 C10 21.54 12.24 24 15 24 C17.76 24 20 21.54 20 18.5 C20 15 15 8 15 8Z" fill="white" opacity="0.92"/>
+          </svg>
+          <span class="hs-nav__logo-text hs-serif">Hive<em>Sticks</em></span>
+        </span>
+      {% endif %}
+    </a>
+
+    <nav class="hs-nav__menu" aria-label="{{ 'Primary'|t }}">
+      <ul class="hs-nav__links" role="list">
+        <li><a href="/shop">{{ 'Shop'|t }}</a></li>
+        <li><a href="/shop">{{ 'Flavors'|t }}</a></li>
+        <li><a href="/our-story">{{ 'Our Story'|t }}</a></li>
+        <li><a href="/for-families">{{ 'For Families'|t }}</a></li>
+        <li><a href="{{ path('<front>') }}#hs-faq">{{ 'FAQ'|t }}</a></li>
+      </ul>
+    </nav>
+
+    <div class="hs-nav__actions">
+      {% if logged_in %}
+        <a href="/user/{{ user.id }}/orders" class="hs-nav__account-link" aria-label="{{ 'My orders'|t }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="17" height="17"
+               fill="none" stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span class="hs-nav__account-text">{{ 'My Orders'|t }}</span>
+        </a>
+        <a href="{{ path('user.logout') }}" class="hs-nav__signout-link">{{ 'Sign out'|t }}</a>
+      {% else %}
+        <a href="{{ path('user.login') }}" class="hs-nav__account-link" aria-label="{{ 'Sign in'|t }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="17" height="17"
+               fill="none" stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span class="hs-nav__account-text">{{ 'Sign in'|t }}</span>
+        </a>
+      {% endif %}
+      <a href="{{ path('commerce_cart.page') }}" class="hs-nav__cart-link" aria-label="{{ 'Cart'|t }}" data-behavior="hs-cart-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="17" height="17"
+             fill="none" stroke="currentColor" stroke-width="1.8"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span class="hs-nav__cart-text">{{ 'Cart'|t }} · <span class="hs-nav__cart-count" aria-live="polite">{{ cart_count|default(0) }}</span></span>
+      </a>
+    </div>
+
+  </div>
+</header>
+
+{# ══════════════════════════════════════════════════════════════════════════
+   404 CONTENT
+   ══════════════════════════════════════════════════════════════════════════ #}
+<main id="main-content" class="hs-page-main" role="main">
+  <div class="hs-404">
+
+    {# Honey stick illustration #}
+    <div class="hs-404__icon" aria-hidden="true">
+      <svg width="56" height="96" viewBox="0 0 72 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="6"  y="10" width="60" height="96" rx="30" fill="#f0a929" opacity=".18"/>
+        <rect x="14" y="18" width="44" height="80" rx="22" fill="#f0a929" opacity=".35"/>
+        <rect x="20" y="24" width="32" height="68" rx="16" fill="#f0a929"/>
+        <rect x="28" y="4"  width="16" height="20" rx="6"  fill="#d9871a"/>
+        <rect x="31" y="0"  width="10" height="8"  rx="3"  fill="#a8640e"/>
+      </svg>
+    </div>
+
+    <p class="hs-404__code hs-mono">{{ '404'|t }}</p>
+    <h1 class="hs-404__heading hs-serif">{{ "This page got lost in the hive."|t }}</h1>
+    <p class="hs-404__body">{{ "The page you're looking for doesn't exist or may have moved. Let's get you back to something sweet."|t }}</p>
+
+    <div class="hs-404__actions">
+      <a href="/shop" class="hs-btn hs-btn--honey">{{ 'Shop honey sticks'|t }}</a>
+      <a href="{{ path('<front>') }}" class="hs-404__home-link">{{ '← Back to home'|t }}</a>
+    </div>
+
+  </div>
+</main>

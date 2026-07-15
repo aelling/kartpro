@@ -1,0 +1,931 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   account.css — Login, register, orders, and user profile pages
+   HiveSticks design system  ·  deploy to: themes/custom/hivesticks/css/
+   All rules key off .hs-account-wrap set in page--user.html.twig
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   WRAPPER + PAGE LAYOUT
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hs-account-wrap {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 48px 24px 96px;
+}
+
+/* Page title block — Drupal renders an h1 via the Page Title block */
+.hs-account-wrap h1.page-title,
+.hs-account-wrap h1 {
+  font-family: var(--hs-serif);
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 600;
+  color: var(--hs-ink);
+  margin: 0 0 24px;
+  line-height: 1.2;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LOCAL TASK TABS  (View · Edit account · Orders)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hs-account-wrap .tabs,
+.hs-account-wrap nav.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--hs-rule);
+  margin: 0 0 32px;
+  padding: 0;
+  list-style: none;
+}
+
+.hs-account-wrap .tabs li,
+.hs-account-wrap nav.tabs li {
+  margin: 0;
+  padding: 0;
+}
+
+.hs-account-wrap .tabs a,
+.hs-account-wrap nav.tabs a {
+  display: inline-block;
+  padding: 9px 16px;
+  font-family: var(--hs-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--hs-ink-2);
+  text-decoration: none;
+  border-radius: 6px 6px 0 0;
+  border-bottom: 2px solid transparent;
+  transition: color 120ms, border-color 120ms;
+}
+
+.hs-account-wrap .tabs a:hover,
+.hs-account-wrap nav.tabs a:hover {
+  color: var(--hs-ink);
+}
+
+.hs-account-wrap .tabs .is-active a,
+.hs-account-wrap .tabs li.active a,
+.hs-account-wrap nav.tabs .is-active a {
+  color: var(--hs-honey);
+  border-bottom-color: var(--hs-honey);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   AUTH FORMS  (login · register · forgot password)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hs-account-wrap .user-login-form,
+.hs-account-wrap .user-register-form,
+.hs-account-wrap .user-pass {
+  background: var(--hs-card);
+  border: 1px solid var(--hs-rule);
+  border-radius: 16px;
+  padding: 36px 40px 40px;
+}
+
+/* ── Field wrappers ── */
+.hs-account-wrap .form-item {
+  margin-bottom: 20px;
+}
+
+.hs-account-wrap .form-item:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Labels ── */
+.hs-account-wrap label {
+  display: block;
+  font-family: var(--hs-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--hs-ink-2);
+  margin-bottom: 7px;
+}
+
+/* ── Text inputs ── */
+.hs-account-wrap input[type="text"],
+.hs-account-wrap input[type="password"],
+.hs-account-wrap input[type="email"] {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  font-family: var(--hs-sans);
+  font-size: 15px;
+  color: var(--hs-ink);
+  background: var(--hs-bg);
+  border: 1.5px solid var(--hs-rule);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 140ms, box-shadow 140ms;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.hs-account-wrap input[type="text"]:focus,
+.hs-account-wrap input[type="password"]:focus,
+.hs-account-wrap input[type="email"]:focus {
+  border-color: var(--hs-honey);
+  box-shadow: 0 0 0 3px rgba(240, 169, 41, 0.15);
+}
+
+/* ── Helper / description text ── */
+.hs-account-wrap .description {
+  font-family: var(--hs-sans);
+  font-size: 12px;
+  color: var(--hs-ink-2);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* ── Submit button ── */
+.hs-account-wrap .form-actions {
+  margin-top: 28px;
+}
+
+.hs-account-wrap .form-submit,
+.hs-account-wrap input[type="submit"] {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 24px;
+  font-family: var(--hs-mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--hs-honey);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 140ms;
+  text-align: center;
+}
+
+.hs-account-wrap .form-submit:hover,
+.hs-account-wrap input[type="submit"]:hover {
+  opacity: .87;
+}
+
+/* ── Helper links (forgot password, create account) ── */
+.hs-account-wrap .item-list {
+  margin-top: 20px;
+}
+
+.hs-account-wrap .item-list ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hs-account-wrap .item-list li {
+  font-family: var(--hs-sans);
+  font-size: 13px;
+  color: var(--hs-ink-2);
+}
+
+.hs-account-wrap a {
+  color: var(--hs-honey);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.hs-account-wrap a:hover {
+  opacity: .8;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   USER PROFILE  (/user/{uid})
+   Drupal renders profile fields directly — wrap them in a card
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* The profile block that Drupal renders */
+.hs-account-wrap .profile {
+  background: var(--hs-card);
+  border: 1px solid var(--hs-rule);
+  border-radius: 16px;
+  padding: 32px 36px;
+}
+
+.hs-account-wrap .field {
+  margin-bottom: 20px;
+  font-family: var(--hs-sans);
+  font-size: 15px;
+  color: var(--hs-ink);
+}
+
+.hs-account-wrap .field:last-child {
+  margin-bottom: 0;
+}
+
+.hs-account-wrap .field__label {
+  font-family: var(--hs-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--hs-ink-2);
+  margin-bottom: 4px;
+}
+
+/* Quick-action links below profile (Edit / Orders / Log out) */
+.hs-account-wrap .hs-account-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.hs-account-wrap .hs-account-actions a {
+  display: inline-block;
+  padding: 10px 20px;
+  font-family: var(--hs-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: opacity 120ms;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ORDERS VIEW  (/user/{uid}/orders)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hs-account-wrap .view-commerce-user-orders .view-content {
+  border: 1px solid var(--hs-rule);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.hs-account-wrap .view-commerce-user-orders table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--hs-sans);
+  font-size: 14px;
+}
+
+.hs-account-wrap .view-commerce-user-orders thead tr {
+  background: var(--hs-bg-2, #f5f4f0);
+  border-bottom: 1px solid var(--hs-rule);
+}
+
+.hs-account-wrap .view-commerce-user-orders thead th {
+  padding: 12px 16px;
+  font-family: var(--hs-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--hs-ink-2);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.hs-account-wrap .view-commerce-user-orders tbody tr {
+  border-bottom: 1px solid var(--hs-rule);
+  transition: background 100ms;
+}
+
+.hs-account-wrap .view-commerce-user-orders tbody tr:last-child {
+  border-bottom: none;
+}
+
+.hs-account-wrap .view-commerce-user-orders tbody tr:hover {
+  background: var(--hs-bg-2, #f5f4f0);
+}
+
+.hs-account-wrap .view-commerce-user-orders tbody td {
+  padding: 14px 16px;
+  color: var(--hs-ink);
+  vertical-align: middle;
+}
+
+/* Order status badge */
+.hs-account-wrap .views-field-state {
+  font-family: var(--hs-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+/* Empty orders state */
+.hs-account-wrap .view-commerce-user-orders .view-empty {
+  background: var(--hs-card);
+  border: 1px solid var(--hs-rule);
+  border-radius: 12px;
+  padding: 48px 24px;
+  text-align: center;
+  font-family: var(--hs-sans);
+  color: var(--hs-ink-2);
+}
+
+.hs-account-wrap .view-commerce-user-orders .view-empty p {
+  margin: 0 0 20px;
+  font-size: 15px;
+}
+
+.hs-account-wrap .view-commerce-user-orders .view-empty a {
+  display: inline-block;
+  padding: 12px 24px;
+  font-family: var(--hs-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--hs-honey);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: opacity 140ms;
+}
+
+.hs-account-wrap .view-commerce-user-orders .view-empty a:hover {
+  opacity: .87;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ORDER DETAIL PAGE  (/user/{uid}/orders/{order})
+   Styled via commerce-order.html.twig template + BEM classes below
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Back link ── */
+.hs-order-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--hs-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--hs-ink-2);
+  text-decoration: none;
+  margin-bottom: 24px;
+}
+.hs-order-back:hover { color: var(--hs-ink); text-decoration: none; }
+
+/* ── Order heading ── */
+.hs-order-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.hs-order-header__title {
+  font-family: var(--hs-serif);
+  font-size: clamp(22px, 4vw, 28px);
+  font-weight: 600;
+  color: var(--hs-ink);
+  margin: 0;
+}
+
+.hs-order-header__status .field__item,
+.hs-order-header__status {
+  font-family: var(--hs-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  background: rgba(240, 169, 41, 0.12);
+  color: var(--hs-honey);
+  border-radius: 6px;
+  padding: 4px 10px;
+}
+
+/* ── Card wrapper ── */
+.hs-order-card {
+  background: var(--hs-card);
+  border: 1px solid var(--hs-rule);
+  border-radius: 16px;
+  padding: 32px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Field rows ── */
+.hs-order-field {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--hs-rule);
+}
+
+.hs-order-field:first-child { padding-top: 0; }
+.hs-order-field:last-child  { border-bottom: none; padding-bottom: 0; }
+
+.hs-order-field__label {
+  font-family: var(--hs-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--hs-ink-2);
+  margin-bottom: 6px;
+}
+
+.hs-order-field__value {
+  font-family: var(--hs-sans);
+  font-size: 15px;
+  color: var(--hs-ink);
+  line-height: 1.5;
+}
+
+/* Suppress Commerce's inline label inside the field value */
+.hs-order-field__value .field__label { display: none; }
+
+/* ── Total field ── */
+.hs-order-field--total .hs-order-field__value {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* ── Address block ── */
+.hs-order-address address,
+.hs-order-address .address {
+  background: var(--hs-bg);
+  border: 1px solid var(--hs-rule);
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-style: normal;
+  font-family: var(--hs-sans);
+  font-size: 14px;
+  color: var(--hs-ink);
+  line-height: 1.8;
+}
+
+/* ── Meta dates ── */
+.hs-order-meta {
+  padding-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+}
+
+.hs-order-meta__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hs-order-meta__label {
+  font-family: var(--hs-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--hs-ink-2);
+}
+
+.hs-order-meta__value {
+  font-family: var(--hs-sans);
+  font-size: 13px;
+  color: var(--hs-ink);
+}
+
+/* ── Order items table ── */
+.hs-order-field__value table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--hs-sans);
+  font-size: 14px;
+}
+
+.hs-order-field__value thead th {
+  font-family: var(--hs-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--hs-ink-2);
+  padding: 0 12px 8px 0;
+  border-bottom: 1px solid var(--hs-rule);
+  text-align: left;
+}
+
+.hs-order-field__value tbody td {
+  padding: 10px 12px 10px 0;
+  border-bottom: 1px solid var(--hs-rule);
+  color: var(--hs-ink);
+  vertical-align: top;
+}
+
+.hs-order-field__value tbody tr:last-child td { border-bottom: none; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 580px) {
+  .hs-account-wrap {
+    padding: 32px 20px 72px;
+  }
+
+  .hs-account-wrap .user-login-form,
+  .hs-account-wrap .user-register-form,
+  .hs-account-wrap .user-pass {
+    padding: 28px 20px 32px;
+  }
+
+  .hs-account-wrap .profile {
+    padding: 24px 20px;
+  }
+
+  /* Stack orders table on mobile */
+  .hs-account-wrap .view-commerce-user-orders table,
+  .hs-account-wrap .view-commerce-user-orders thead,
+  .hs-account-wrap .view-commerce-user-orders tbody,
+  .hs-account-wrap .view-commerce-user-orders th,
+  .hs-account-wrap .view-commerce-user-orders td,
+  .hs-account-wrap .view-commerce-user-orders tr {
+    display: block;
+  }
+
+  .hs-account-wrap .view-commerce-user-orders thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .hs-account-wrap .view-commerce-user-orders tbody tr {
+    border-bottom: 1px solid var(--hs-rule);
+    padding: 12px 16px;
+  }
+
+  .hs-account-wrap .view-commerce-user-orders tbody td {
+    padding: 4px 0;
+    border: none;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .hs-account-wrap .view-commerce-user-orders tbody td::before {
+    content: attr(data-label);
+    font-family: var(--hs-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--hs-ink-2);
+    min-width: 80px;
+    flex-shrink: 0;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ACCOUNT AREA  (logged-in shell: Orders · Addresses · Profile)
+   design_handoff_account_drupal — sidebar layout, panels, order cards
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Extra tokens (fallbacks; the theme's global.css defines the --hs-* base set) */
+.hs-page-main {
+  --hs-ink-mute: #8a7558;
+  --hs-rule-strong: rgba(42, 26, 8, 0.22);
+  --hs-accent-deep: #a8640e;
+  --hs-honey-glow: #f0a929;
+  --hs-panel-shadow: 0 1px 2px rgba(0,0,0,.03), 0 16px 36px -26px rgba(80,60,20,.18);
+}
+
+/* ── Header avatar chip (logged-in) ── */
+.hs-nav__account-chip {
+  display: inline-flex; align-items: center; gap: 10px;
+  text-decoration: none; color: var(--hs-ink);
+}
+.hs-nav__avatar,
+.hs-acct__avatar {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 999px; flex-shrink: 0;
+  background: radial-gradient(circle at 32% 28%, #f0a929, #c8851a 70%);
+  color: #2a1a08; font-family: var(--hs-sans); font-weight: 700;
+  border: 1.5px solid rgba(42,26,8,0.15);
+}
+.hs-nav__avatar { width: 32px; height: 32px; font-size: 12px; }
+.hs-nav__account-chip .hs-nav__account-text { font-weight: 600; font-size: 14.5px; }
+
+/* ── Shell layout ── */
+.hs-acct {
+  max-width: 1240px; margin: 0 auto; padding: 40px 56px 8px;
+  display: grid; grid-template-columns: 248px 1fr; gap: 40px; align-items: start;
+}
+.hs-account-wrap--wide { max-width: none; margin: 0; padding: 0 0 96px; }
+
+/* ── Sidebar rail ── */
+.hs-acct__rail { position: sticky; top: 96px; }
+.hs-acct__id { display: flex; align-items: center; gap: 12px; padding: 4px 8px 20px; }
+.hs-acct__avatar { width: 44px; height: 44px; font-size: 16px; }
+.hs-acct__id-text { min-width: 0; }
+.hs-acct__id-name { font-size: 15px; font-weight: 700; color: var(--hs-ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hs-acct__id-email { font-size: 12.5px; color: var(--hs-ink-mute);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.hs-acct__nav { display: flex; flex-direction: column; gap: 3px; }
+.hs-acct__link {
+  display: flex; align-items: center; gap: 12px; padding: 11px 14px;
+  border-radius: 11px; text-align: left; text-decoration: none;
+  font-family: var(--hs-sans); font-size: 14.5px; font-weight: 500;
+  color: var(--hs-ink-2); border: 1px solid transparent;
+}
+.hs-acct__link svg { color: var(--hs-ink-mute); flex-shrink: 0; }
+.hs-acct__link:hover { background: rgba(42,26,8,0.03); }
+.hs-acct__link.is-active {
+  background: #fff; color: var(--hs-ink); font-weight: 600;
+  border-color: var(--hs-rule); box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+.hs-acct__link.is-active svg { color: var(--hs-accent-deep); }
+
+.hs-acct__rail-foot { border-top: 1px solid var(--hs-rule); margin-top: 16px; padding-top: 12px; }
+.hs-acct__signout {
+  display: flex; align-items: center; gap: 12px; padding: 11px 14px;
+  font-family: var(--hs-sans); font-size: 14.5px; font-weight: 500;
+  color: var(--hs-ink-2); text-decoration: none;
+}
+.hs-acct__signout:hover { color: var(--hs-ink); }
+
+/* ── Mobile / topbar section tabs (hidden on desktop) ── */
+.hs-acct-tabs { display: none; }
+.hs-acct-tabs__inner {
+  max-width: 1040px; margin: 0 auto; display: flex; gap: 4px;
+  padding: 0 20px; overflow-x: auto;
+}
+.hs-acct-tabs__inner::-webkit-scrollbar { display: none; }
+.hs-acct-tabs__tab {
+  padding: 14px 16px; flex-shrink: 0; white-space: nowrap; text-decoration: none;
+  font-family: var(--hs-sans); font-size: 14px; font-weight: 500;
+  color: var(--hs-ink-mute); border-bottom: 2.5px solid transparent;
+}
+.hs-acct-tabs__tab.is-active { color: var(--hs-ink); font-weight: 700; border-bottom-color: var(--hs-honey); }
+
+/* ── Section head ── */
+.hs-sec-head { display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+.hs-sec-head__title { font-family: var(--hs-serif); font-size: 30px; font-weight: 600;
+  color: var(--hs-ink); margin: 0; letter-spacing: -0.02em; line-height: 1.15; }
+.hs-sec-head__sub { font-size: 15px; color: var(--hs-ink-2); margin: 6px 0 0; }
+.hs-ord-intro { margin: -12px 0 22px; }
+
+/* ── Buttons ── */
+.hs-abtn { display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 44px; padding: 0 20px; border-radius: 11px; font-family: var(--hs-sans);
+  font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; border: 1px solid transparent; }
+.hs-abtn--dark { background: var(--hs-ink); color: var(--hs-bg); }
+.hs-abtn--dark:hover { filter: brightness(1.1); }
+.hs-abtn--ghost { background: #fff; border-color: var(--hs-rule-strong); color: var(--hs-ink); }
+.hs-abtn--ghost:hover { background: var(--hs-bg-2); }
+
+/* ── Filter pills ── */
+.hs-ord-filters { display: flex; gap: 8px; margin-bottom: 22px; flex-wrap: wrap; }
+.hs-pill { padding: 9px 16px; border-radius: 999px; font-family: var(--hs-sans);
+  font-size: 13px; font-weight: 600; cursor: pointer; background: #fff;
+  color: var(--hs-ink-2); border: 1px solid var(--hs-rule-strong); }
+.hs-pill.is-active { background: var(--hs-ink); color: var(--hs-bg); border-color: var(--hs-ink); }
+
+/* ── Status badges ── */
+.hs-badge { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px;
+  border-radius: 999px; font-family: var(--hs-mono); font-size: 11.5px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; }
+.hs-badge__dot { width: 7px; height: 7px; border-radius: 999px; background: currentColor; }
+.hs-badge--active  { background: rgba(46,125,80,0.12);  color: #2e7d50; }
+.hs-badge--pending { background: rgba(217,135,26,0.14); color: #a8640e; }
+.hs-badge--done    { background: rgba(42,26,8,0.06);    color: #4a3520; }
+.hs-badge--muted   { background: rgba(180,71,31,0.10);  color: #b4471f; }
+
+/* ── Order cards (list) ── */
+.hs-ord-list { display: flex; flex-direction: column; gap: 16px; }
+.hs-ocard { display: block; background: #fff; border: 1px solid var(--hs-rule);
+  border-radius: 16px; padding: 20px 24px; text-decoration: none;
+  box-shadow: var(--hs-panel-shadow); transition: border-color 140ms, transform 140ms; }
+.hs-ocard:hover { border-color: var(--hs-rule-strong); transform: translateY(-1px); }
+.hs-ocard__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.hs-ocard__head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.hs-ocard__id { font-size: 13px; font-weight: 600; color: var(--hs-ink); letter-spacing: 0.04em; }
+.hs-ocard__meta { display: block; font-size: 13px; color: var(--hs-ink-mute); margin-top: 5px; }
+.hs-ocard__thumbs { display: flex; gap: 8px; flex-shrink: 0; }
+.hs-thumb { position: relative; width: 44px; height: 44px; border-radius: 10px;
+  background: radial-gradient(ellipse at 50% 35%, rgba(240,169,41,.20), transparent 65%), var(--hs-bg-2);
+  border: 1px solid var(--hs-rule); display: flex; align-items: center; justify-content: center; }
+.hs-thumb__qty { position: absolute; top: -6px; right: -6px; min-width: 19px; height: 19px;
+  border-radius: 999px; background: var(--hs-ink); color: #fff; font-family: var(--hs-sans);
+  font-size: 11px; font-weight: 700; display: inline-flex; align-items: center;
+  justify-content: center; border: 2px solid #fff; }
+.hs-ocard__foot { margin-top: 14px; }
+.hs-ocard__view { display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--hs-sans); font-size: 13.5px; font-weight: 600; color: var(--hs-accent-deep); }
+
+/* ── Empty states ── */
+.hs-empty { background: #fff; border: 1px solid var(--hs-rule); border-radius: 20px;
+  padding: 56px 24px; text-align: center; box-shadow: var(--hs-panel-shadow); }
+.hs-empty__title { font-family: var(--hs-serif); font-size: 22px; font-weight: 600; color: var(--hs-ink); margin-bottom: 8px; }
+.hs-empty__body { font-size: 15px; color: var(--hs-ink-2); max-width: 380px; margin: 0 auto 22px; line-height: 1.55; }
+.hs-ord-empty-filter { padding: 40px 0; text-align: center; color: var(--hs-ink-mute); }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   OVERVIEW DASHBOARD  (/user/{uid})
+   ══════════════════════════════════════════════════════════════════════════ */
+.hs-panel { background: #fff; border: 1px solid var(--hs-rule); border-radius: 20px;
+  padding: 28px; box-shadow: var(--hs-panel-shadow); }
+.hs-ov-latest { margin-bottom: 16px; }
+.hs-ov-latest__head { display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+.hs-ov-eyebrow { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--hs-ink-mute); }
+.hs-ov-latest__meta { font-size: 14px; color: var(--hs-ink-2); margin-bottom: 20px; }
+.hs-ov-latest__actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.hs-ov-empty { text-align: center; padding: 48px 24px; margin-bottom: 16px; }
+.hs-ov-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.hs-statcard { display: block; background: #fff; border: 1px solid var(--hs-rule); border-radius: 16px;
+  padding: 20px 22px; text-decoration: none; box-shadow: var(--hs-panel-shadow);
+  transition: transform 140ms, border-color 140ms; }
+.hs-statcard:hover { transform: translateY(-1px); border-color: var(--hs-rule-strong); }
+.hs-statcard__num { font-size: 34px; font-weight: 600; color: var(--hs-ink); line-height: 1; }
+.hs-statcard__label { font-size: 13px; color: var(--hs-ink-mute); margin-top: 8px; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SUBSCRIPTIONS  (/user/{uid}/subscriptions)
+   ══════════════════════════════════════════════════════════════════════════ */
+.hs-subcard__main { display: flex; justify-content: space-between; gap: 22px;
+  flex-wrap: wrap; align-items: center; }
+.hs-subcard__title { display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  font-size: 17px; font-weight: 600; color: var(--hs-ink); }
+.hs-subcard__meta { font-size: 13.5px; color: var(--hs-ink-mute); margin-top: 4px; }
+.hs-subcard__next { text-align: right; }
+.hs-subcard__next-date { font-size: 18px; font-weight: 600; color: var(--hs-ink); }
+.hs-subcard__actions { border-top: 1px solid var(--hs-rule); margin-top: 18px;
+  padding-top: 16px; display: flex; gap: 10px; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   REWARDS  (/user/{uid}/rewards — hs_rewards module)
+   ══════════════════════════════════════════════════════════════════════════ */
+.hs-rw-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
+.hs-rw-points { background: linear-gradient(135deg, #2a1a08, #4a3520); color: #fff;
+  border-radius: 20px; padding: 28px; box-shadow: var(--hs-panel-shadow); }
+.hs-rw-tier { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--hs-honey-glow); }
+.hs-rw-points__row { display: flex; align-items: baseline; gap: 10px; margin: 10px 0 4px; }
+.hs-rw-points__num { font-size: 52px; font-weight: 600; line-height: 1; color: #fff; }
+.hs-rw-points__label { font-size: 15px; color: rgba(255,255,255,.7); }
+.hs-rw-perk { font-size: 13.5px; color: rgba(255,255,255,.75); margin-bottom: 20px; }
+.hs-rw-bar { height: 8px; border-radius: 999px; background: rgba(255,255,255,.18); overflow: hidden; }
+.hs-rw-bar__fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #f0a929, #ffce5c); }
+.hs-rw-bar__labels { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,.7); margin-top: 8px; }
+.hs-rw-referral__desc { font-size: 14.5px; color: var(--hs-ink-2); line-height: 1.55; margin: 12px 0 18px; }
+.hs-rw-code { height: 48px; border-radius: 11px; border: 1px dashed var(--hs-rule-strong);
+  background: var(--hs-bg-2); display: flex; align-items: center; justify-content: center;
+  font-family: var(--hs-mono); font-size: 14px; font-weight: 600; letter-spacing: .05em; color: var(--hs-ink); }
+.hs-rw-earn { margin-top: 16px; }
+.hs-rw-earn__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
+.hs-rw-earn__item { padding: 16px 18px; border-radius: 12px; background: var(--hs-bg-2); }
+.hs-rw-earn__t { font-size: 14.5px; font-weight: 600; color: var(--hs-ink); }
+.hs-rw-earn__d { font-size: 13px; color: var(--hs-ink-mute); margin-top: 4px; }
+@media (max-width: 900px) {
+  .hs-rw-grid { grid-template-columns: 1fr; }
+  .hs-rw-earn__grid { grid-template-columns: 1fr; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ADDRESS BOOK  (/user/{uid}/address-book — .address-book__* markup)
+   ══════════════════════════════════════════════════════════════════════════ */
+.hs-account-wrap .address-book__container::before {
+  content: "Addresses"; display: block; font-family: var(--hs-serif);
+  font-size: 30px; font-weight: 600; color: var(--hs-ink);
+  letter-spacing: -0.02em; margin-bottom: 22px; }
+.hs-account-wrap .address-book__add-link { display: inline-flex; margin-bottom: 22px; }
+.hs-account-wrap .address-book__add-link a,
+.hs-account-wrap a.address-book__add-link {
+  display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 20px;
+  border-radius: 11px; background: var(--hs-ink); color: var(--hs-bg);
+  font-family: var(--hs-sans); font-size: 14px; font-weight: 600;
+  text-decoration: none; }
+.hs-account-wrap .address-book__profiles {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.hs-account-wrap .address-book__profile {
+  position: relative; background: #fff; border: 1px solid var(--hs-rule);
+  border-radius: 20px; padding: 24px 26px; box-shadow: var(--hs-panel-shadow); }
+.hs-account-wrap .address-book__profile--default { border-color: rgba(217,135,26,0.35); }
+.hs-account-wrap .address-book__profile--default::before {
+  content: "Default"; position: absolute; top: 20px; right: 22px;
+  font-family: var(--hs-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--hs-accent-deep); background: rgba(217,135,26,0.12);
+  border: 1px solid rgba(217,135,26,0.3); border-radius: 999px; padding: 3px 9px; }
+.hs-account-wrap .address-book__profile .address,
+.hs-account-wrap .address-book__profile p.address { font-style: normal;
+  font-size: 14.5px; color: var(--hs-ink-2); line-height: 1.65; }
+.hs-account-wrap .address-book__operations { display: flex; gap: 16px;
+  border-top: 1px solid var(--hs-rule); margin-top: 18px; padding-top: 14px; }
+.hs-account-wrap .address-book__operations a { font-family: var(--hs-sans);
+  font-size: 13.5px; font-weight: 600; text-decoration: none; }
+.hs-account-wrap .address-book__edit-link a,
+.hs-account-wrap a.address-book__edit-link { color: var(--hs-accent-deep); }
+.hs-account-wrap .address-book__delete-link a,
+.hs-account-wrap a.address-book__delete-link { color: #b4471f; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ORDER DETAIL — status badge + tracking timeline
+   ══════════════════════════════════════════════════════════════════════════ */
+.hs-track-wrap { margin: 0 0 26px; }
+.hs-track { display: flex; align-items: flex-start; }
+.hs-track__step { flex: 1; display: flex; flex-direction: column; align-items: center;
+  position: relative; text-align: center; }
+.hs-track__step:not(:last-child)::after {
+  content: ''; position: absolute; top: 11px; left: 50%; width: 100%; height: 2.5px;
+  background: var(--hs-rule-strong); border-radius: 2px; z-index: 0; }
+.hs-track__step.is-done::after { background: var(--hs-honey); }
+.hs-track__dot { position: relative; z-index: 1; width: 24px; height: 24px; border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;
+  color: var(--hs-ink-mute); background: var(--hs-bg); border: 2px solid var(--hs-rule-strong); }
+.hs-track__step.is-done .hs-track__dot,
+.hs-track__step.is-current .hs-track__dot { background: var(--hs-honey); color: #fff; border: none; }
+.hs-track__step.is-current .hs-track__dot { box-shadow: 0 0 0 4px rgba(217,135,26,0.18); }
+.hs-track__label { margin-top: 10px; font-size: 11.5px; color: var(--hs-ink-mute); line-height: 1.25; padding: 0 4px; }
+.hs-track__step.is-current .hs-track__label { color: var(--hs-ink); font-weight: 700; }
+.hs-track__num { margin-top: 14px; font-family: var(--hs-mono); font-size: 12.5px; color: var(--hs-ink-2); }
+@media (max-width: 560px) {
+  .hs-track { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .hs-track__step { flex-direction: row; gap: 12px; text-align: left; }
+  .hs-track__step:not(:last-child)::after { display: none; }
+  .hs-track__label { margin-top: 0; }
+}
+
+/* Commerce-rendered content inside the detail card (billing, items, totals) */
+/* Hide Drupal's inner field labels — our .hs-order-field__label replaces them */
+.hs-order-card--flow .hs-order-field__value > .field > .field__label,
+.hs-order-card--flow .hs-order-field__value .field--name-mail .field__label { display: none; }
+.hs-order-card--flow > .field,
+.hs-order-card--flow .field { margin-bottom: 22px; }
+.hs-order-card--flow .field:last-child { margin-bottom: 0; }
+.hs-order-card--flow .field__label {
+  font-family: var(--hs-mono); font-size: 11px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--hs-ink-2); margin-bottom: 8px; }
+.hs-order-card--flow .profile { background: transparent; border: none; padding: 0; box-shadow: none; }
+.hs-order-card--flow .address, .hs-order-card--flow address {
+  font-style: normal; font-size: 14px; color: var(--hs-ink); line-height: 1.7; }
+.hs-order-card--flow table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.hs-order-card--flow thead th {
+  font-family: var(--hs-mono); font-size: 10px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--hs-ink-2); text-align: left;
+  padding: 0 12px 8px 0; border-bottom: 1px solid var(--hs-rule); }
+.hs-order-card--flow tbody td {
+  padding: 11px 12px 11px 0; border-bottom: 1px solid var(--hs-rule);
+  color: var(--hs-ink); vertical-align: top; }
+.hs-order-card--flow tbody tr:last-child td { border-bottom: none; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PROFILE / ACCOUNT SETTINGS  (/user/{uid}/edit — .user-form)
+   ══════════════════════════════════════════════════════════════════════════ */
+.hs-account-wrap--wide .user-form {
+  background: #fff; border: 1px solid var(--hs-rule); border-radius: 20px;
+  padding: 30px 32px; box-shadow: var(--hs-panel-shadow); max-width: 720px;
+}
+.hs-account-wrap--wide .user-form::before {
+  content: "Profile & settings"; display: block;
+  font-family: var(--hs-serif); font-size: 26px; font-weight: 600;
+  color: var(--hs-ink); letter-spacing: -0.02em; margin: 0 0 24px;
+}
+/* Nested detail/fieldset groups become quiet sub-sections */
+.hs-account-wrap--wide .user-form details,
+.hs-account-wrap--wide .user-form fieldset {
+  border: none; border-top: 1px solid var(--hs-rule);
+  margin: 8px 0 0; padding: 20px 0 0;
+}
+.hs-account-wrap--wide .user-form summary,
+.hs-account-wrap--wide .user-form legend {
+  font-family: var(--hs-sans); font-size: 15px; font-weight: 700;
+  color: var(--hs-ink); text-transform: none; letter-spacing: 0; padding: 0; margin-bottom: 8px;
+}
+/* Inline dark save button (overrides the full-width honey auth button) */
+.hs-account-wrap--wide .user-form .form-actions { margin-top: 26px; }
+.hs-account-wrap--wide .user-form .form-submit,
+.hs-account-wrap--wide .user-form input[type="submit"] {
+  display: inline-flex; width: auto; align-items: center; justify-content: center;
+  height: 44px; padding: 0 22px; border-radius: 11px;
+  font-family: var(--hs-sans); font-size: 14px; font-weight: 600; letter-spacing: 0;
+  text-transform: none; color: var(--hs-bg); background: var(--hs-ink);
+}
+.hs-account-wrap--wide .user-form .form-submit:hover { filter: brightness(1.1); opacity: 1; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE — account area
+   ══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .hs-acct { display: block; padding: 0 0 8px; max-width: 1040px; }
+  .hs-acct__rail { display: none; }
+  .hs-acct-tabs { display: block; position: sticky; top: 58px; z-index: 40;
+    background: rgba(251,246,236,0.95); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--hs-rule); }
+  .hs-account-wrap--wide { padding: 24px 20px 72px; }
+  .hs-account-wrap .address-book__profiles { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .hs-sec-head__title { font-size: 26px; }
+}

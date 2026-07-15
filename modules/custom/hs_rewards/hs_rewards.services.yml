@@ -1,0 +1,6 @@
+services:
+  hs_rewards.order_subscriber:
+    class: Drupal\hs_rewards\EventSubscriber\OrderPointsSubscriber
+    arguments: ['@user.data']
+    tags:
+      - { name: event_subscriber }

@@ -1,0 +1,97 @@
+{#
+  views-view--catalog.html.twig
+  ─────────────────────────────
+  Deploy to: themes/custom/hivesticks/templates/views/views-view--catalog.html.twig
+
+  Page shell for the "catalog" View (machine name: catalog, path: /shop).
+  Renders: intro header → sticky toolbar (exposed filters) → product grid → pager.
+
+  The inner grid and exposed form are handled by:
+    views-view-unformatted--catalog.html.twig  (the .hs-shop__grid)
+    views-exposed-form--catalog.html.twig      (pills + sort)
+#}
+
+{{ attach_library('hivesticks/catalog') }}
+
+<div class="hs-shop">
+
+  {# ── Page intro header ──────────────────────────────────────────── #}
+  {{ title_prefix }}
+  <div class="hs-shop__intro">
+    <div class="hs-shop__intro-inner">
+      <p class="hs-shop__eyebrow hs-mono">
+        <span aria-hidden="true">01</span>
+        {{ 'The whole hive'|t }}
+      </p>
+      <h1 class="hs-shop__heading hs-serif">{{ 'Shop all honey'|t }}</h1>
+      <p class="hs-shop__lede">
+        {{ 'Raw, single-origin honey sticks from our Story County, Iowa apiary. Pick a flavor, a bundle, or never run out with a monthly box.'|t }}
+      </p>
+    </div>
+  </div>
+  {{ title_suffix }}
+
+  {# ── Sticky toolbar: category pills + sort ──────────────────────── #}
+  {#
+    Pills are built by hivesticks_preprocess_views_view__catalog() in hivesticks.theme.
+    They use plain GET-param links (?field_category_target_id=N) so no exposed form needed.
+  #}
+  <div class="hs-shop__toolbar" role="search" aria-label="{{ 'Filter products'|t }}">
+  <div class="hs-toolbar">
+
+    {# Category pills #}
+    <div class="hs-toolbar__pills" role="group" aria-label="{{ 'Filter by category'|t }}">
+      {% if catalog_pills is defined %}
+        {% for pill in catalog_pills %}
+          <a href="{{ pill.url }}"
+             class="hs-pill{% if pill.active %} is-active{% endif %}"
+             aria-current="{{ pill.active ? 'true' : 'false' }}">
+            {{ pill.label }}
+            {% if pill.count is not null %}
+              <span class="hs-pill__count" aria-hidden="true">{{ pill.count }}</span>
+            {% endif %}
+          </a>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    {# Sort select #}
+    {% if catalog_sort_options is defined %}
+      <form class="hs-toolbar__sort-form" method="get">
+        {# Carry existing GET params (category filter, etc.) as hidden fields #}
+        {% if catalog_active_tid %}
+          <input type="hidden" name="field_category_target_id" value="{{ catalog_active_tid }}">
+        {% endif %}
+        <label class="hs-toolbar__sort">
+          {{ 'Sort'|t }}
+          <select name="sort_by" onchange="this.form.submit()">
+            {% for opt in catalog_sort_options %}
+              <option value="{{ opt.value }}"
+                {% if opt.value == catalog_sort_active %} selected{% endif %}>
+                {{ opt.label }}
+              </option>
+            {% endfor %}
+          </select>
+        </label>
+      </form>
+    {% endif %}
+
+  </div>{# /.hs-toolbar #}
+  </div>{# /.hs-shop__toolbar #}
+
+  {# ── Product grid ───────────────────────────────────────────────── #}
+  <main class="hs-shop__main" id="hs-shop-results" aria-label="{{ 'Products'|t }}">
+    {% if rows %}
+      {{ rows }}
+    {% elseif empty %}
+      <div class="hs-shop__empty">
+        <p>{{ empty }}</p>
+      </div>
+    {% endif %}
+
+    {% if pager %}
+      <div class="hs-shop__pager">{{ pager }}</div>
+    {% endif %}
+  </main>
+
+</div>

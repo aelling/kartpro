@@ -1,0 +1,10 @@
+{#
+  HiveSticks — Product variation "cart" display mode.
+  Renders the variation title in the cart line item card.
+
+  Deploy to: themes/custom/hivesticks/templates/commerce/
+
+  Note: Commerce's preprocess doesn't map #commerce_product_variation → product_variation
+  reliably, so we read it directly from the elements render array.
+#}
+{{- elements['#commerce_product_variation'].label -}}

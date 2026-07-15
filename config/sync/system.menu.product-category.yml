@@ -1,0 +1,8 @@
+uuid: 0ac60469-460b-475c-9c6b-371215683098
+langcode: en
+status: true
+dependencies: {  }
+id: product-category
+label: 'Product Category'
+description: 'Product category'
+locked: false

@@ -1,0 +1,22 @@
+uuid: de3c37a6-c7a5-4361-a096-81e01ff89487
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.default
+    - field.storage.commerce_product.field_ingredients
+  module:
+    - text
+id: commerce_product.default.field_ingredients
+field_name: field_ingredients
+entity_type: commerce_product
+bundle: default
+label: Ingredients
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

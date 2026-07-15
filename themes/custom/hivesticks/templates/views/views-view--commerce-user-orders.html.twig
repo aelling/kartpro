@@ -1,0 +1,67 @@
+{#
+  views-view--commerce-user-orders.html.twig
+  ──────────────────────────────────────────
+  Restyles the Commerce "User orders" view into HiveSticks order cards.
+  `order_cards` is built in hivesticks_preprocess_views_view__commerce_user_orders().
+  Each whole card links to the order detail page (/user/{uid}/orders/{id}).
+
+  Deploy to: themes/custom/hivesticks/templates/views/
+#}
+
+<div class="hs-sec-head">
+  <div>
+    <h1 class="hs-sec-head__title hs-serif">{{ 'Your orders'|t }}</h1>
+    <p class="hs-sec-head__sub">{{ 'Track shipments, view details, and reorder your favorites.'|t }}</p>
+  </div>
+</div>
+
+{% if order_cards is defined and order_cards is not empty %}
+  <div class="hs-ord-filters" data-behavior="hs-order-filter">
+    <button type="button" class="hs-pill is-active" data-filter="all">{{ 'All'|t }}</button>
+    <button type="button" class="hs-pill" data-filter="progress">{{ 'In progress'|t }}</button>
+    <button type="button" class="hs-pill" data-filter="done">{{ 'Delivered'|t }}</button>
+    <button type="button" class="hs-pill" data-filter="muted">{{ 'Canceled'|t }}</button>
+  </div>
+
+  <div class="hs-ord-list">
+    {% for c in order_cards %}
+      <a href="{{ c.url }}" class="hs-ocard" data-tone="{{ c.tone }}">
+        <div class="hs-ocard__top">
+          <div class="hs-ocard__headings">
+            <div class="hs-ocard__head">
+              <span class="hs-ocard__id hs-mono">#{{ c.number }}</span>
+              <span class="hs-badge hs-badge--{{ c.tone }}"><span class="hs-badge__dot"></span>{{ c.status }}</span>
+            </div>
+            <span class="hs-ocard__meta">{{ 'Placed'|t }} {{ c.placed }} · {{ c.item_count }} {{ c.item_count == 1 ? 'item'|t : 'items'|t }} · {{ c.total }}</span>
+          </div>
+          {% if c.items is not empty %}
+            <div class="hs-ocard__thumbs">
+              {% for it in c.items %}
+                <span class="hs-thumb" title="{{ it.title }}">
+                  <svg viewBox="0 0 24 60" width="18" height="44" aria-hidden="true">
+                    <rect x="6" y="4" width="12" height="52" rx="6" fill="var(--hs-honey)"/>
+                    <rect x="9" y="7" width="2" height="46" rx="1" fill="#fff" opacity=".45"/>
+                  </svg>
+                  {% if it.qty > 1 %}<span class="hs-thumb__qty">{{ it.qty }}</span>{% endif %}
+                </span>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="hs-ocard__foot">
+          <span class="hs-ocard__view">{{ 'View details'|t }}
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+
+  <div class="hs-ord-empty-filter" hidden>{{ 'No orders in this filter.'|t }}</div>
+{% else %}
+  <div class="hs-empty">
+    <div class="hs-empty__title hs-serif">{{ 'No orders yet'|t }}</div>
+    <p class="hs-empty__body">{{ 'When you place your first order, it will show up here with live tracking.'|t }}</p>
+    <a href="/shop" class="hs-abtn hs-abtn--dark">{{ 'Start shopping'|t }}</a>
+  </div>
+{% endif %}

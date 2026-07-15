@@ -1,0 +1,7 @@
+name: 'HiveSticks Rewards'
+type: module
+description: 'Honey Points loyalty — earn points on orders; view balance, tier progress, and referral code in the account area.'
+core_version_requirement: ^10 || ^11
+package: HiveSticks
+dependencies:
+  - commerce:commerce_order

@@ -1,0 +1,29 @@
+uuid: 5284784e-ead3-4e15-9465-8a4f5b68aae5
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.product-category
+  module:
+    - system
+  theme:
+    - hivesticks
+id: hivesticks_productcategory
+theme: hivesticks
+region: sidebar_first
+weight: 0
+provider: null
+plugin: 'system_menu_block:product-category'
+settings:
+  id: 'system_menu_block:product-category'
+  label: Category
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 5
+  expand_all_items: true
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/store\r\n/store/*"

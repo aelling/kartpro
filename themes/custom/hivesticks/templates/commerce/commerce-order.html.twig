@@ -1,0 +1,96 @@
+{#
+  commerce-order.html.twig / commerce-order--user.html.twig
+  ─────────────────────────────────────────────────────────
+  HiveSticks order detail (user view mode) at /user/{uid}/orders/{order_id}.
+
+  In the 'user' view mode the RENDERED fields live under `order`
+  (order.mail, order.billing_information, order.shipping_information,
+  order.order_items, order.total_price, order.placed, order.state);
+  `order_entity` is the order entity itself.
+
+  Variables from hivesticks_preprocess_commerce_order():
+    order_status_label / order_status_tone, order_has_shipment,
+    order_track_step, order_tracking, order_canceled
+
+  Deploy to: themes/custom/hivesticks/templates/commerce/
+#}
+
+<div{{ attributes.addClass('commerce-order', 'commerce-order--view-mode-' ~ view_mode) }}>
+
+  {# ── Back link ─────────────────────────────────────────────────────────── #}
+  <a href="/user/{{ order_entity.getCustomerId() }}/orders" class="hs-order-back">
+    ← {{ 'All orders'|t }}
+  </a>
+
+  {# ── Heading + derived status badge ────────────────────────────────────── #}
+  <div class="hs-order-header">
+    <h1 class="hs-order-header__title hs-serif">
+      {{ 'Order #'|t }}{{ order_entity.getOrderNumber() ?: order_entity.id() }}
+    </h1>
+    {% if order_status_label %}
+      <span class="hs-badge hs-badge--{{ order_status_tone }}"><span class="hs-badge__dot"></span>{{ order_status_label }}</span>
+    {% endif %}
+  </div>
+
+  {# ── Tracking timeline (only when a shipment exists) ────────────────────── #}
+  {% if order_has_shipment and not order_canceled %}
+    {% set track_steps = ['Ordered'|t, 'Packed'|t, 'Shipped'|t, 'Out for delivery'|t, 'Delivered'|t] %}
+    <div class="hs-track-wrap">
+      <div class="hs-track">
+        {% for i in 0..4 %}
+          <div class="hs-track__step{{ i < order_track_step ? ' is-done' }}{{ i == order_track_step ? ' is-current' }}">
+            <span class="hs-track__dot">{{ i < order_track_step ? '✓' }}</span>
+            <span class="hs-track__label">{{ track_steps[i] }}</span>
+          </div>
+        {% endfor %}
+      </div>
+      {% if order_tracking %}
+        <div class="hs-track__num">{{ 'Tracking'|t }}: {{ order_tracking }}</div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {# ── Card: order details ───────────────────────────────────────────────── #}
+  <div class="hs-order-card hs-order-card--flow">
+
+    {% if order.mail %}
+      <div class="hs-order-field">
+        <div class="hs-order-field__label">{{ 'Contact'|t }}</div>
+        <div class="hs-order-field__value">{{ order.mail }}</div>
+      </div>
+    {% endif %}
+
+    {% if order.shipping_information %}
+      <div class="hs-order-field">
+        <div class="hs-order-field__label">{{ 'Shipping to'|t }}</div>
+        <div class="hs-order-field__value hs-order-address">{{ order.shipping_information }}</div>
+      </div>
+    {% endif %}
+
+    {% if order.billing_information %}
+      <div class="hs-order-field">
+        <div class="hs-order-field__label">{{ 'Billing'|t }}</div>
+        <div class="hs-order-field__value hs-order-address">{{ order.billing_information }}</div>
+      </div>
+    {% endif %}
+
+    {% if order.order_items %}
+      <div class="hs-order-field">
+        <div class="hs-order-field__label">{{ 'Items'|t }}</div>
+        <div class="hs-order-field__value">{{ order.order_items }}</div>
+      </div>
+    {% endif %}
+
+    {% if order.total_price %}
+      <div class="hs-order-field hs-order-field--total">
+        <div class="hs-order-field__value">{{ order.total_price }}</div>
+      </div>
+    {% endif %}
+
+    {% if order.placed %}
+      <div class="hs-order-field hs-order-field--meta">{{ order.placed }}</div>
+    {% endif %}
+
+  </div>{# /.hs-order-card #}
+
+</div>{# /.commerce-order #}

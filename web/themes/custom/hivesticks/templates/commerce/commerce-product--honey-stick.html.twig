@@ -1,0 +1,440 @@
+{#
+  commerce-product--honey-stick.html.twig
+  ───────────────────────────────────────
+  Full HiveSticks PDP — matches the design handoff in design_handoff_pdp_drupal/.
+  Place in: themes/custom/hivesticks/templates/commerce/
+  Run `ddev drush cr` after placing.
+
+  Variables from preprocess (hivesticks_preprocess_commerce_product):
+    product_edit_url    — edit URL string if user has update access, else NULL
+    highlight_items     — array of {num, title, body} parsed from field_highlight
+    faq_items           — array of {question, answer} parsed from field_faq
+    flavors_js_data     — passed to drupalSettings for JS picker (JSON)
+    packs_js_data       — passed to drupalSettings for JS picker (JSON)
+
+  Product entity field reference:
+    product_entity.label
+    product_entity.field_subtitle.value
+    product_entity.field_rating.value
+    product_entity.field_review_count.value
+    product_entity.field_orders_this_month.value
+    product_entity.field_quality_badge.value
+    product_entity.field_batch_label.value
+    product_entity.field_net_weight.value
+    product_entity.field_origin.value
+    product_entity.field_harvest.value
+    product_entity.field_shelf_life.value
+    product_entity.field_storage.value
+    product_entity.field_allergens.value
+    product_entity.field_certifications.value
+    product_entity.field_description_body.value
+    elements.field_product_images
+    elements.field_ingredients
+    elements.field_nutrition_facts
+    add_to_cart_form                   ← Commerce add-to-cart form (rendered in preprocess via viewField)
+#}
+
+{% set rating = product_entity.field_rating.value|default(0)|round(1) %}
+{% set review_count = product_entity.field_review_count.value|default(0) %}
+{% set orders_month = product_entity.field_orders_this_month.value|default(0) %}
+{% set subtitle = product_entity.field_subtitle.value|default(product_entity.field_flavor_description.value) %}
+
+{{ attach_library('hivesticks/pdp') }}
+
+<article class="hs-pdp"{{ attributes }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {# ── Admin task tabs (View / Edit / Delete) ───────────────────────────────── #}
+  {# Only rendered for admins. product_edit_url is set by                        #}
+  {# hivesticks_preprocess_commerce_product() only when the user has update       #}
+  {# access (administrators); it is NULL for shoppers / anonymous users.          #}
+  {% if product_edit_url %}
+    <nav class="hs-admin-tabs" aria-label="{{ 'Product administration'|t }}">
+      <span class="hs-admin-tabs__tab hs-admin-tabs__tab--active">{{ 'View'|t }}</span>
+      <a href="{{ product_edit_url }}"
+         class="hs-admin-tabs__tab">{{ 'Edit'|t }}</a>
+      <a href="/product/{{ product_entity.id() }}/delete"
+         class="hs-admin-tabs__tab hs-admin-tabs__tab--danger">{{ 'Delete'|t }}</a>
+      <span class="hs-admin-tabs__label hs-mono">{{ 'Product #' ~ product_entity.id() }}</span>
+    </nav>
+  {% endif %}
+
+  {# ── Breadcrumb ──────────────────────────────────────────────────────────── #}
+  <nav class="hs-breadcrumb hs-mono" aria-label="{{ 'Breadcrumb'|t }}">
+    <a href="/shop">{{ 'Shop'|t }}</a>
+    <span class="hs-breadcrumb__sep">/</span>
+    <a href="/shop/honey-sticks">{{ 'Honey Sticks'|t }}</a>
+    <span class="hs-breadcrumb__sep">/</span>
+    <span class="hs-breadcrumb__current">{{ product_entity.label|upper }}</span>
+  </nav>
+
+  {# ── Main PDP grid: gallery (left) + buy column (right) ─────────────────── #}
+  <div class="hs-pdp__grid">
+
+    {# Gallery ─────────────────────────────────────────────────────────────── #}
+    <section class="hs-gallery" data-behavior="hs-gallery">
+      {% set img_count = product_entity.field_product_images|length %}
+
+      <div class="hs-gallery__thumbs">
+        {% if img_count > 0 %}
+          {% for i in 0..(img_count - 1) %}
+            <button class="hs-gallery__thumb{% if i == 0 %} is-active{% endif %}"
+                    data-index="{{ i }}"
+                    aria-label="{{ 'View image @num'|t({'@num': i + 1}) }}">
+              {{ elements.field_product_images[i] }}
+            </button>
+          {% endfor %}
+        {% else %}
+          {# Placeholder thumbs if no images uploaded yet #}
+          {% for i in 1..5 %}
+            <div class="hs-gallery__thumb-placeholder hs-mono">{{ i }}</div>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      <div class="hs-gallery__stage">
+        {% if img_count > 0 %}
+          {% for i in 0..(img_count - 1) %}
+            <div class="hs-gallery__slide{% if i == 0 %} is-active{% endif %}" data-index="{{ i }}">
+              {{ elements.field_product_images[i] }}
+            </div>
+          {% endfor %}
+        {% else %}
+          {# Honey-stick SVG placeholder — replaced by real photography #}
+          <div class="hs-gallery__slide is-active hs-gallery__placeholder">
+            <svg class="hs-stick-hero" viewBox="0 0 64 520" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="stick-grad" x1="0" x2="1" y1="0" y2="0">
+                  <stop offset="0%" stop-color="var(--hs-honey-deep)" stop-opacity=".85"/>
+                  <stop offset="30%" stop-color="var(--hs-honey)"/>
+                  <stop offset="55%" stop-color="#fff3c8"/>
+                  <stop offset="100%" stop-color="var(--hs-honey-deep)" stop-opacity=".85"/>
+                </linearGradient>
+              </defs>
+              <rect x="4" y="20" width="56" height="480" rx="28" fill="url(#stick-grad)" stroke="rgba(42,26,8,.18)" stroke-width=".8"/>
+              <ellipse cx="32" cy="14" rx="24" ry="10" fill="var(--hs-honey-deep)" opacity=".85"/>
+              <ellipse cx="32" cy="506" rx="24" ry="10" fill="var(--hs-honey-deep)" opacity=".85"/>
+              <rect x="26" y="24" width="3" height="472" rx="1.5" fill="#fff" opacity=".45"/>
+              <rect x="36" y="30" width="1.5" height="460" rx=".75" fill="#fff" opacity=".25"/>
+              <rect x="10" y="232" width="44" height="56" rx="3" fill="#fbf6ec" opacity=".92"/>
+              <text x="32" y="252" font-size="6" font-family="JetBrains Mono,monospace" fill="#2a1a08" text-anchor="middle" letter-spacing="1.5" font-weight="600">HIVE</text>
+              <text x="32" y="262" font-size="6" font-family="JetBrains Mono,monospace" fill="#2a1a08" text-anchor="middle" letter-spacing="1.5" font-weight="600">STICKS</text>
+              <text x="32" y="275" font-size="4.2" font-family="JetBrains Mono,monospace" fill="var(--hs-honey-deep)" text-anchor="middle" letter-spacing="1">RAW · IOWA · 7g</text>
+            </svg>
+          </div>
+        {% endif %}
+
+        {# Prev / Next navigation #}
+        <div class="hs-gallery__nav">
+          <button class="hs-gallery__nav-btn" data-dir="-1" aria-label="{{ 'Previous image'|t }}">‹</button>
+          <button class="hs-gallery__nav-btn hs-gallery__nav-btn--next" data-dir="1" aria-label="{{ 'Next image'|t }}">›</button>
+        </div>
+      </div>
+    </section>
+
+    {# Buy column ───────────────────────────────────────────────────────────── #}
+    <section class="hs-buy">
+
+      {# Product title #}
+      <h1 class="hs-buy__title hs-serif">{{ product_entity.label }}</h1>
+
+      {# Star rating + review count + orders #}
+      {% if rating > 0 %}
+        <div class="hs-buy__rating">
+          <span class="hs-stars" aria-label="{{ '@rating out of 5 stars'|t({'@rating': rating}) }}">
+            {% for i in 1..5 %}
+              <svg class="hs-star{% if i <= rating %} hs-star--filled{% endif %}"
+                   width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M8 1.5l2.06 4.18L14.5 6.3l-3.25 3.17.77 4.5L8 11.85l-4.02 2.12.77-4.5L1.5 6.3l4.44-.62z"/>
+              </svg>
+            {% endfor %}
+          </span>
+          <span class="hs-buy__rating-score">{{ rating }}</span>
+          {% if review_count > 0 %}
+            <a href="#reviews" class="hs-buy__rating-link">
+              {{- review_count|number_format -}}&nbsp;{{ 'reviews'|t -}}
+            </a>
+          {% endif %}
+          {% if orders_month > 0 %}
+            <span class="hs-buy__rating-sep">·</span>
+            <span class="hs-buy__orders">{{ orders_month|number_format }}+ {{ 'orders this month'|t }}</span>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {# Subtitle #}
+      {% if subtitle %}
+        <p class="hs-buy__subtitle">{{ subtitle }}</p>
+      {% endif %}
+
+      <hr class="hs-rule">
+
+      {# ── Pack picker (visual UI — synced to Commerce form by JS) ─────────── #}
+      <div class="hs-packs" data-behavior="hs-pack-picker">
+        <div class="hs-packs__header">
+          <span class="hs-mono hs-label">{{ 'Pack Size'|t }}</span>
+          <span class="hs-packs__per-stick hs-mono"></span>
+        </div>
+        <div class="hs-packs__grid">
+          {# Populated by pdp.js using drupalSettings.hivesticks.packs #}
+        </div>
+      </div>
+
+      {# ── Subscribe toggle ─────────────────────────────────────────────────── #}
+      <div class="hs-subscribe" data-behavior="hs-subscribe">
+        <button class="hs-subscribe__opt is-active" data-type="one-time">
+          <span class="hs-subscribe__opt-label">{{ 'One-time'|t }}</span>
+          <span class="hs-subscribe__opt-price"></span>
+        </button>
+        <button class="hs-subscribe__opt" data-type="subscribe">
+          <span class="hs-badge hs-badge--save">{{ 'SAVE 15%'|t }}</span>
+          <span class="hs-subscribe__opt-label">{{ 'Subscribe'|t }}</span>
+          <span class="hs-subscribe__opt-price hs-subscribe__opt-price--sub"></span>
+        </button>
+      </div>
+
+      {# ── Commerce add-to-cart form ─────────────────────────────────────────  #}
+      {# content.variations renders the add-to-cart form via the add_to_cart     #}
+      {# formatter set on the variations field in Manage Display.                #}
+      {# Attribute selects are hidden (CSS .hs-commerce-attrs) — the visual      #}
+      {# pack picker above syncs their values via JS.                             #}
+      <p class="hs-label hs-commerce-qty-label">Quantity</p>
+      <div class="hs-commerce-form" data-behavior="hs-commerce-form">
+        {{ add_to_cart_form }}
+      </div>
+
+      {# Trust micro-copy #}
+      <ul class="hs-trust hs-mono">
+        <li>{{ 'Free shipping over $25'|t }}</li>
+        <li>{{ 'Compostable wrappers'|t }}</li>
+        <li>{{ '30-day returns'|t }}</li>
+        <li>{{ 'Single-origin Iowa honey'|t }}</li>
+      </ul>
+
+    </section>
+  </div>{# end .hs-pdp__grid #}
+
+  {# ── Highlights 4-up ─────────────────────────────────────────────────────── #}
+  {% if highlight_items %}
+    <section class="hs-highlights">
+      {% for h in highlight_items %}
+        <div class="hs-highlight">
+          <span class="hs-highlight__num hs-mono">{{ h.num }}</span>
+          <h3 class="hs-highlight__title hs-serif">{{ h.title }}</h3>
+          <p class="hs-highlight__body">{{ h.body }}</p>
+        </div>
+      {% endfor %}
+    </section>
+  {% endif %}
+
+  {# ── Tabbed details ──────────────────────────────────────────────────────── #}
+  <section class="hs-details" data-behavior="hs-tabs">
+    <div class="hs-details__intro">
+      <div class="hs-mono hs-label">{{ 'Product Details'|t }}</div>
+      <h2 class="hs-details__heading hs-serif">
+        {{ "Everything you'd want in <em>a teaspoon of honey</em>, in a stick."|raw|t }}
+      </h2>
+      {% if product_entity.field_description_body.value %}
+        <p class="hs-details__body">{{ product_entity.field_description_body.value }}</p>
+      {% endif %}
+    </div>
+
+    <div class="hs-details__panel-wrap">
+      {# Tab nav #}
+      <nav class="hs-tabs-nav" role="tablist">
+        {% for tab in [
+          {id: 'details',      label: 'Details'|t},
+          {id: 'ingredients',  label: 'Ingredients'|t},
+          {id: 'nutrition',    label: 'Nutrition'|t},
+          {id: 'shipping',     label: 'Shipping & returns'|t},
+        ] %}
+          <button class="hs-tab{% if loop.first %} is-active{% endif %}"
+                  role="tab"
+                  data-tab="{{ tab.id }}"
+                  aria-controls="hs-panel-{{ tab.id }}"
+                  aria-selected="{{ loop.first ? 'true' : 'false' }}">
+            {{ tab.label }}
+          </button>
+        {% endfor %}
+      </nav>
+
+      {# Details tab #}
+      <div id="hs-panel-details" class="hs-tab-panel is-active" role="tabpanel" data-panel="details">
+        <dl class="hs-detail-grid">
+          {% for detail in [
+            {k: 'Net weight'|t,     v: product_entity.field_net_weight.value},
+            {k: 'Origin'|t,         v: product_entity.field_origin.value},
+            {k: 'Harvest'|t,        v: product_entity.field_harvest.value},
+            {k: 'Shelf life'|t,     v: product_entity.field_shelf_life.value},
+            {k: 'Storage'|t,        v: product_entity.field_storage.value},
+            {k: 'Allergens'|t,      v: product_entity.field_allergens.value},
+            {k: 'Certifications'|t, v: product_entity.field_certifications.value},
+          ] %}
+            {% if detail.v %}
+              <div class="hs-detail-row">
+                <dt class="hs-mono">{{ detail.k|upper }}</dt>
+                <dd>{{ detail.v }}</dd>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </dl>
+      </div>
+
+      {# Ingredients tab #}
+      <div id="hs-panel-ingredients" class="hs-tab-panel" role="tabpanel" data-panel="ingredients" hidden>
+        <div class="hs-panel-body">
+          {% if product_entity.field_ingredients.value %}
+            {{ elements.field_ingredients }}
+          {% else %}
+            <p>{{ 'Classic / Wildflower / Clover / Buckwheat / Orange Blossom: Raw, unfiltered honey.'|t }}</p>
+            <p>{{ 'Cinnamon: Raw wildflower honey, organic Saigon cinnamon.'|t }}</p>
+            <p>{{ 'Lemon Ginger: Raw wildflower honey, organic dried lemon zest, organic ginger root.'|t }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      {# Nutrition tab #}
+      <div id="hs-panel-nutrition" class="hs-tab-panel" role="tabpanel" data-panel="nutrition" hidden>
+        {% if product_entity.field_nutrition_facts.entity %}
+          <div class="hs-nutrition-image">{{ elements.field_nutrition_facts }}</div>
+        {% else %}
+          {# Inline nutrition card matching design #}
+          <div class="hs-nutrition-card">
+            <div class="hs-nutrition-card__header">{{ 'Nutrition Facts'|t }}</div>
+            <div class="hs-nutrition-card__serving hs-mono">{{ 'Serving size: 1 stick (7 g)'|t }}</div>
+            <div class="hs-nutrition-card__divider hs-nutrition-card__divider--thick"></div>
+            <dl class="hs-nutrition-rows">
+              <div class="hs-nutrition-row hs-nutrition-row--big"><dt>{{ 'Calories'|t }}</dt><dd>20</dd></div>
+              <div class="hs-nutrition-row"><dt>{{ 'Total Carbohydrate'|t }}</dt><dd>6 g</dd></div>
+              <div class="hs-nutrition-row hs-nutrition-row--indent"><dt>{{ 'Total Sugars'|t }}</dt><dd>6 g</dd></div>
+              <div class="hs-nutrition-row hs-nutrition-row--indent"><dt>{{ 'Includes Added Sugars'|t }}</dt><dd>0 g</dd></div>
+              <div class="hs-nutrition-row"><dt>{{ 'Protein'|t }}</dt><dd>0 g</dd></div>
+            </dl>
+            <p class="hs-nutrition-card__note">{{ 'Not a significant source of fat, sodium, or fiber.'|t }}</p>
+          </div>
+        {% endif %}
+      </div>
+
+      {# Shipping tab #}
+      <div id="hs-panel-shipping" class="hs-tab-panel" role="tabpanel" data-panel="shipping" hidden>
+        <div class="hs-panel-body">
+          <p><strong>{{ 'Free USPS Ground'|t }}</strong> {{ 'on orders $25 and up. $4.50 below that.'|t }}</p>
+          <p>{{ 'Ships from our Iowa farm within 1–2 business days.'|t }}</p>
+          <p>{{ 'Subscriptions ship monthly on the day you ordered. Skip, swap, or cancel anytime.'|t }}</p>
+          <p><strong>{{ '30-day no-questions returns.'|t }}</strong> {{ "Don't love it? Email hello@hivesticks.com for a full refund — keep the sticks."|t }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ── Reviews ──────────────────────────────────────────────────────────────── #}
+  <section id="reviews" class="hs-reviews">
+    <div class="hs-mono hs-label">{{ 'Reviews'|t }}</div>
+    <h2 class="hs-reviews__heading hs-serif">
+      {% if review_count > 0 %}
+        {{- '@count people have something to say.'|t({'@count': review_count|number_format}) -}}
+      {% else %}
+        {{- 'Be the first to leave a review.'|t -}}
+      {% endif %}
+    </h2>
+
+    <div class="hs-reviews__layout">
+      {# Summary card #}
+      <div class="hs-reviews__summary">
+        {% if rating > 0 %}
+          <div class="hs-reviews__score hs-serif">{{ rating }}</div>
+          <span class="hs-stars">
+            {% for i in 1..5 %}
+              <svg class="hs-star{% if i <= rating %} hs-star--filled{% endif %}" width="18" height="18" viewBox="0 0 16 16">
+                <path d="M8 1.5l2.06 4.18L14.5 6.3l-3.25 3.17.77 4.5L8 11.85l-4.02 2.12.77-4.5L1.5 6.3l4.44-.62z"/>
+              </svg>
+            {% endfor %}
+          </span>
+          <div class="hs-mono hs-reviews__count">{{ review_count|number_format }} {{ 'verified reviews'|t }}</div>
+          {# Distribution bars — static design values; swap for real data when reviews module is added #}
+          <div class="hs-reviews__dist">
+            {% for bar in [{s:5,p:86},{s:4,p:11},{s:3,p:2},{s:2,p:1},{s:1,p:0}] %}
+              <div class="hs-reviews__dist-row">
+                <span class="hs-mono">{{ bar.s }}★</span>
+                <div class="hs-reviews__dist-bar">
+                  <div class="hs-reviews__dist-fill" style="width: {{ bar.p }}%"></div>
+                </div>
+                <span class="hs-mono">{{ bar.p }}%</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+        <button class="hs-btn hs-btn--outline">{{ 'Write a review'|t }}</button>
+      </div>
+
+      {# Review list placeholder (connect to reviews module or Views) #}
+      <div class="hs-reviews__list">
+        <p class="hs-reviews__list-placeholder">
+          {{ 'Connect a reviews module or Views block here to display individual reviews.'|t }}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {# ── FAQ ──────────────────────────────────────────────────────────────────── #}
+  {% if faq_items %}
+    <section class="hs-faq" data-behavior="hs-accordion">
+      <div class="hs-faq__intro">
+        <div class="hs-mono hs-label">{{ 'FAQ'|t }}</div>
+        <h2 class="hs-faq__heading hs-serif">{{ 'Things people ask.'|t }}</h2>
+        <p class="hs-faq__contact">
+          {{ 'Still have questions? Email'|t }}
+          <a href="mailto:hello@hivesticks.com">hello@hivesticks.com</a>
+          {{ '— a real human replies within a day.'|t }}
+        </p>
+      </div>
+      <div class="hs-faq__items" role="list">
+        {% for item in faq_items %}
+          <div class="hs-faq__item" role="listitem">
+            <button class="hs-faq__q hs-serif"
+                    aria-expanded="false"
+                    aria-controls="hs-faq-answer-{{ loop.index }}">
+              {{ item.question }}
+              <span class="hs-faq__icon" aria-hidden="true">+</span>
+            </button>
+            <div id="hs-faq-answer-{{ loop.index }}" class="hs-faq__a" hidden>
+              {{ item.answer }}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  {# ── Related products (Views block or entity-reference field) ────────────── #}
+  {# Wire up a View block named 'related_products' or add field_related to the type #}
+  <section class="hs-related">
+    <div class="hs-related__header">
+      <h2 class="hs-serif">{{ 'You may also like'|t }}</h2>
+      <a href="/shop" class="hs-related__all">{{ 'Shop all flavors →'|t }}</a>
+    </div>
+    {# {{ drupal_view('related_products', 'block_1') }} #}
+    <p class="hs-related__placeholder hs-mono">
+      {{ 'Add a Related Products view block here.'|t }}
+    </p>
+  </section>
+
+</article>
+
+{# ── Sticky add-to-cart bar ──────────────────────────────────────────────────── #}
+<div class="hs-sticky-bar" data-behavior="hs-sticky-bar" aria-hidden="true">
+  <div class="hs-sticky-bar__inner">
+    <div class="hs-sticky-bar__product">
+      <div class="hs-sticky-bar__thumb"></div>
+      <div>
+        <div class="hs-sticky-bar__name">{{ 'Classic Honey Sticks'|t }}</div>
+        <div class="hs-sticky-bar__meta hs-mono"></div>
+      </div>
+    </div>
+    <div class="hs-sticky-bar__actions">
+      <span class="hs-sticky-bar__price hs-serif"></span>
+      <button class="hs-btn hs-btn--dark hs-sticky-bar__btn" type="button">{{ 'Add to cart'|t }}</button>
+    </div>
+  </div>
+</div>

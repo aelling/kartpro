@@ -1,0 +1,275 @@
+uuid: 41ca3613-16d6-4635-96a5-21ba72e7c8e3
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.honey_stick
+    - field.field.commerce_product.honey_stick.body
+    - field.field.commerce_product.honey_stick.field_allergens
+    - field.field.commerce_product.honey_stick.field_batch_label
+    - field.field.commerce_product.honey_stick.field_category
+    - field.field.commerce_product.honey_stick.field_certifications
+    - field.field.commerce_product.honey_stick.field_description_body
+    - field.field.commerce_product.honey_stick.field_faq
+    - field.field.commerce_product.honey_stick.field_flavor_description
+    - field.field.commerce_product.honey_stick.field_harvest
+    - field.field.commerce_product.honey_stick.field_highlight
+    - field.field.commerce_product.honey_stick.field_ingredients
+    - field.field.commerce_product.honey_stick.field_net_weight
+    - field.field.commerce_product.honey_stick.field_nutrition_facts
+    - field.field.commerce_product.honey_stick.field_orders_this_month
+    - field.field.commerce_product.honey_stick.field_origin
+    - field.field.commerce_product.honey_stick.field_product_images
+    - field.field.commerce_product.honey_stick.field_quality_badge
+    - field.field.commerce_product.honey_stick.field_rating
+    - field.field.commerce_product.honey_stick.field_review_count
+    - field.field.commerce_product.honey_stick.field_shelf_life
+    - field.field.commerce_product.honey_stick.field_sticky_featured
+    - field.field.commerce_product.honey_stick.field_storage
+    - field.field.commerce_product.honey_stick.field_subtitle
+    - image.style.thumbnail
+  module:
+    - commerce
+    - image
+    - path
+    - text
+id: commerce_product.honey_stick.default
+targetEntityType: commerce_product
+bundle: honey_stick
+mode: default
+content:
+  body:
+    type: text_textarea_with_summary
+    weight: 1
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  created:
+    type: datetime_timestamp
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_allergens:
+    type: string_textfield
+    weight: 25
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_batch_label:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: "e.g. NEW BATCH · MAY '26"
+    third_party_settings: {  }
+  field_certifications:
+    type: string_textfield
+    weight: 26
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_description_body:
+    type: text_textarea
+    weight: 30
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_faq:
+    type: string_textarea
+    weight: 50
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_flavor_description:
+    type: text_textarea_with_summary
+    weight: 3
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  field_harvest:
+    type: string_textfield
+    weight: 22
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_highlight:
+    type: string_textarea
+    weight: 40
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_ingredients:
+    type: text_textarea
+    weight: 4
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_net_weight:
+    type: string_textfield
+    weight: 20
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_nutrition_facts:
+    type: image_image
+    weight: 5
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_orders_this_month:
+    type: number
+    weight: 12
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_origin:
+    type: string_textfield
+    weight: 21
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_product_images:
+    type: image_image
+    weight: 2
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_quality_badge:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: 'e.g. RAW · UNFILTERED'
+    third_party_settings: {  }
+  field_rating:
+    type: number
+    weight: 10
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_review_count:
+    type: number
+    weight: 11
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_shelf_life:
+    type: string_textfield
+    weight: 23
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_sticky_featured:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_storage:
+    type: string_textfield
+    weight: 24
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_subtitle:
+    type: string_textfield
+    weight: 5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 30
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 90
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  stores:
+    type: commerce_entity_select
+    weight: -10
+    region: content
+    settings:
+      hide_single_entity: true
+      autocomplete_threshold: 7
+      autocomplete_size: 60
+      autocomplete_placeholder: ''
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 5
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  variations:
+    type: entity_reference_autocomplete
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  field_category: true

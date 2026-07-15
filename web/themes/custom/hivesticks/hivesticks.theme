@@ -1,0 +1,17 @@
+<?php
+
+
+/**
+ * Implements hook_preprocess_menu_local_tasks().
+ *
+ * Hides the primary/secondary local task tabs (View | Edit | Delete, etc.)
+ * from everyone except users in the 'administrator' role. This controls both
+ * the {{ tabs }} template variable and the core "Tabs" block.
+ */
+function hivesticks_preprocess_menu_local_tasks(&$variables) {
+  $account = \Drupal::currentUser();
+  if (!in_array('administrator', $account->getRoles(), TRUE)) {
+    $variables['primary'] = [];
+    $variables['secondary'] = [];
+  }
+}

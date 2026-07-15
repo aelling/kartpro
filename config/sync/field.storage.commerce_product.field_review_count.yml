@@ -1,0 +1,20 @@
+uuid: e0ac8b41-abc2-452c-a285-39ca0e9698e5
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_product
+id: commerce_product.field_review_count
+field_name: field_review_count
+entity_type: commerce_product
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

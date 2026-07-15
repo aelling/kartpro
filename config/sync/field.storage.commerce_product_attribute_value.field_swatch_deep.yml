@@ -1,0 +1,21 @@
+uuid: df441e42-a0b9-4ecb-b818-00a80d1665d6
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_product
+id: commerce_product_attribute_value.field_swatch_deep
+field_name: field_swatch_deep
+entity_type: commerce_product_attribute_value
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,19 @@
+uuid: fa6dcc86-013c-456f-8dd7-eb07448cce5a
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.landing_page_section
+    - field.storage.block_content.field_button_url
+id: block_content.landing_page_section.field_button_url
+field_name: field_button_url
+entity_type: block_content
+bundle: landing_page_section
+label: 'Button URL'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

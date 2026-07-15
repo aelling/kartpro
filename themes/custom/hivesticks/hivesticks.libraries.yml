@@ -1,40 +1,118 @@
-global:
-  version: 1.0
-  css:
-    theme:
-      css/global.css: {}
-  js:
-    js/global.js: {}
-  dependencies:
-    - core/drupal
+# hivesticks.libraries.yml
+# Copy this file to: themes/custom/hivesticks/hivesticks.libraries.yml
+# (Replace any existing version — this is the complete definition.)
+#
+# Attach the pdp library in the Twig template with:
+#   {{ attach_library('hivesticks/pdp') }}
+# (Already present in commerce-product--honey-stick.html.twig)
+#
+# The homepage library is attached automatically via page--front.html.twig:
+#   {{ attach_library('hivesticks/homepage') }}
 
-pdp:
-  version: 1.0
+# Google Fonts — Fraunces (serif display), Inter (body), JetBrains Mono (labels)
+fonts:
   css:
     theme:
-      # Google Fonts: Fraunces + JetBrains Mono (for PDP serif/mono text)
-      'https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,500;9..144,0,600;9..144,0,700;9..144,1,400;9..144,1,500&family=JetBrains+Mono:wght@400;500;600&display=swap':
+      'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap':
         type: external
         minified: true
+
+# Product detail page — attach via {{ attach_library('hivesticks/pdp') }} in the template
+pdp:
+  version: 1.x
+  css:
+    theme:
       css/pdp.css: {}
   js:
     js/pdp.js: {}
   dependencies:
     - core/drupal
-    - hivesticks/global
+    - core/drupalSettings
+    - core/once
+    - hivesticks/fonts
 
+# Homepage (front page) — attached via page--front.html.twig
 homepage:
-  version: 1.0
+  version: 1.x
   css:
     theme:
-      # Google Fonts: Inter (body) + Fraunces (headings) + JetBrains Mono (labels)
-      'https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,500;9..144,0,600;9..144,0,700;9..144,1,400;9..144,1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap':
-        type: external
-        minified: true
       css/homepage.css: {}
   js:
     js/homepage.js: {}
   dependencies:
     - core/drupal
     - core/once
-    - hivesticks/global
+    - hivesticks/fonts
+
+# Cart page — attached via {{ attach_library('hivesticks/cart') }} in views-view--commerce-cart-form.html.twig
+cart:
+  version: 1.x
+  css:
+    theme:
+      css/cart.css: {}
+  js:
+    js/cart.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - hivesticks/fonts
+
+# Shared header/nav — attached via page.html.twig (inner pages)
+# The homepage (page--front.html.twig) uses homepage.css/js for nav styles
+# and homepage.js for the cart badge; this library is for all other pages.
+header:
+  version: 1.x
+  css:
+    theme:
+      css/header.css: {}
+  js:
+    js/header.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - hivesticks/fonts
+
+# Catalog / Shop page (/shop) — attached via views-view--catalog.html.twig
+catalog:
+  version: 1.x
+  css:
+    theme:
+      css/catalog.css: {}
+  dependencies:
+    - core/drupal
+    - hivesticks/fonts
+
+# Checkout flow — attached via page--checkout.html.twig
+checkout:
+  version: 1.x
+  css:
+    theme:
+      css/checkout.css: {}
+  js:
+    js/checkout.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - hivesticks/fonts
+
+# Account / user pages (login, register, orders) — attached in page.html.twig
+account:
+  version: 1.x
+  css:
+    theme:
+      css/account.css: {}
+  js:
+    js/account.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - hivesticks/fonts
+
+# Global base styles (attach in hivesticks.info.yml under libraries:)
+global:
+  version: 1.x
+  css:
+    base:
+      css/global.css: {}
+  dependencies:
+    - hivesticks/fonts

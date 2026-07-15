@@ -1,0 +1,31 @@
+uuid: 1e14dbb9-d667-4267-aa21-20bbfc29a07e
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:landing_page_section:673306b3-d3d5-46ee-9d98-9a058a38a5b0'
+  module:
+    - block_content
+    - system
+  theme:
+    - hivesticks
+id: hivesticks_storysection
+theme: hivesticks
+region: footer_first
+weight: 0
+provider: null
+plugin: 'block_content:673306b3-d3d5-46ee-9d98-9a058a38a5b0'
+settings:
+  id: 'block_content:673306b3-d3d5-46ee-9d98-9a058a38a5b0'
+  label: 'Story Section'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: '<front>'

@@ -1,0 +1,22 @@
+uuid: 7007ecf5-4123-4c4b-9080-dfdca8a214fb
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - hivesticks
+_core:
+  default_config_hash: BZ5tpW7H8X4PVGRm3MImTIHd2tN0eF7zOtp4SpRYUA0
+id: hivesticks_messages
+theme: hivesticks
+region: highlighted
+weight: -8
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  label_display: '0'
+  provider: system
+visibility: {  }

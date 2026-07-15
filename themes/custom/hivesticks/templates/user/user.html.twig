@@ -1,0 +1,55 @@
+{#
+  user.html.twig — HiveSticks account Overview (/user/{uid})
+  ──────────────────────────────────────────────────────────
+  Replaces the default user profile render with the account Overview:
+  greeting, latest-order panel, quick-stat cards.
+
+  Variables from hivesticks_preprocess_user():
+    overview_uid, overview_greeting, overview_subtitle,
+    overview_latest {number,status,tone,total,item_count,url},
+    overview_delivered, overview_addresses
+
+  Deploy to: themes/custom/hivesticks/templates/user/
+#}
+
+<div class="hs-overview">
+
+  <div class="hs-sec-head">
+    <div>
+      <h1 class="hs-sec-head__title hs-serif">{{ overview_greeting }}</h1>
+      {% if overview_subtitle %}<p class="hs-sec-head__sub">{{ overview_subtitle }}</p>{% endif %}
+    </div>
+  </div>
+
+  {% if overview_latest %}
+    <section class="hs-panel hs-ov-latest">
+      <div class="hs-ov-latest__head">
+        <span class="hs-mono hs-ov-eyebrow">{{ 'Latest order'|t }} · #{{ overview_latest.number }}</span>
+        <span class="hs-badge hs-badge--{{ overview_latest.tone }}"><span class="hs-badge__dot"></span>{{ overview_latest.status }}</span>
+      </div>
+      <div class="hs-ov-latest__meta">{{ overview_latest.item_count }} {{ overview_latest.item_count == 1 ? 'item'|t : 'items'|t }} · {{ overview_latest.total }}</div>
+      <div class="hs-ov-latest__actions">
+        <a href="{{ overview_latest.url }}" class="hs-abtn hs-abtn--dark">{{ 'View order'|t }}</a>
+        <a href="/shop" class="hs-abtn hs-abtn--ghost">{{ 'Reorder'|t }}</a>
+      </div>
+    </section>
+  {% else %}
+    <section class="hs-panel hs-ov-empty">
+      <div class="hs-empty__title hs-serif">{{ 'Welcome to HiveSticks'|t }}</div>
+      <p class="hs-empty__body">{{ 'You haven’t placed an order yet. Your orders and tracking will show up here.'|t }}</p>
+      <a href="/shop" class="hs-abtn hs-abtn--dark">{{ 'Start shopping'|t }}</a>
+    </section>
+  {% endif %}
+
+  <div class="hs-ov-stats">
+    <a href="/user/{{ overview_uid }}/orders" class="hs-statcard">
+      <div class="hs-statcard__num hs-serif">{{ overview_delivered }}</div>
+      <div class="hs-statcard__label">{{ 'Orders delivered'|t }}</div>
+    </a>
+    <a href="/user/{{ overview_uid }}/address-book" class="hs-statcard">
+      <div class="hs-statcard__num hs-serif">{{ overview_addresses }}</div>
+      <div class="hs-statcard__label">{{ 'Saved addresses'|t }}</div>
+    </a>
+  </div>
+
+</div>

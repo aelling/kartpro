@@ -1,0 +1,9 @@
+uuid: 46f712e5-0f97-4add-8020-84cc934d8865
+langcode: en
+status: true
+dependencies: {  }
+name: 'Product category'
+vid: product_category
+description: 'Catalog filter categories for HiveSticks products.'
+weight: 0
+new_revision: false

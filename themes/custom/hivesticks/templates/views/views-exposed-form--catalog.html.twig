@@ -1,0 +1,81 @@
+{#
+  views-exposed-form--catalog.html.twig
+  ──────────────────────────────────────
+  Deploy to: themes/custom/hivesticks/templates/views/views-exposed-form--catalog.html.twig
+
+  Renders the catalog exposed filters as:
+    • Category pills (All products / Single flavors / Bundles & gifts / Subscriptions)
+    • Sort select (Featured / Price ↑ / Price ↓ / Top rated)
+
+  The preprocess hook `hivesticks_preprocess_views_exposed_form__catalog()`
+  (in hivesticks.theme) provides two extra variables:
+    catalog_pills  — array of { value, label, count, active }
+    catalog_sort_options — array of { value, label }
+    catalog_sort_active  — currently selected sort value
+
+  Falls back to rendering the raw Drupal form if the preprocess vars aren't present,
+  so the page remains functional before the hook is added.
+#}
+
+<form class="hs-toolbar" method="get" action="{{ url('<current>') }}">
+
+  {# Preserve any existing GET params (clean URL pager, etc.) #}
+  {% if form.formid is defined %}{{ form.formid }}{% endif %}
+  {% if form.form_build_id is defined %}{{ form.form_build_id }}{% endif %}
+
+  {# ── Category pills ──────────────────────────────────────────── #}
+  <div class="hs-toolbar__pills" role="group" aria-label="{{ 'Filter by category'|t }}">
+
+    {% if catalog_pills is defined and catalog_pills|length %}
+      {# Preprocess-generated pills with counts #}
+      {% for pill in catalog_pills %}
+        <a href="{{ pill.url }}"
+           class="hs-pill{% if pill.active %} is-active{% endif %}"
+           aria-current="{{ pill.active ? 'true' : 'false' }}"
+           aria-label="{{ pill.label }}{% if pill.count is defined %} ({{ pill.count }}){% endif %}">
+          {{ pill.label }}
+          {% if pill.count is defined %}
+            <span class="hs-pill__count" aria-hidden="true">{{ pill.count }}</span>
+          {% endif %}
+        </a>
+      {% endfor %}
+
+    {% elseif form.field_category_target_id is defined %}
+      {# Fallback: render from the exposed form element's #options #}
+      {% set active_val = form.field_category_target_id['#value'] ?? '' %}
+      {% for val, label in form.field_category_target_id['#options'] %}
+        <button type="submit"
+                name="field_category_target_id"
+                value="{{ val }}"
+                class="hs-pill{% if active_val == val %} is-active{% endif %}"
+                aria-current="{{ active_val == val ? 'true' : 'false' }}">
+          {{ label }}
+        </button>
+      {% endfor %}
+
+    {% else %}
+      {# Last resort: render whatever Drupal gives us #}
+      {% for key, element in form if key|first != '#' %}
+        {{ element }}
+      {% endfor %}
+    {% endif %}
+
+  </div>
+
+  {# ── Sort select ─────────────────────────────────────────────── #}
+  <label class="hs-toolbar__sort">
+    {{ 'Sort'|t }}
+    {% if catalog_sort_options is defined %}
+      <select name="sort_by" onchange="this.form.submit()">
+        {% for opt in catalog_sort_options %}
+          <option value="{{ opt.value }}"{% if opt.value == catalog_sort_active %} selected{% endif %}>
+            {{ opt.label }}
+          </option>
+        {% endfor %}
+      </select>
+    {% elseif form.sort_by is defined %}
+      {{ form.sort_by }}
+    {% endif %}
+  </label>
+
+</form>

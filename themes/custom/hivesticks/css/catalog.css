@@ -1,0 +1,530 @@
+/*
+ * HiveSticks Catalog / Shop page — stylesheet
+ * Attach via hivesticks/catalog library.
+ * Route: /shop  (Views page "catalog")
+ * Class prefix: .hs-  (shared token set from homepage.css :root)
+ */
+
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN TOKENS (subset — keeps this file self-contained)
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --hs-bg:          #fbf6ec;
+  --hs-bg-2:        #f3ecd9;
+  --hs-bg-3:        #e9dfc4;
+  --hs-ink:         #2a1a08;
+  --hs-ink-2:       #4a3520;
+  --hs-ink-mute:    #8a7558;
+  --hs-honey:       #d9871a;
+  --hs-honey-deep:  #a8640e;
+  --hs-honey-glow:  #f0a929;
+  --hs-card:        #ffffff;
+  --hs-rule:        rgba(42, 26, 8, 0.10);
+  --hs-rule-strong: rgba(42, 26, 8, 0.22);
+  --hs-serif:       'Fraunces', 'Georgia', serif;
+  --hs-sans:        'Inter', system-ui, sans-serif;
+  --hs-mono:        'JetBrains Mono', ui-monospace, monospace;
+  --hs-r-card:      18px;
+  --hs-r-ctrl:      10px;
+  --hs-r-pill:      999px;
+  --hs-shadow-card: 0 1px 2px rgba(0,0,0,.03), 0 12px 28px -20px rgba(80,60,20,.16);
+  --hs-shadow-hover: 0 2px 4px rgba(0,0,0,.04), 0 22px 44px -22px rgba(80,60,20,.30);
+  --hs-gutter:      clamp(20px, 3.5vw, 40px);
+  --hs-nav-h:       68px;
+  --hs-shop-max:    1240px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PAGE SHELL
+   ═══════════════════════════════════════════════════════════════ */
+.hs-shop {
+  font-family: var(--hs-sans);
+  color: var(--hs-ink);
+  background: var(--hs-bg);
+  min-height: 100vh;
+}
+
+/* ── Page intro header ── */
+.hs-shop__intro {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--hs-rule);
+}
+.hs-shop__intro-inner {
+  position: relative;
+  max-width: var(--hs-shop-max);
+  margin: 0 auto;
+  padding: 54px var(--hs-gutter) 44px;
+}
+
+/* Honeycomb accent */
+.hs-shop__intro::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(240,169,41,0.04) 1px, transparent 1.5px);
+  background-size: 28px 28px;
+  pointer-events: none;
+}
+
+/* Eyebrow */
+.hs-shop__eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--hs-mono);
+  font-size: 11px; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--hs-ink-mute);
+  margin: 0 0 16px;
+}
+.hs-shop__eyebrow span {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--hs-honey-glow); color: var(--hs-ink);
+  font-size: 10px; font-weight: 700; flex-shrink: 0;
+}
+
+/* Heading */
+.hs-shop__heading {
+  font-family: var(--hs-serif);
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 600; letter-spacing: -0.02em; line-height: 1.05;
+  color: var(--hs-ink); margin: 0 0 14px;
+}
+
+/* Tagline */
+.hs-shop__lede {
+  font-size: 17px; color: var(--hs-ink-2);
+  max-width: 540px; margin: 0; line-height: 1.55;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STICKY TOOLBAR (filter pills + sort)
+   ═══════════════════════════════════════════════════════════════ */
+.hs-shop__toolbar {
+  position: sticky;
+  top: var(--hs-nav-h);
+  z-index: 30;
+  background: rgba(251, 246, 236, 0.92);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border-bottom: 1px solid var(--hs-rule);
+}
+
+/* The exposed form inside the toolbar */
+.hs-toolbar {
+  max-width: var(--hs-shop-max);
+  margin: 0 auto;
+  padding: 14px var(--hs-gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ── Category pills ── */
+.hs-toolbar__pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hs-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: var(--hs-r-pill);
+  font-family: var(--hs-sans);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--hs-rule-strong);
+  background: transparent;
+  color: var(--hs-ink-2);
+  transition: background 140ms, color 140ms, border-color 140ms;
+  white-space: nowrap;
+}
+.hs-pill:hover {
+  background: var(--hs-bg-2);
+  color: var(--hs-ink);
+}
+.hs-pill.is-active,
+.hs-pill[aria-current="true"] {
+  background: var(--hs-ink);
+  color: var(--hs-bg);
+  border-color: var(--hs-ink);
+}
+.hs-pill__count {
+  font-size: 11px;
+  opacity: .5;
+}
+.hs-pill.is-active .hs-pill__count {
+  opacity: .7;
+}
+
+/* ── Sort control ── */
+.hs-toolbar__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--hs-ink-mute);
+  font-family: var(--hs-sans);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.hs-toolbar__sort select,
+.hs-toolbar select[name="sort_by"],
+.hs-toolbar select[name="sort_order"] {
+  height: 38px;
+  padding: 0 12px;
+  border-radius: var(--hs-r-ctrl);
+  font-family: var(--hs-sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--hs-ink);
+  background: #fff;
+  border: 1px solid var(--hs-rule-strong);
+  cursor: pointer;
+  appearance: auto;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PRODUCT GRID
+   ═══════════════════════════════════════════════════════════════ */
+.hs-shop__main {
+  max-width: var(--hs-shop-max);
+  margin: 0 auto;
+  padding: 32px var(--hs-gutter) 72px;
+}
+
+.hs-shop__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(264px, 1fr));
+  gap: 24px;
+}
+
+/* Empty state */
+.hs-shop__empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 0;
+  color: var(--hs-ink-mute);
+  font-size: 16px;
+}
+
+/* Pager */
+.hs-shop__pager {
+  margin-top: 48px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PRODUCT CARD  (.hs-card)
+   ═══════════════════════════════════════════════════════════════ */
+.hs-card {
+  background: var(--hs-card);
+  border: 1px solid var(--hs-rule);
+  border-radius: var(--hs-r-card);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--hs-shadow-card);
+  transition:
+    transform 220ms cubic-bezier(.2,.7,.3,1),
+    box-shadow 220ms ease;
+}
+.hs-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--hs-shadow-hover);
+}
+
+/* ── Card media ── */
+.hs-card__media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 220px;
+  /* --swatch is set via inline style from field_swatch_color */
+  background:
+    radial-gradient(ellipse at 50% 38%, color-mix(in srgb, var(--hs-card-swatch, #f0a929) 20%, transparent), transparent 66%),
+    var(--hs-bg-2);
+  border-bottom: 1px solid var(--hs-rule);
+  text-decoration: none;
+  overflow: hidden;
+}
+/* When --swatch custom property is set inline */
+.hs-card__media[style*="--swatch"] {
+  background:
+    radial-gradient(ellipse at 50% 38%, color-mix(in srgb, var(--swatch) 20%, transparent), transparent 66%),
+    var(--hs-bg-2);
+}
+/* Fallback for browsers without color-mix (use rgba approximation) */
+@supports not (color: color-mix(in srgb, red, blue)) {
+  .hs-card__media {
+    background: radial-gradient(ellipse at 50% 38%, rgba(240,169,41,0.20), transparent 66%), var(--hs-bg-2);
+  }
+}
+
+/* Product image inside media */
+.hs-card__media img {
+  max-height: 160px;
+  max-width: 80%;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+}
+
+/* Honey stick SVG placeholder (used when no image) */
+.hs-card__stick {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Badge ── */
+.hs-card__badge {
+  position: absolute;
+  top: 14px; left: 14px;
+  font-family: var(--hs-mono);
+  font-size: 10px; font-weight: 600;
+  letter-spacing: .10em; text-transform: uppercase;
+  color: #fff;
+  padding: 5px 9px;
+  border-radius: var(--hs-r-pill);
+  z-index: 2;
+  white-space: nowrap;
+}
+/* Badge colour variants */
+.hs-card__badge--bestseller,
+.hs-card__badge--most-loved  { background: var(--hs-honey-deep); }
+.hs-card__badge--new         { background: #3a7d44; }
+.hs-card__badge--subscribe   { background: #6b4ea8; }
+.hs-card__badge--infused     { background: var(--hs-ink-2); }
+.hs-card__badge--save        { background: #1a6b3a; }
+/* Generic fallback */
+.hs-card__badge:not([class*="--"]) { background: var(--hs-ink-2); }
+
+/* ── Card body ── */
+.hs-card__body {
+  padding: 22px 24px 26px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* ── Rating row ── */
+.hs-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+.hs-card__stars {
+  display: inline-flex;
+  gap: 1.5px;
+  color: var(--hs-honey);
+  font-size: 12px;
+  line-height: 1;
+}
+.hs-card__stars .hs-star-empty { color: var(--hs-bg-3); }
+.hs-card__rating-text {
+  font-size: 12.5px;
+  color: var(--hs-ink-mute);
+}
+
+/* ── Title ── */
+.hs-card__title {
+  font-family: var(--hs-serif);
+  font-size: 23px;
+  font-weight: 600;
+  color: var(--hs-ink);
+  line-height: 1.1;
+  text-decoration: none;
+  display: block;
+}
+.hs-card__title:hover { color: var(--hs-honey-deep); }
+
+/* ── Flavor notes ── */
+.hs-card__notes {
+  font-family: var(--hs-mono);
+  font-size: 11px;
+  color: var(--hs-ink-mute);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  margin: 8px 0 16px;
+  line-height: 1.4;
+}
+
+/* ── Card footer: price stacked above button ── */
+.hs-card__foot {
+  margin-top: auto;
+  padding-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.hs-card__price {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.hs-card__from {
+  font-size: 12px;
+  color: var(--hs-ink-mute);
+  line-height: 1;
+}
+.hs-card__amount {
+  font-family: var(--hs-serif);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--hs-ink);
+  line-height: 1;
+}
+
+/* ── Choose options button ── */
+.hs-card__add {
+  height: 44px;
+  padding: 0 20px;
+  border-radius: var(--hs-r-ctrl);
+  background: var(--hs-ink);
+  color: var(--hs-bg);
+  border: 1px solid var(--hs-ink);
+  font-family: var(--hs-sans);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 160ms, color 160ms;
+  width: 100%;
+}
+.hs-card__add:hover {
+  background: var(--hs-honey-deep);
+  border-color: var(--hs-honey-deep);
+  color: #fff;
+}
+
+/* ── Suppress raw Commerce add-to-cart form on cards ── */
+/* When `single_variation` is true the Twig shows .hs-card__add-wrap containing the
+   Commerce form. Hide every Commerce form element and restyle the submit button. */
+.hs-card__add-wrap .commerce-order-item-add-to-cart-form > *:not([type="submit"]),
+.hs-card__add-wrap .form-item,
+.hs-card__add-wrap select,
+.hs-card__add-wrap input[type="number"],
+.hs-card__add-wrap .field--name-quantity,
+.hs-card__add-wrap .field--name-purchased-entity { display: none !important; }
+
+.hs-card__add-wrap [type="submit"] {
+  height: 42px;
+  padding: 0 18px;
+  border-radius: var(--hs-r-ctrl);
+  background: var(--hs-honey);
+  color: var(--hs-ink);
+  border: 1px solid var(--hs-honey);
+  font-family: var(--hs-sans);
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: background 160ms, color 160ms;
+}
+.hs-card__add-wrap [type="submit"]:hover {
+  background: var(--hs-honey-deep);
+  border-color: var(--hs-honey-deep);
+  color: #fff;
+}
+
+/* ── Honey stick SVG (single-flavor card visual) ── */
+.hs-stick-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.hs-stick {
+  width: 36px;
+  border-radius: 18px;
+  flex-shrink: 0;
+}
+
+/* ── Bundle visual (fanned sticks) ── */
+.hs-bundle-fan {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  justify-content: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CATALOG FOOTER (minimal, inherits from page.html.twig outer)
+   ═══════════════════════════════════════════════════════════════ */
+.hs-shop-footer {
+  background: var(--hs-ink);
+  border-top: 1px solid rgba(255,255,255,.07);
+  padding: 48px var(--hs-gutter);
+}
+.hs-shop-footer__inner {
+  max-width: var(--hs-shop-max);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.hs-shop-footer__brand {
+  font-family: var(--hs-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: #fff;
+}
+.hs-shop-footer__brand em { font-style: normal; color: var(--hs-honey-glow); }
+.hs-shop-footer__copy {
+  font-size: 13px;
+  color: var(--hs-ink-mute);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .hs-shop__grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .hs-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .hs-shop__intro-inner {
+    padding-top: 36px;
+    padding-bottom: 32px;
+  }
+  .hs-shop__heading { font-size: clamp(28px, 6vw, 42px); }
+}
+
+@media (max-width: 600px) {
+  .hs-shop__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .hs-card__body { padding: 14px 14px 16px; }
+  .hs-card__title { font-size: 18px; }
+  .hs-card__amount { font-size: 18px; }
+  .hs-card__add { height: 36px; padding: 0 12px; font-size: 12px; }
+  .hs-card__media { height: 160px; }
+}
+
+@media (max-width: 400px) {
+  .hs-shop__grid { grid-template-columns: 1fr; }
+}

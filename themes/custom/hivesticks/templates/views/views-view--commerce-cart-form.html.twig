@@ -1,0 +1,148 @@
+{#
+  HiveSticks — Commerce cart page shell.
+  Overrides views-view--commerce-cart-form.html.twig in the theme.
+
+  Deploy to: themes/custom/hivesticks/templates/commerce/
+
+  Variables (standard Drupal Views):
+    rows    — rendered line items (Commerce order item rows, includes qty+remove form)
+    footer  — order total summary (commerce_order_total_summary area handler)
+    empty   — rendered empty text (when cart has no items)
+    id      — view machine name
+    display_id — display machine name
+    dom_id  — unique DOM id for this view instance
+
+  The entire output is wrapped in a <form> by Drupal Commerce's cart module
+  before this template is called — do NOT add a <form> tag here.
+
+  Library attached via hivesticks.libraries.yml cart entry.
+  The {{ attach_library() }} call is here so the cart styles load on /cart
+  even if the page template doesn't explicitly attach them.
+#}
+{{ attach_library('hivesticks/cart') }}
+
+{%
+  set classes = [
+    'view',
+    'view-' ~ id|clean_class,
+    'view-id-' ~ id,
+    'view-display-id-' ~ display_id,
+    dom_id ? 'js-view-dom-id-' ~ dom_id,
+  ]
+%}
+
+<div{{ attributes.addClass(classes) }}>
+
+  {# ── Breadcrumb ─────────────────────────────────────────────────────────── #}
+  <nav class="hs-breadcrumb hs-mono" aria-label="{{ 'Breadcrumb'|t }}">
+    <a href="/shop">{{ 'Shop'|t }}</a>
+    <span class="hs-breadcrumb__sep">/</span>
+    <span>{{ 'Cart'|t }}</span>
+  </nav>
+
+  {% if empty %}
+
+    {# ── Empty state ───────────────────────────────────────────────────────── #}
+    <div class="hs-cart-empty">
+      <div class="hs-cart-empty__icon">
+        {# Inline honey-stick SVG (matches hivesticks-parts.jsx HoneyStick) #}
+        <svg width="72" height="120" viewBox="0 0 72 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="6" y="10" width="60" height="96" rx="30" fill="#f0a929" opacity=".18"/>
+          <rect x="14" y="18" width="44" height="80" rx="22" fill="#f0a929" opacity=".35"/>
+          <rect x="20" y="24" width="32" height="68" rx="16" fill="#f0a929"/>
+          <rect x="28" y="4" width="16" height="20" rx="6" fill="#d9871a"/>
+          <rect x="31" y="0" width="10" height="8" rx="3" fill="#a8640e"/>
+        </svg>
+      </div>
+      <h1 class="hs-cart-empty__title hs-serif">{{ "Your cart's empty."|t }}</h1>
+      <p class="hs-cart-empty__body">
+        {{ 'No honey yet. Pick your flavors and we\'ll ship them from the Iowa farm in compostable mailers.'|t }}
+      </p>
+      <a class="hs-btn hs-btn--dark" href="/shop">{{ 'Shop honey sticks'|t }}</a>
+    </div>
+
+  {% else %}
+
+    {# ── Page header ───────────────────────────────────────────────────────── #}
+    <header class="hs-cart-head">
+      <h1 class="hs-cart-head__title hs-serif">{{ 'Your cart'|t }}</h1>
+    </header>
+
+    {# ── Two-column grid ───────────────────────────────────────────────────── #}
+    <div class="hs-cart-grid">
+
+      {# ── Left: line items ──────────────────────────────────────────────── #}
+      <section class="hs-cart-items">
+
+        {# Free-shipping progress bar.
+           JS reads the subtotal from the order total block and drives this.
+           data-threshold is the free-shipping amount in USD. #}
+        <div class="hs-shipbar" data-threshold="25" data-behavior="hs-shipbar">
+          <div class="hs-shipbar__top">
+            <p class="hs-shipbar__label">{{ 'Calculating…'|t }}</p>
+          </div>
+          <div class="hs-shipbar__track" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+            <div class="hs-shipbar__fill"></div>
+          </div>
+        </div>
+
+        {# Commerce renders the cart rows here — each row is a line item with
+           quantity stepper and remove button as Commerce form elements.
+           CSS transforms the table output into our card design. #}
+        <div class="hs-cart-rows" data-behavior="hs-cart-rows">
+          {{ rows }}
+        </div>
+
+        <a class="hs-cart-continue hs-mono" href="/shop">
+          ← {{ 'Continue shopping'|t }}
+        </a>
+      </section>
+
+      {# ── Right: sticky order summary ───────────────────────────────────── #}
+      <aside class="hs-cart-summary" aria-label="{{ 'Order summary'|t }}">
+        <div class="hs-summary-card">
+          <h2 class="hs-summary-card__title hs-serif">{{ 'Order summary'|t }}</h2>
+
+          {# Promo code — rendered by commerce_promotion coupon block if enabled.
+             Wrap in a styled div so it picks up .hs-promo-* CSS even if absent. #}
+          <div class="hs-promo">
+            {{ coupon_redemption_form is defined ? coupon_redemption_form : '' }}
+          </div>
+
+          {# Totals — rendered via commerce-order-total-summary.html.twig override #}
+          <div class="hs-summary-totals">
+            {{ footer }}
+          </div>
+
+          <a class="hs-btn hs-btn--dark hs-btn--block" href="/checkout">
+            {{ 'Proceed to checkout'|t }}
+          </a>
+
+          <p class="hs-summary-secure hs-mono">
+            <svg width="13" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 10V8a6 6 0 0 1 12 0v2M5 10h14v10H5z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            </svg>
+            {{ 'Secure checkout · encrypted'|t }}
+          </p>
+
+          <ul class="hs-summary-pay hs-mono" aria-label="{{ 'Accepted payment methods'|t }}">
+            <li>VISA</li>
+            <li>MC</li>
+            <li>AMEX</li>
+            <li>PayPal</li>
+            <li>Pay</li>
+          </ul>
+        </div>
+
+        <ul class="hs-summary-trust hs-mono">
+          <li>{{ 'Free returns within 30 days'|t }}</li>
+          <li>{{ 'Compostable wrappers'|t }}</li>
+          <li>{{ 'Single-origin Iowa honey'|t }}</li>
+        </ul>
+      </aside>
+
+    </div>{# /.hs-cart-grid #}
+
+  {% endif %}
+
+</div>{# /.view #}

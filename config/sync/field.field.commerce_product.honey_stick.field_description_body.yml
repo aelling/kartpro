@@ -1,0 +1,22 @@
+uuid: 83bf1aeb-36dc-4d96-aa83-5eb8d2f48ddd
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.honey_stick
+    - field.storage.commerce_product.field_description_body
+  module:
+    - text
+id: commerce_product.honey_stick.field_description_body
+field_name: field_description_body
+entity_type: commerce_product
+bundle: honey_stick
+label: 'Description Body'
+description: 'The longer product description shown in the Details tab.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

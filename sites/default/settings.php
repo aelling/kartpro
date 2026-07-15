@@ -903,3 +903,6 @@ if (getenv('IS_DDEV_PROJECT') == 'true' && is_readable($ddev_settings)) {
 // Force HTTPS
 $settings['reverse_proxy'] = TRUE;
 $settings['https'] = TRUE;
+
+// HiveSticks: config sync relocated into the repo so it deploys via git.
+$settings['config_sync_directory'] = 'config/sync';

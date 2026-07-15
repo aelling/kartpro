@@ -1,0 +1,19 @@
+uuid: 0541dd96-688b-4117-b8fd-1eb6f5144961
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_product
+    - text
+id: commerce_product.field_everyday_use
+field_name: field_everyday_use
+entity_type: commerce_product
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

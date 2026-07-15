@@ -1,0 +1,29 @@
+uuid: 53b53072-6f95-44b4-a7b6-e31e73c8305b
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.blog_category
+  module:
+    - system
+    - views
+  theme:
+    - hivesticks
+id: hivesticks_views_block__blog_category_block_1
+theme: hivesticks
+region: sidebar_second
+weight: 0
+provider: null
+plugin: 'views_block:blog_category-block_1'
+settings:
+  id: 'views_block:blog_category-block_1'
+  label: ''
+  label_display: visible
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/blog-grid\r\n/blog\r\n/blog/*"

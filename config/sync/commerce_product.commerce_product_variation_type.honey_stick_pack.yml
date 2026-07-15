@@ -1,0 +1,20 @@
+uuid: 5f8fa6ec-0285-4ebf-879c-64ba2eb66da2
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_recurring
+    - commerce_shipping
+third_party_settings:
+  commerce_shipping:
+    shipment_type: default
+  commerce_recurring:
+    subscription_type: product_variation
+id: honey_stick_pack
+label: 'Honey Stick Pack'
+traits:
+  - purchasable_entity_shippable
+  - purchasable_entity_subscription
+locked: false
+orderItemType: default
+generateTitle: true

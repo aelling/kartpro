@@ -1,0 +1,22 @@
+uuid: 1472ec55-3805-432f-a62e-904ac12ccf4a
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - kartpro
+_core:
+  default_config_hash: VhBzWb7lMRtIOg9G7VSw_0uopi-7zXeHq4vXqqV1HFE
+id: kartpro_breadcrumbs
+theme: kartpro
+region: page_header
+weight: -7
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  label_display: '0'
+  provider: system
+visibility: {  }

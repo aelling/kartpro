@@ -1,0 +1,14 @@
+services:
+  hs_subscribe.order_item_matcher:
+    class: Drupal\hs_subscribe\SubscribeOrderItemMatcher
+    decorates: commerce_cart.order_item_matcher
+    arguments: ['@hs_subscribe.order_item_matcher.inner']
+  hs_subscribe.discount_processor:
+    class: Drupal\hs_subscribe\OrderProcessor\SubscribeDiscountProcessor
+    tags:
+      - { name: commerce_order.order_processor, priority: 100 }
+  hs_subscribe.order_subscriber:
+    class: Drupal\hs_subscribe\EventSubscriber\SubscribeOrderSubscriber
+    arguments: ['@entity_type.manager', '@datetime.time']
+    tags:
+      - { name: event_subscriber }

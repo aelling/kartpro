@@ -1,0 +1,199 @@
+{#
+  page--checkout.html.twig — HiveSticks checkout pages
+  ──────────────────────────────────────────────────────
+  Covers all /checkout/* steps: login, order_information, payment, complete
+  Drupal generates this suggestion from the URL path /checkout/...
+  Deploy to: themes/custom/hivesticks/templates/layout/page--checkout.html.twig
+#}
+
+{{ attach_library('hivesticks/header') }}
+{{ attach_library('hivesticks/checkout') }}
+
+{# ══════════════════════════════════════════════════════════════════════════
+   ORDER DATA FOR "IN YOUR CART" SIDEBAR
+   Populated server-side by hivesticks_preprocess_page__checkout() in
+   hivesticks.theme.  checkout.js reads this element via:
+     document.getElementById('hs-cart-data')
+   so the login-step sidebar can render cart items without an API call.
+   ══════════════════════════════════════════════════════════════════════════ #}
+{% if hs_cart_json is defined and hs_cart_json %}
+<script type="application/json" id="hs-cart-data">{{ hs_cart_json|raw }}</script>
+{% endif %}
+
+<a class="hs-skip-link" href="#main-content">{{ 'Skip to main content'|t }}</a>
+
+{# ══════════════════════════════════════════════════════════════════════════
+   NAVIGATION
+   ══════════════════════════════════════════════════════════════════════════ #}
+<header class="hs-nav" data-behavior="hs-nav" role="banner">
+  <div class="hs-nav__inner">
+
+    <a href="{{ path('<front>') }}" class="hs-nav__logo-link" aria-label="{{ 'HiveSticks'|t }}">
+      {% if logo_url %}
+        <img src="{{ logo_url }}" alt="{{ 'HiveSticks'|t }}" class="hs-nav__logo-img">
+      {% else %}
+        <span class="hs-nav__logo-wrap">
+          <svg class="hs-nav__hex" width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true">
+            <path d="M15 2 L27 9 L27 21 L15 28 L3 21 L3 9 Z" fill="#d9871a"/>
+            <path d="M15 8 C15 8 10 15 10 18.5 C10 21.54 12.24 24 15 24 C17.76 24 20 21.54 20 18.5 C20 15 15 8 15 8Z" fill="white" opacity="0.92"/>
+          </svg>
+          <span class="hs-nav__logo-text hs-serif">Hive<em>Sticks</em></span>
+        </span>
+      {% endif %}
+    </a>
+
+    <nav class="hs-nav__menu" aria-label="{{ 'Primary'|t }}">
+      <ul class="hs-nav__links" role="list">
+        <li><a href="/shop">{{ 'Shop'|t }}</a></li>
+        <li><a href="/shop">{{ 'Flavors'|t }}</a></li>
+        <li><a href="/our-story">{{ 'Our Story'|t }}</a></li>
+        <li><a href="/for-families">{{ 'For Families'|t }}</a></li>
+        <li><a href="{{ path('<front>') }}#hs-faq">{{ 'FAQ'|t }}</a></li>
+      </ul>
+    </nav>
+
+    <div class="hs-nav__actions">
+      {% if logged_in %}
+        <a href="/user/{{ user.id }}/orders" class="hs-nav__account-link" aria-label="{{ 'My orders'|t }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span class="hs-nav__account-text">{{ 'My Orders'|t }}</span>
+        </a>
+        <a href="{{ path('user.logout') }}" class="hs-nav__signout-link">{{ 'Sign out'|t }}</a>
+      {% else %}
+        <a href="{{ path('user.login') }}" class="hs-nav__account-link" aria-label="{{ 'Sign in'|t }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span class="hs-nav__account-text">{{ 'Sign in'|t }}</span>
+        </a>
+      {% endif %}
+      <a href="{{ path('commerce_cart.page') }}" class="hs-nav__cart-link" aria-label="{{ 'Cart'|t }}" data-behavior="hs-cart-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span class="hs-nav__cart-text">{{ 'Cart'|t }} · <span class="hs-nav__cart-count" aria-live="polite">{{ cart_count|default(0) }}</span></span>
+      </a>
+    </div>
+
+  </div>
+</header>
+
+{# ══════════════════════════════════════════════════════════════════════════
+   STEP PROGRESS BAR
+   JS marks .is-done / .is-active based on current URL path and swaps
+   the .hs-co-step-num text to ✓ for completed steps.
+   ══════════════════════════════════════════════════════════════════════════ #}
+{# Use <div> not <ol>/<li> — avoids browser list-item layout defaults #}
+<div class="hs-co-step-band">
+  <div class="hs-co-steps" role="list" aria-label="{{ 'Checkout progress'|t }}">
+    <div class="hs-co-step" role="listitem" data-step="cart">
+      <span class="hs-co-step-num" aria-hidden="true">1</span>
+      <span class="hs-co-step-label">{{ 'Cart'|t }}</span>
+    </div>
+    <div class="hs-co-connector" aria-hidden="true"></div>
+    <div class="hs-co-step" role="listitem" data-step="login">
+      <span class="hs-co-step-num" aria-hidden="true">2</span>
+      <span class="hs-co-step-label">{{ 'Account'|t }}</span>
+    </div>
+    <div class="hs-co-connector" aria-hidden="true"></div>
+    <div class="hs-co-step" role="listitem" data-step="order_information">
+      <span class="hs-co-step-num" aria-hidden="true">3</span>
+      <span class="hs-co-step-label">{{ 'Shipping'|t }}</span>
+    </div>
+    <div class="hs-co-connector" aria-hidden="true"></div>
+    <div class="hs-co-step" role="listitem" data-step="payment">
+      <span class="hs-co-step-num" aria-hidden="true">4</span>
+      <span class="hs-co-step-label">{{ 'Payment'|t }}</span>
+    </div>
+  </div>
+</div>
+
+{# ══════════════════════════════════════════════════════════════════════════
+   CHECKOUT CONTENT
+   ══════════════════════════════════════════════════════════════════════════ #}
+<main id="main-content" class="hs-page-main" role="main">
+  <div class="hs-checkout-wrap">
+
+    {# Page heading row — text and back link set by inline JS #}
+    <div class="hs-co-page-header">
+      <div>
+        <h1 class="hs-co-page-title" id="hs-co-title">{{ 'Checkout'|t }}</h1>
+        <p class="hs-co-page-subtitle" id="hs-co-subtitle" style="display:none"></p>
+      </div>
+      <a href="{{ path('commerce_cart.page') }}" class="hs-co-back-link" id="hs-co-back" style="display:none">{{ '← Back to cart'|t }}</a>
+    </div>
+
+    {{ page.content }}
+
+  </div>
+</main>
+
+{# ══════════════════════════════════════════════════════════════════════════
+   DARK FOOTER
+   ══════════════════════════════════════════════════════════════════════════ #}
+<footer class="hs-co-footer" role="contentinfo">
+  <div class="hs-co-footer__inner">
+    <span class="hs-co-footer__brand hs-serif">Hive<em>Sticks</em></span>
+    <span>{{ 'Raw single-origin honey · Story County, Iowa'|t }}</span>
+    <span>© {{ 'now'|date('Y') }} HiveSticks</span>
+  </div>
+</footer>
+
+{# ══════════════════════════════════════════════════════════════════════════
+   STEP + HEADING SCRIPT
+   Runs immediately after the DOM is painted — no DOMContentLoaded delay
+   ══════════════════════════════════════════════════════════════════════════ #}
+<script>
+(function () {
+  var path = window.location.pathname;
+
+  // Map URL path segments to step index (0 = Cart, 1 = Account, 2 = Shipping, 3 = Payment)
+  var activeIdx =
+    path.includes('/login')             ? 1 :
+    path.includes('/order_information') ? 2 :
+    path.includes('/review')            ? 2 :
+    path.includes('/payment')           ? 3 :
+    path.includes('/complete')          ? 4 : 1;
+
+  var stepOrder = ['cart', 'login', 'order_information', 'payment'];
+
+  // Mark step circles and update number → ✓ for done steps
+  document.querySelectorAll('.hs-co-step[data-step]').forEach(function (el) {
+    var idx = stepOrder.indexOf(el.getAttribute('data-step'));
+    var numEl = el.querySelector('.hs-co-step-num');
+    if (idx < activeIdx) {
+      el.classList.add('is-done');
+      if (numEl) numEl.textContent = '✓';
+    } else if (idx === activeIdx) {
+      el.classList.add('is-active');
+    }
+  });
+
+  // Mark connectors (connector i sits between step i and step i+1)
+  document.querySelectorAll('.hs-co-connector').forEach(function (el, i) {
+    if (i < activeIdx) el.classList.add('is-done');
+  });
+
+  // Update page heading
+  var title    = document.getElementById('hs-co-title');
+  var subtitle = document.getElementById('hs-co-subtitle');
+  var backLink = document.getElementById('hs-co-back');
+
+  if (activeIdx === 1) {
+    if (title)    title.textContent = 'How would you like to check out?';
+    if (subtitle) { subtitle.textContent = 'Sign in to your HiveSticks account, or continue as a guest.'; subtitle.style.display = ''; }
+  } else if (activeIdx === 2 || activeIdx === 3) {
+    if (title)    title.textContent = 'Checkout';
+    if (backLink) {
+      backLink.textContent = '← Account options';
+      backLink.href = path.replace(/\/[^\/]+$/, '/login');
+      backLink.style.display = '';
+    }
+  } else if (activeIdx >= 4) {
+    if (title) title.textContent = 'Order confirmed';
+  }
+})();
+</script>

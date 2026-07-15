@@ -1,0 +1,51 @@
+{#
+  HiveSticks — Commerce order total summary.
+  Overrides commerce-order-total-summary.html.twig.
+
+  Deploy to: themes/custom/hivesticks/templates/commerce/
+
+  totals structure (this Commerce version):
+    totals.subtotal    → Price object  (.number = "38.97")
+    totals.adjustments → associative array of adjustment objects
+                         each: {type, label, amount: Price(.number), positive}
+    totals.total       → Price object
+
+  Note: Drupal Twig does NOT have |number_format. Use "%.2f"|format(n) instead.
+#}
+<div class="hs-totals" data-behavior="hs-totals">
+
+  {# ── Subtotal ── #}
+  {% if totals.subtotal.number %}
+    <div class="hs-totals__row hs-totals__row--subtotal">
+      <span class="hs-totals__label">{{ 'Subtotal'|t }}</span>
+      <span class="hs-totals__value">${{ "%.2f"|format(totals.subtotal.number) }}</span>
+    </div>
+  {% endif %}
+
+  {# ── Adjustments (shipping, promotions, tax…) ── #}
+  {% if totals.adjustments is iterable %}
+    {% for adj_key, adj in totals.adjustments %}
+      {% set adj_num = adj.amount.number %}
+      {% set is_free = (adj_num == '0.00' or adj_num == 0 or not adj_num) %}
+      <div class="hs-totals__row hs-totals__row--{{ adj.type|clean_class }}">
+        <span class="hs-totals__label">{{ adj.label }}</span>
+        <span class="hs-totals__value{{ is_free ? ' hs-totals__value--free' : '' }}">
+          {%- if is_free -%}
+            {{ 'FREE'|t }}
+          {%- else -%}
+            ${{ "%.2f"|format(adj_num) }}
+          {%- endif -%}
+        </span>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  {# ── Total — .hs-totals__row--order-total triggers large serif in CSS ── #}
+  {% if totals.total.number %}
+    <div class="hs-totals__row hs-totals__row--order-total">
+      <span class="hs-totals__label">{{ 'Total'|t }}</span>
+      <span class="hs-totals__value">${{ "%.2f"|format(totals.total.number) }}</span>
+    </div>
+  {% endif %}
+
+</div>

@@ -1,0 +1,14 @@
+{#
+  views-view-unformatted--catalog.html.twig
+  ─────────────────────────────────────────
+  Deploy to: themes/custom/hivesticks/templates/views/views-view-unformatted--catalog.html.twig
+
+  Wraps the rendered product rows in the CSS grid.
+  Each `row` is a rendered Commerce product entity in "Teaser" view mode,
+  themed by commerce-product--teaser.html.twig.
+#}
+<div class="hs-shop__grid">
+  {% for row in rows %}
+    {{ row.content }}
+  {% endfor %}
+</div>

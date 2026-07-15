@@ -1,0 +1,8 @@
+uuid: 32d3febe-2230-44f8-af0a-30be8fc7fdbc
+langcode: en
+status: true
+dependencies: {  }
+id: landing_page_section
+label: 'Landing Page Section'
+revision: false
+description: 'Used for homepage landing page sections'

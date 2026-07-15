@@ -1,0 +1,12 @@
+hs_rewards.user_rewards:
+  path: '/user/{user}/rewards'
+  defaults:
+    _controller: '\Drupal\hs_rewards\Controller\RewardsController::view'
+    _title: 'Rewards'
+  requirements:
+    _entity_access: 'user.view'
+    user: \d+
+  options:
+    parameters:
+      user:
+        type: entity:user

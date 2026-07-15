@@ -1,0 +1,1328 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   checkout.css — Commerce checkout flow  ·  HiveSticks V3
+   deploy to: themes/custom/hivesticks/css/checkout.css
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* ── Local tokens (extras not in global.css) ── */
+.hs-checkout-wrap,
+.hs-co-step-band {
+  --co-ink-mute:    #8a7558;
+  --co-bg-2:        #f3ecd9;
+  --co-rule-strong: rgba(42, 26, 8, 0.22);
+  --co-accent-deep: #a8640e;
+  --co-white:       #ffffff;
+  --co-card-shadow: 0 1px 2px rgba(0,0,0,0.03),
+                    0 16px 36px -26px rgba(80,60,20,0.18);
+  --co-sum-shadow:  0 1px 2px rgba(0,0,0,0.03),
+                    0 18px 40px -26px rgba(80,60,20,0.20);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   STEP PROGRESS BAR
+   Sits in .hs-co-step-band above the main wrapper,
+   injected by page--checkout.html.twig
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hs-co-step-band {
+  margin-top: var(--hs-nav-h, 68px);              /* clear the fixed nav */
+  background: #ede5cf;                            /* distinctly darker than page bg */
+  border-bottom: 2px solid rgba(42, 26, 8, 0.18); /* visible separator line */
+  padding: 18px 56px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.hs-co-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+.hs-co-step {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: #8a7558;
+}
+
+/* Number circle — explicit span, no CSS counters */
+.hs-co-step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  background: transparent;
+  color: #8a7558;
+  border: 1.5px solid rgba(42, 26, 8, 0.22);
+  transition: background 200ms, color 200ms, border-color 200ms;
+  line-height: 1;
+}
+
+.hs-co-step-label {
+  /* label text styled on parent */
+}
+
+/* Connector line — explicit display:block (was <li>, now <div>) */
+.hs-co-connector {
+  display: block;
+  width: 48px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: rgba(42, 26, 8, 0.22);
+  flex-shrink: 0;
+  margin: 0 18px;
+  align-self: center; /* vertically center the 1.5px line within the flex row */
+  transition: background 200ms;
+}
+
+/* Active step — filled dark circle with white number */
+.hs-co-step.is-active {
+  color: #2a1a08;
+  font-weight: 700;
+}
+.hs-co-step.is-active .hs-co-step-num {
+  background: #2a1a08;
+  color: #fff;
+  border-color: #2a1a08;
+  box-shadow: 0 0 0 3px rgba(217, 135, 26, 0.25); /* amber halo */
+}
+
+/* Done step — honey ✓ */
+.hs-co-step.is-done {
+  color: #8a7558;
+}
+.hs-co-step.is-done .hs-co-step-num {
+  background: #d9871a;
+  color: #fff;
+  border-color: #d9871a;
+}
+
+/* Connector turns honey when step before it is done */
+.hs-co-connector.is-done {
+  background: #d9871a;
+}
+
+/* Checkout pages: step band already clears the fixed nav via margin-top,
+   so suppress the extra padding-top that header.css sets on .hs-page-main. */
+.hs-co-step-band ~ .hs-page-main {
+  padding-top: 0 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PAGE HEADER (heading + optional back link)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hs-co-page-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 32px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.hs-co-page-title {
+  font-family: var(--hs-serif);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 600;
+  color: var(--hs-ink);
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.hs-co-page-subtitle {
+  font-family: var(--hs-sans);
+  font-size: 16px;
+  color: var(--hs-ink-2);
+  margin: 6px 0 0;
+}
+
+.hs-co-back-link {
+  font-family: var(--hs-sans);
+  font-size: 14px;
+  color: var(--hs-ink-2) !important;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+.hs-co-back-link:hover { opacity: 0.7; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   WRAPPER
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hs-checkout-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 44px 56px 80px;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FIELDSET = CARD
+   The <fieldset> is the white card.
+   <legend> floats left to appear inside the card as a serif heading.
+   .fieldset-wrapper clears the float and provides form content padding.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hs-checkout-wrap fieldset {
+  border: 1px solid var(--hs-rule) !important;
+  background: var(--co-white) !important;
+  border-radius: 20px !important;
+  padding: 0 !important;
+  margin: 0 0 24px !important;
+  box-shadow: var(--co-card-shadow);
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Clearfix so fieldset height wraps floated legend */
+.hs-checkout-wrap fieldset::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+/* Legend floats left → stays INSIDE the card as a serif H2 title */
+.hs-checkout-wrap legend {
+  float: left !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  display: block !important;
+  padding: 26px 30px 20px !important;
+  margin: 0 !important;
+  border: none !important;
+  border-bottom: 1px solid var(--hs-rule) !important;
+  background: none !important;
+  font-family: var(--hs-serif) !important;
+  font-size: 24px !important;
+  font-weight: 600 !important;
+  color: var(--hs-ink) !important;
+  letter-spacing: -0.01em !important;
+  white-space: normal !important;
+  text-transform: none !important;
+  text-align: left !important;
+}
+
+/* Form content below the legend */
+.hs-checkout-wrap .fieldset-wrapper {
+  clear: left;
+  padding: 24px 30px 30px;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CHECKOUT STEPS LAYOUT  (order_information, payment, complete)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* The form itself just fills width */
+.hs-checkout-wrap .commerce-checkout-flow {
+  display: block;
+}
+
+/* Grid goes on the actual column wrapper — regions are direct children here */
+.hs-checkout-wrap .layout-checkout-form {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  grid-template-areas:
+    "main      secondary"
+    "footer    secondary";
+  gap: 40px 40px;
+  align-items: start;
+}
+
+/* Clear Commerce's default float/width from all region elements */
+.hs-checkout-wrap .layout-region {
+  float: none !important;
+  width: auto !important;
+  min-width: 0;
+}
+
+/* Explicit grid placement */
+.hs-checkout-wrap .layout-region-checkout-main      { grid-area: main; }
+.hs-checkout-wrap .layout-region-checkout-secondary { grid-area: secondary; }
+.hs-checkout-wrap .layout-region-checkout-footer    { grid-area: footer; }
+
+/* Left: stacked card sections */
+.hs-checkout-wrap .layout-region-checkout-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* fieldset margin handles spacing */
+}
+
+/* Sidebar — card frame that wraps the entire secondary region */
+.hs-checkout-wrap .layout-region-checkout-secondary {
+  background: var(--co-white);
+  border: 1px solid var(--hs-rule);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: var(--co-sum-shadow);
+  position: sticky;
+  top: calc(var(--hs-nav-h, 68px) + 24px);
+  align-self: start;           /* don't stretch to full grid height */
+  box-sizing: border-box;
+}
+
+/* Override fieldset card styling inside sidebar (coupon fields etc.) */
+.hs-checkout-wrap .layout-region-checkout-secondary fieldset {
+  border: none !important;
+  background: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.hs-checkout-wrap .layout-region-checkout-secondary legend {
+  float: none !important;
+  width: auto !important;
+  font-family: var(--hs-sans) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: var(--hs-ink-2) !important;
+  padding: 0 0 10px !important;
+  border: none !important;
+  border-bottom: 1px solid var(--hs-rule) !important;
+  margin: 0 0 12px !important;
+}
+.hs-checkout-wrap .layout-region-checkout-secondary .fieldset-wrapper {
+  padding: 0;
+  clear: none;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CHECKOUT LOGIN — two-column layout
+   checkout.js adds .hs-co-login-page to <body> on the login step.
+
+   Two problems we solve here:
+   1. The .commerce-checkout-flow grid is 1fr 380px — even with NO sidebar on
+      the login step that 380px column is still reserved, shrinking the main
+      area to ~648px.  Force 1fr-only on the login step.
+   2. The two login panes need to sit side-by-side.  We target both the
+      js-form-wrapper (if it's a direct child of the form) AND the
+      layout-region-checkout-main so the rule works regardless of whether
+      Commerce wraps panes in a .layout-regions-checkout intermediary.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* 1. Kill the phantom sidebar column on the login step */
+.hs-co-login-page .hs-checkout-wrap .commerce-checkout-flow,
+.hs-co-login-page .hs-checkout-wrap .layout-regions-checkout {
+  grid-template-columns: 1fr !important;
+}
+
+/* 2a. Approach A — Commerce puts panes in a .js-form-wrapper (direct child of form) */
+.hs-checkout-wrap form > .js-form-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+.hs-checkout-wrap form > .js-form-wrapper > fieldset,
+.hs-checkout-wrap form > .js-form-wrapper > .checkout-pane {
+  margin-bottom: 0 !important;
+}
+
+/* 2b. Approach B — panes are inside .layout-region-checkout-main directly */
+.hs-co-login-page .hs-checkout-wrap .layout-region-checkout-main {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 28px !important;
+  align-items: start !important;
+  flex-direction: unset !important;
+}
+.hs-co-login-page .hs-checkout-wrap .layout-region-checkout-main > fieldset,
+.hs-co-login-page .hs-checkout-wrap .layout-region-checkout-main > .checkout-pane {
+  margin-bottom: 0 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ORDER SUMMARY SIDEBAR
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hs-checkout-wrap .layout-region-checkout-secondary h2,
+.hs-checkout-wrap .layout-region-checkout-secondary h3,
+.hs-checkout-wrap .layout-region-checkout-secondary .block-title {
+  font-family: var(--hs-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--hs-ink);
+  margin: 0 0 20px;
+  letter-spacing: -0.01em;
+}
+
+/* Order item rows */
+.hs-checkout-wrap .views-row {
+  display: grid;
+  grid-template-columns: 54px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--hs-rule);
+}
+.hs-checkout-wrap .views-row:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.hs-checkout-wrap .views-field-title {
+  font-family: var(--hs-sans);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--hs-ink);
+}
+
+.hs-checkout-wrap .views-field-quantity {
+  font-family: var(--hs-mono);
+  font-size: 10.5px;
+  color: var(--co-ink-mute);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.hs-checkout-wrap .views-field-total-price {
+  font-family: var(--hs-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--hs-ink);
+  white-space: nowrap;
+}
+
+/* Suppress "Price" label */
+.hs-checkout-wrap .field--name-unit-price .field__label,
+.hs-checkout-wrap .field--name-total-price .field__label {
+  display: none;
+}
+
+/* Total lines */
+.hs-checkout-wrap .order-total-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 11px 0;
+}
+
+.hs-checkout-wrap .order-total-line__label {
+  font-family: var(--hs-sans);
+  font-size: 14.5px;
+  color: var(--hs-ink-2);
+}
+
+.hs-checkout-wrap .order-total-line__value {
+  font-family: var(--hs-sans);
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--hs-ink);
+}
+
+.hs-checkout-wrap .order-total-line--total {
+  border-top: 1px solid var(--hs-rule);
+  margin-top: 12px;
+  padding-top: 14px;
+}
+
+.hs-checkout-wrap .order-total-line--total .order-total-line__label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--hs-ink);
+}
+
+.hs-checkout-wrap .order-total-line--total .order-total-line__value {
+  font-family: var(--hs-serif);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--hs-ink);
+  letter-spacing: -0.01em;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CARD EYEBROW — "STEP 1 OF 3" label injected above card title by checkout.js
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Eyebrow is injected as first child of <legend> so it appears above the title.
+   Since legend is display:block (via float trick), a block child works fine. */
+.hs-checkout-wrap .hs-co-eyebrow {
+  display: block !important;
+  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: #a8640e !important;
+  margin-bottom: 8px !important;
+  /* reset legend font override so child inherits correctly */
+  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   INJECTED CARD HEADER ELEMENTS  (added by checkout.js)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Legend flex row when icon is injected */
+.hs-checkout-wrap legend.hs-co-legend-enhanced {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+/* Icon chip — grey (Returning Customer) */
+.hs-co-card-chip {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--co-bg-2);
+  border: 1px solid var(--hs-rule);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--hs-ink);
+}
+
+/* Honey-tinted chip (Guest Checkout) */
+.hs-co-card-chip--honey {
+  background: rgba(217, 135, 26, 0.12);
+  border-color: rgba(217, 135, 26, 0.30);
+  color: var(--hs-honey);
+}
+
+/* Card subtitle — injected below icon+title, above form fields */
+.hs-co-card-subtitle {
+  font-family: var(--hs-sans) !important;
+  font-size: 13.5px !important;
+  color: var(--co-ink-mute) !important;
+  margin: 0 0 20px !important;
+  line-height: 1.5 !important;
+}
+
+/* Benefits list (Guest Checkout) */
+.hs-co-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hs-co-benefits li {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-family: var(--hs-sans);
+  font-size: 14.5px;
+  color: var(--hs-ink-2);
+}
+
+.hs-co-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(217, 135, 26, 0.12);
+  color: var(--co-accent-deep);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  font-family: var(--hs-sans);
+}
+
+/* Dark ink button (injected class for "Continue as guest" + "Place order") */
+.hs-checkout-wrap .hs-co-btn-dark,
+.hs-checkout-wrap input.hs-co-btn-dark {
+  height: 58px !important;
+  border-radius: 14px !important;
+  background: var(--hs-ink) !important;
+  color: var(--hs-bg) !important;
+  box-shadow: 0 16px 36px -16px rgba(42, 26, 8, 0.50) !important;
+}
+
+/* ── LOGIN CARDS: no separator line (matches design where title flows into form) */
+.hs-checkout-wrap .hs-co-login-card legend {
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+}
+.hs-checkout-wrap .hs-co-login-card .fieldset-wrapper {
+  padding-top: 16px !important;
+}
+
+/* Guest card paragraph ("Proceed straight to...") */
+.hs-co-card-para {
+  font-family: var(--hs-sans) !important;
+  font-size: 15.5px !important;
+  line-height: 1.6 !important;
+  color: var(--hs-ink-2) !important;
+  margin: 0 0 20px !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   "IN YOUR BAG" — injected sidebar on the login step
+   checkout.js injects .hs-co-bag-aside into the page on the login step
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hs-co-bag-aside {
+  background: #fff;
+  border: 1px solid var(--hs-rule);
+  border-radius: 20px;
+  padding: 26px 28px 28px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 18px 40px -26px rgba(80,60,20,0.20);
+  position: sticky;
+  top: calc(var(--hs-nav-h, 68px) + 24px);
+  box-sizing: border-box;
+}
+
+.hs-co-bag-aside h2 {
+  font-family: var(--hs-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--hs-ink);
+  margin: 0 0 18px;
+  letter-spacing: -0.01em;
+}
+
+.hs-co-bag-item {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  gap: 13px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hs-rule);
+}
+.hs-co-bag-item:last-of-type { border-bottom: none; }
+
+.hs-co-bag-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: rgba(217, 135, 26, 0.10);
+  border: 1px solid rgba(217, 135, 26, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.hs-co-bag-item-name {
+  font-family: var(--hs-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--hs-ink);
+  line-height: 1.3;
+}
+
+.hs-co-bag-item-qty {
+  font-family: var(--hs-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  color: #8a7558;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.hs-co-bag-item-price {
+  font-family: var(--hs-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--hs-ink);
+  white-space: nowrap;
+}
+
+.hs-co-bag-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-top: 14px;
+  margin-top: 4px;
+  border-top: 1px solid var(--hs-rule);
+  font-family: var(--hs-sans);
+  font-size: 14.5px;
+  color: var(--hs-ink-2);
+}
+
+.hs-co-bag-total-amount {
+  font-family: var(--hs-serif);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--hs-ink);
+  letter-spacing: -0.01em;
+}
+
+.hs-co-bag-note {
+  font-family: var(--hs-sans) !important;
+  font-size: 12px !important;
+  color: #8a7558 !important;
+  margin: 8px 0 0 !important;
+  line-height: 1.5 !important;
+}
+
+.hs-co-bag-back {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--hs-rule);
+  font-family: var(--hs-sans);
+  font-size: 13px;
+  color: #8a7558 !important;
+  text-decoration: none !important;
+}
+.hs-co-bag-back:hover { color: var(--hs-ink) !important; }
+
+.hs-co-bag-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  font-family: var(--hs-sans);
+  font-size: 13px;
+  color: #8a7558;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ORDER SUMMARY CARD — injected sidebar on order_information + payment steps
+   checkout.js injects .hs-co-sum-card into .layout-region-checkout-secondary
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hs-co-sum-card {
+  /* Grouping container only — visual card frame comes from the parent
+     .layout-region-checkout-secondary (background, border, shadow, padding).
+     No extra visual treatment here so we don't double-nest cards. */
+}
+
+.hs-co-sum-heading {
+  font-family: var(--hs-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--hs-ink);
+  margin: 0 0 18px;
+  letter-spacing: -0.01em;
+}
+
+/* ── Item rows ── */
+.hs-co-sum-item {
+  display: grid;
+  grid-template-columns: 54px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hs-rule);
+}
+.hs-co-sum-item:last-of-type { border-bottom: none; padding-bottom: 0; }
+
+.hs-co-sum-thumb {
+  width: 54px;
+  height: 54px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: rgba(217, 135, 26, 0.08);
+  border: 1px solid rgba(217, 135, 26, 0.15);
+  flex-shrink: 0;
+}
+.hs-co-sum-thumb--emoji {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.hs-co-sum-item-info {
+  min-width: 0;
+}
+.hs-co-sum-item-name {
+  font-family: var(--hs-sans);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--hs-ink);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hs-co-sum-item-qty {
+  font-family: var(--hs-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  color: #8a7558;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+.hs-co-sum-item-price {
+  font-family: var(--hs-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--hs-ink);
+  white-space: nowrap;
+}
+
+/* ── Divider rule ── */
+.hs-co-sum-rule {
+  border: none;
+  border-top: 1px solid var(--hs-rule);
+  margin: 16px 0;
+}
+
+/* ── Coupon code ── */
+.hs-co-sum-coupon {
+  margin-bottom: 0;
+}
+.hs-co-sum-coupon-label {
+  display: block;
+  font-family: var(--hs-mono, 'JetBrains Mono', monospace);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8a7558;
+  margin-bottom: 8px;
+}
+.hs-co-sum-coupon-row {
+  display: flex;
+  gap: 8px;
+}
+.hs-co-sum-coupon-input {
+  flex: 1;
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid var(--hs-rule);
+  border-radius: 10px;
+  background: #faf6ed;
+  font-family: var(--hs-sans);
+  font-size: 14px;
+  color: var(--hs-ink);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.hs-co-sum-coupon-input:focus {
+  border-color: rgba(168, 100, 14, 0.45);
+  background: #fff;
+}
+.hs-co-sum-coupon-btn {
+  height: 42px;
+  padding: 0 18px;
+  border-radius: 10px;
+  background: #d9871a;
+  border: none;
+  font-family: var(--hs-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.hs-co-sum-coupon-btn:hover { background: #c07616; }
+.hs-co-sum-coupon-hint {
+  font-family: var(--hs-sans);
+  font-size: 12px;
+  color: #8a7558;
+  margin: 7px 0 0;
+  line-height: 1.4;
+}
+.hs-co-sum-coupon-hint strong { color: #a8640e; font-weight: 600; }
+
+/* ── Price breakdown ── */
+.hs-co-sum-totals {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.hs-co-sum-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--hs-sans);
+  font-size: 14.5px;
+  color: var(--hs-ink-2, #5a4a30);
+}
+.hs-co-sum-free {
+  font-weight: 600;
+  color: #3b7a3b;                   /* green FREE label */
+}
+.hs-co-sum-grand-total {
+  border-top: 1px solid var(--hs-rule);
+  padding-top: 13px;
+  margin-top: 2px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--hs-ink);
+}
+.hs-co-sum-grand-total span:last-child {
+  font-family: var(--hs-serif);
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--hs-ink);
+}
+
+/* ── SIDEBAR FOOTER: Secure badge + payment chips ── */
+.hs-co-secure-badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--hs-sans);
+  font-size: 13px;
+  color: #8a7558;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(42, 26, 8, 0.10);
+}
+.hs-co-pay-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.hs-co-pay-chip {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #4a3520;
+  background: #f3ecd9;
+  border: 1px solid rgba(42, 26, 8, 0.10);
+  border-radius: 6px;
+  padding: 5px 9px;
+}
+
+/* ── COMPLETE PAGE ── */
+.hs-co-complete-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 520px;
+  margin: 60px auto;
+  padding: 0 24px;
+}
+.hs-co-complete-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: rgba(217, 135, 26, 0.12);
+  border: 1px solid rgba(217, 135, 26, 0.30);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.hs-co-complete-title {
+  font-family: var(--hs-serif);
+  font-size: clamp(28px, 5vw, 38px);
+  font-weight: 600;
+  color: var(--hs-ink);
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.hs-co-complete-body {
+  font-family: var(--hs-sans);
+  font-size: 16.5px;
+  line-height: 1.6;
+  color: var(--hs-ink-2);
+  margin: 0 0 28px;
+}
+.hs-co-complete-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  padding: 0 30px;
+  border-radius: 12px;
+  background: var(--hs-ink);
+  color: var(--hs-bg);
+  font-family: var(--hs-sans);
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none !important;
+  letter-spacing: 0.01em;
+  transition: opacity 160ms;
+}
+.hs-co-complete-cta:hover { opacity: 0.85; }
+
+/* Secure note (Payment card) */
+.hs-co-secure-note {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--hs-sans);
+  font-size: 13px;
+  color: var(--co-ink-mute);
+  margin-bottom: 20px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FORM FIELDS
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hs-checkout-wrap .form-item {
+  margin-bottom: 18px;
+}
+
+.hs-checkout-wrap .form-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Field labels */
+.hs-checkout-wrap label,
+.hs-checkout-wrap .form-item label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: var(--hs-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hs-ink-2);
+  margin-bottom: 9px;
+}
+
+/* Text inputs */
+.hs-checkout-wrap input[type="text"],
+.hs-checkout-wrap input[type="password"],
+.hs-checkout-wrap input[type="email"],
+.hs-checkout-wrap input[type="tel"],
+.hs-checkout-wrap input[type="number"] {
+  display: block;
+  width: 100%;
+  height: 52px;
+  box-sizing: border-box;
+  padding: 0 16px;
+  font-family: var(--hs-sans);
+  font-size: 15.5px;
+  color: var(--hs-ink);
+  background: var(--hs-bg);
+  border: 1px solid var(--co-rule-strong);
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.hs-checkout-wrap input[type="text"]:focus,
+.hs-checkout-wrap input[type="password"]:focus,
+.hs-checkout-wrap input[type="email"]:focus,
+.hs-checkout-wrap input[type="tel"]:focus,
+.hs-checkout-wrap input[type="number"]:focus {
+  border-color: var(--hs-honey);
+  box-shadow: 0 0 0 3px rgba(217, 135, 26, 0.14);
+}
+
+/* Select */
+.hs-checkout-wrap select {
+  display: block;
+  width: 100%;
+  height: 52px;
+  box-sizing: border-box;
+  padding: 0 44px 0 16px;
+  font-family: var(--hs-sans);
+  font-size: 15.5px;
+  color: var(--hs-ink);
+  background-color: var(--hs-bg);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3e%3cpath d='M4 6l4 4 4-4' stroke='%238a7558' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+  border: 1px solid var(--co-rule-strong);
+  border-radius: 12px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.hs-checkout-wrap select:focus {
+  border-color: var(--hs-honey);
+  box-shadow: 0 0 0 3px rgba(217, 135, 26, 0.14);
+}
+
+/* Checkboxes */
+.hs-checkout-wrap input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--hs-honey);
+  cursor: pointer;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.hs-checkout-wrap .js-form-type-checkbox label,
+.hs-checkout-wrap .form-type--checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--hs-sans);
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--hs-ink-2);
+  cursor: pointer;
+  margin-bottom: 0;
+}
+
+/* Description / hint (right of label) */
+.hs-checkout-wrap .description {
+  font-family: var(--hs-sans);
+  font-size: 12px;
+  color: var(--co-ink-mute);
+  margin-top: 5px;
+  line-height: 1.5;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Error state */
+.hs-checkout-wrap .form-item--error input,
+.hs-checkout-wrap .form-item--error select {
+  border-color: #b4471f !important;
+}
+
+.hs-checkout-wrap .form-item--error-message {
+  font-family: var(--hs-sans);
+  font-size: 12px;
+  color: #b4471f;
+  margin-top: 6px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ADDRESS FIELDS — inline rows
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hs-checkout-wrap .address-container-inline {
+  display: flex;
+  gap: 16px;
+}
+
+.hs-checkout-wrap .address-container-inline .form-item {
+  flex: 1 1 0;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.hs-checkout-wrap .locality-block {
+  display: grid;
+  grid-template-columns: 1fr 90px 110px;
+  gap: 16px;
+}
+
+.hs-checkout-wrap .locality-block .form-item {
+  margin-bottom: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   BUTTONS
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hs-checkout-wrap .form-actions {
+  margin-top: 24px;
+}
+
+/* Default: honey (Log in & continue, Apply coupon) */
+.hs-checkout-wrap input[type="submit"],
+.hs-checkout-wrap .button,
+.hs-checkout-wrap .form-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 54px;
+  box-sizing: border-box;
+  padding: 0 24px;
+  font-family: var(--hs-sans);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: var(--hs-honey);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: opacity 140ms;
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: 0 10px 26px -10px rgba(217, 135, 26, 0.55);
+}
+
+.hs-checkout-wrap input[type="submit"]:hover,
+.hs-checkout-wrap .button:hover,
+.hs-checkout-wrap .form-submit:hover { opacity: 0.88; }
+
+/* Dark ink: Place order, Continue as guest */
+.hs-checkout-wrap .button--primary,
+.hs-checkout-wrap input.button--primary {
+  height: 58px;
+  border-radius: 14px;
+  background: var(--hs-ink);
+  color: var(--hs-bg);
+  box-shadow: 0 16px 36px -16px rgba(42, 26, 8, 0.50);
+}
+
+/* Secondary / outlined */
+.hs-checkout-wrap .button--secondary,
+.hs-checkout-wrap input.button--secondary {
+  background: transparent;
+  color: var(--hs-ink);
+  border: 1.5px solid var(--co-rule-strong);
+  box-shadow: none;
+}
+.hs-checkout-wrap .button--secondary:hover { background: var(--co-bg-2); opacity: 1; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MISC
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hs-checkout-wrap p {
+  font-family: var(--hs-sans);
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--hs-ink-2);
+  margin: 0 0 18px;
+}
+
+.hs-checkout-wrap a {
+  color: var(--co-accent-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.hs-checkout-wrap a:hover { opacity: 0.8; }
+
+/* Secure badge */
+.hs-checkout-wrap .secure-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--hs-sans);
+  font-size: 13px;
+  color: var(--co-ink-mute);
+  margin-bottom: 20px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CONFIRMATION STATE
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hs-checkout-wrap .checkout-complete {
+  text-align: center;
+  padding: 48px 24px 64px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   DARK FOOTER
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hs-co-footer {
+  background: #2a1a08;
+  color: #f3ecd9;
+  padding: 40px 56px;
+  margin-top: 64px;
+}
+.hs-co-footer__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  font-family: var(--hs-sans);
+  font-size: 13px;
+  color: #8a7558;
+}
+.hs-co-footer__brand {
+  font-family: var(--hs-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: #fff;
+  font-style: normal;
+}
+.hs-co-footer__brand em {
+  color: #f0a929;
+  font-style: italic;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE  ≤ 760px
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 760px) {
+  .hs-co-step-band { padding: 14px 20px; }
+
+  .hs-co-step-label { display: none; }
+  .hs-co-step.is-active .hs-co-step-label { display: inline; }
+  .hs-co-connector { width: 20px; margin: 0 8px; }
+
+  .hs-checkout-wrap {
+    padding: 28px 20px 64px;
+  }
+
+  .hs-co-page-header { margin-bottom: 24px; }
+
+  .hs-checkout-wrap form > .js-form-wrapper,
+  .hs-co-login-page .hs-checkout-wrap .layout-region-checkout-main {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hs-co-bag-aside {
+    position: static;
+  }
+
+  .hs-checkout-wrap .commerce-checkout-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .hs-checkout-wrap .layout-region-checkout-secondary {
+    position: static;
+  }
+
+  .hs-checkout-wrap .address-container-inline {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .hs-checkout-wrap .locality-block {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .hs-checkout-wrap .fieldset-wrapper {
+    padding: 20px 22px 24px;
+  }
+
+  .hs-checkout-wrap legend {
+    padding: 20px 22px 16px !important;
+    font-size: 20px !important;
+  }
+}

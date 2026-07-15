@@ -1,0 +1,22 @@
+uuid: b0b61c38-f4b6-4b93-b48c-23d19a922953
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - kartpro
+_core:
+  default_config_hash: eYL19CLDyinGTWYQfBD1DswWzglEotE_kHnHx3AxTXM
+id: kartpro_powered
+theme: kartpro
+region: hidden_blocks
+weight: -4
+provider: null
+plugin: system_powered_by_block
+settings:
+  id: system_powered_by_block
+  label: 'Powered by Drupal'
+  label_display: '0'
+  provider: system
+visibility: {  }

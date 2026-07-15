@@ -1,0 +1,183 @@
+uuid: 9e6290aa-258d-4eae-ba0b-b61ae6e51710
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.honey_stick
+    - field.field.commerce_product.honey_stick.body
+    - field.field.commerce_product.honey_stick.field_allergens
+    - field.field.commerce_product.honey_stick.field_batch_label
+    - field.field.commerce_product.honey_stick.field_category
+    - field.field.commerce_product.honey_stick.field_certifications
+    - field.field.commerce_product.honey_stick.field_description_body
+    - field.field.commerce_product.honey_stick.field_faq
+    - field.field.commerce_product.honey_stick.field_flavor_description
+    - field.field.commerce_product.honey_stick.field_harvest
+    - field.field.commerce_product.honey_stick.field_highlight
+    - field.field.commerce_product.honey_stick.field_ingredients
+    - field.field.commerce_product.honey_stick.field_net_weight
+    - field.field.commerce_product.honey_stick.field_nutrition_facts
+    - field.field.commerce_product.honey_stick.field_orders_this_month
+    - field.field.commerce_product.honey_stick.field_origin
+    - field.field.commerce_product.honey_stick.field_product_images
+    - field.field.commerce_product.honey_stick.field_quality_badge
+    - field.field.commerce_product.honey_stick.field_rating
+    - field.field.commerce_product.honey_stick.field_review_count
+    - field.field.commerce_product.honey_stick.field_shelf_life
+    - field.field.commerce_product.honey_stick.field_sticky_featured
+    - field.field.commerce_product.honey_stick.field_storage
+    - field.field.commerce_product.honey_stick.field_subtitle
+  module:
+    - commerce_product
+    - image
+    - text
+id: commerce_product.honey_stick.default
+targetEntityType: commerce_product
+bundle: honey_stick
+mode: default
+content:
+  field_allergens:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 25
+    region: content
+  field_batch_label:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_certifications:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 26
+    region: content
+  field_flavor_description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_harvest:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 22
+    region: content
+  field_ingredients:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_net_weight:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 20
+    region: content
+  field_nutrition_facts:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_origin:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 21
+    region: content
+  field_product_images:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_quality_badge:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_shelf_life:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 23
+    region: content
+  field_storage:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 24
+    region: content
+  field_subtitle:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  variations:
+    type: commerce_add_to_cart
+    label: hidden
+    settings:
+      combine: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  body: true
+  created: true
+  field_category: true
+  field_description_body: true
+  field_faq: true
+  field_highlight: true
+  field_orders_this_month: true
+  field_rating: true
+  field_review_count: true
+  field_sticky_featured: true
+  stores: true
+  uid: true

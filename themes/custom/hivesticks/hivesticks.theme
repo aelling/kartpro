@@ -19,13 +19,36 @@ function hivesticks_preprocess_html(&$variables) {
  * Implements hook_preprocess_HOOK() for page.html.twig.
  */
 function hivesticks_preprocess_page(&$variables) {
+  // Original variables preserved.
   $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
   $variables['site_name'] = \Drupal::config('system.site')->get('name');
   $variables['site_slogan'] = \Drupal::config('system.site')->get('slogan');
-
-  // Attach homepage library on the front page.
   if ($variables['is_front']) {
     $variables['#attached']['library'][] = 'hivesticks/homepage';
+  }
+
+  // Cart count for the nav badge on every page.
+  $variables['cart_count'] = 0;
+  $variables['#cache']['contexts'][] = 'session';
+  try {
+    $cart_provider = \Drupal::service('commerce_cart.cart_provider');
+    $carts = $cart_provider->getCarts();
+    $total = 0;
+    foreach ($carts as $cart) {
+      foreach ($cart->getItems() as $item) {
+        $total += (int) $item->getQuantity();
+      }
+      // Tag page so dynamic_page_cache invalidates when this cart changes.
+      $variables['#cache']['tags'] = array_merge(
+        $variables['#cache']['tags'] ?? [],
+        $cart->getCacheTags()
+      );
+    }
+    $variables['cart_count'] = $total;
+    \Drupal::service('page_cache_kill_switch')->trigger();
+  }
+  catch (\Exception $e) {
+    // keep cart_count = 0
   }
 }
 
@@ -34,15 +57,6 @@ function hivesticks_preprocess_page(&$variables) {
  */
 function hivesticks_preprocess_node(&$variables) {
   $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
-}
-
-/**
- * Implements hook_preprocess_HOOK() for commerce_product.html.twig.
- *
- * Attaches the PDP library (CSS + JS) on all product display pages.
- */
-function hivesticks_preprocess_commerce_product(&$variables) {
-  $variables['#attached']['library'][] = 'hivesticks/pdp';
 }
 
 /**
@@ -69,6 +83,65 @@ function hivesticks_theme_suggestions_page_alter(array &$suggestions, array $var
  */
 function hivesticks_preprocess_page__front(&$variables) {
   $variables['#attached']['library'][] = 'hivesticks/homepage';
+
+  // Cart count for homepage nav badge.
+  $variables['cart_count'] = 0;
+  try {
+    $cart_provider = \Drupal::service('commerce_cart.cart_provider');
+    $carts = $cart_provider->getCarts();
+    $total = 0;
+    foreach ($carts as $cart) {
+      $items = $cart->getItems();
+        foreach ($items as $item) {
+        $total += (int) $item->getQuantity();
+      }
+    }
+    $variables['cart_count'] = $total;
+    if ($total > 0) {
+      \Drupal::service('page_cache_kill_switch')->trigger();
+    }
+  }
+  catch (\Exception $e) {}
+
+  // Catalog products for the shop section
+  $view = \Drupal\views\Views::getView('catalog');
+  if ($view) {
+    $variables['catalog_products'] = $view->preview('default');
+  }
+
+  // Sticky bar: load the product with "Feature in sticky bar" checked
+  $product_storage = \Drupal::entityTypeManager()->getStorage('commerce_product');
+  $pids = $product_storage->getQuery()
+    ->condition('status', 1)
+    ->condition('type', 'honey_stick')
+    ->condition('field_sticky_featured', 1)
+    ->sort('changed', 'DESC')
+    ->range(0, 1)
+    ->accessCheck(FALSE)
+    ->execute();
+
+  if ($pids) {
+    $product = $product_storage->load(reset($pids));
+    $variables['sticky_product_name'] = $product->getTitle();
+    $variables['sticky_product_url']  = $product->toUrl()->toString();
+
+    // Find the minimum price across all variations
+    $min_price = NULL;
+    foreach ($product->getVariations() as $variation) {
+      $price = $variation->getPrice();
+      if ($price && ($min_price === NULL || (float)$price->getNumber() < (float)$min_price->getNumber())) {
+        $min_price = $price;
+      }
+    }
+    if ($min_price) {
+      $num = (float)$min_price->getNumber();
+      $formatted = $num == floor($num)
+        ? '$' . number_format($num, 0)
+        : '$' . number_format($num, 2);
+      $variables['sticky_product_price'] = 'From ' . $formatted;
+    }
+  }
+
 }
 
 /**
@@ -81,4 +154,808 @@ function hivesticks_theme_suggestions_commerce_product_alter(array &$suggestions
       && $variables['elements']['#view_mode'] === 'default') {
     $suggestions[] = 'commerce_product__default';
   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* HIVESTICKS-PREPROCESS-START */
+/**
+ * Prepares variables for the Honey Stick commerce product template.
+ *
+ * Passes to Twig:
+ *   product_edit_url — edit URL for users with update access; NULL otherwise
+ *   highlight_items  — parsed from field_highlight (format: num|||title|||body)
+ *   faq_items        — parsed from field_faq (format: question|||answer)
+ *
+ * Passes to drupalSettings (for JS pickers):
+ *   hivesticks.flavors — flavor attribute values with swatch/notes data
+ *   hivesticks.packs   — pack size attribute values with price/label data
+ */
+function hivesticks_preprocess_commerce_product(&$variables) {
+  /** @var \Drupal\commerce_product\Entity\ProductInterface $product */
+  $product = $variables['elements']['#commerce_product'];
+
+  // ── Edit URL ──────────────────────────────────────────────────────────────
+  $variables['product_edit_url'] = $product->access('update')
+    ? $product->toUrl('edit-form')->toString()
+    : NULL;
+
+  // ── Highlights ────────────────────────────────────────────────────────────
+  $variables['highlight_items'] = [];
+  if ($product->hasField('field_highlight')) {
+    foreach ($product->get('field_highlight') as $item) {
+      $parts = explode('|||', $item->value, 3);
+      if (count($parts) === 3) {
+        $variables['highlight_items'][] = [
+          'num'   => trim($parts[0]),
+          'title' => trim($parts[1]),
+          'body'  => trim($parts[2]),
+        ];
+      }
+    }
+  }
+
+  // ── FAQ ───────────────────────────────────────────────────────────────────
+  $variables['faq_items'] = [];
+  if ($product->hasField('field_faq')) {
+    foreach ($product->get('field_faq') as $item) {
+      $parts = explode('|||', $item->value, 2);
+      if (count($parts) === 2) {
+        $variables['faq_items'][] = [
+          'question' => trim($parts[0]),
+          'answer'   => trim($parts[1]),
+        ];
+      }
+    }
+  }
+
+  // ── Pack size data → drupalSettings ──────────────────────────────────────
+  // Only include pack sizes that have an actual variation on THIS product.
+  // Walk the product's variations to collect pack_size AV IDs and prices.
+  $price_by_pack = [];
+  foreach ($product->getVariations() as $variation) {
+    if (!$variation->hasField('attribute_pack_size')) continue;
+    $pack_ref = $variation->get('attribute_pack_size');
+    if ($pack_ref->isEmpty()) continue;
+    $pack_av_id = (string) $pack_ref->target_id;
+    if (!array_key_exists($pack_av_id, $price_by_pack)) {
+      $price_obj = $variation->getPrice();
+      $price_by_pack[$pack_av_id] = ($price_obj && (float) $price_obj->getNumber() > 0)
+        ? $price_obj->getNumber() : 0;
+    }
+  }
+
+  // Load those AV entities so we can get weights and custom fields.
+  $pack_av_entities = \Drupal::entityTypeManager()
+    ->getStorage('commerce_product_attribute_value')
+    ->loadMultiple(array_keys($price_by_pack));
+  uasort($pack_av_entities, fn($a, $b) => $a->getWeight() <=> $b->getWeight());
+
+  $packs_data = [];
+  foreach ($pack_av_entities as $av) {
+    $packs_data[] = [
+      'id'         => $av->id(),
+      'count'      => $av->getName(),
+      'price'      => $price_by_pack[(string) $av->id()] ?? 0,
+      'per_stick'  => $av->hasField('field_pack_per_stick')  ? ($av->get('field_pack_per_stick')->value  ?? 0) : 0,
+      'label'      => $av->hasField('field_pack_label')      ? ($av->get('field_pack_label')->value      ?? '') : '',
+      'note'       => $av->hasField('field_pack_note')       ? ($av->get('field_pack_note')->value       ?? '') : '',
+      'is_popular' => $av->hasField('field_pack_is_popular') ? (bool) $av->get('field_pack_is_popular')->value : FALSE,
+      'save_label' => $av->hasField('field_pack_save_label') ? ($av->get('field_pack_save_label')->value ?? '') : '',
+    ];
+  }
+
+  // Attach data to drupalSettings for JS pickers
+  if (!empty($packs_data)) {
+    $variables['#attached']['drupalSettings']['hivesticks'] = [
+      'packs' => $packs_data,
+    ];
+  }
+
+  // ── Add-to-cart form ──────────────────────────────────────────────────────
+  // Render directly via viewField so we are not dependent on the 'full'
+  // entity view display existing.  The 'default' display has the
+  // commerce_add_to_cart formatter, and viewField uses it explicitly.
+  try {
+    $view_builder = \Drupal::entityTypeManager()->getViewBuilder('commerce_product');
+    $variables['add_to_cart_form'] = $view_builder->viewField(
+      $product->get('variations'),
+      ['type' => 'commerce_add_to_cart', 'settings' => ['combine' => TRUE, 'quantity' => TRUE]]
+    );
+  }
+  catch (\Exception $e) {
+    $variables['add_to_cart_form'] = [];
+  }
+}
+/* HIVESTICKS-PREPROCESS-END */
+
+/**
+ * Preprocess for Commerce product teaser cards on the /shop catalog.
+ *
+ * Adds:
+ *   $variables['price_from']      — formatted cheapest variation price, e.g. "$8"
+ *   $variables['is_subscription'] — TRUE for subscription-category products
+ *   $variables['single_variation']— TRUE when product has exactly 1 variation
+ */
+function hivesticks_preprocess_commerce_product__teaser(&$variables) {
+  /** @var \Drupal\commerce_product\Entity\ProductInterface $product */
+  $product = $variables['product_entity'] ?? NULL;
+  if (!$product) return;
+
+  // ── "From" price: cheapest variation ──────────────────────────────
+  $min_price = NULL;
+  try {
+    $variations = $product->getVariations();
+    $variables['single_variation'] = count($variations) === 1;
+    foreach ($variations as $variation) {
+      $price = $variation->getPrice();
+      if (!$price) continue;
+      if ($min_price === NULL || $price->compareTo($min_price) < 0) {
+        $min_price = $price;
+      }
+    }
+    if ($min_price) {
+      /** @var \Drupal\commerce_price\Resolver\ChainPriceResolver $formatter */
+      $currency_formatter = \Drupal::service('commerce_price.currency_formatter');
+      $formatted = $currency_formatter->format(
+        $min_price->getNumber(),
+        $min_price->getCurrencyCode()
+      );
+      // Strip decimal zeros: "$8.00" → "$8"
+      $variables['price_from'] = preg_replace('/\.00$/', '', $formatted);
+    }
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('hivesticks')->warning('Price error on teaser: @msg', ['@msg' => $e->getMessage()]);
+  }
+
+  // ── Subscription flag ─────────────────────────────────────────────
+  $variables['is_subscription'] = FALSE;
+  if ($product->hasField('field_category') && !$product->get('field_category')->isEmpty()) {
+    $term = $product->get('field_category')->entity;
+    if ($term && stripos($term->label(), 'subscri') !== FALSE) {
+      $variables['is_subscription'] = TRUE;
+    }
+  }
+}
+
+/**
+ * Preprocess for the catalog Views exposed form.
+ * Adds pill data and sort options with clean URLs.
+ */
+function hivesticks_preprocess_views_exposed_form__catalog(&$variables) {
+  // ── Category pills ─────────────────────────────────────────────────
+  $current_request = \Drupal::request();
+  $current_tid     = (int) $current_request->query->get('field_category_target_id', 0);
+
+  // Load all product_category terms ordered by weight
+  $terms = \Drupal::entityTypeManager()
+    ->getStorage('taxonomy_term')
+    ->loadByProperties(['vid' => 'product_category']);
+  uasort($terms, fn($a, $b) => $a->getWeight() <=> $b->getWeight());
+
+  $pills = [];
+
+  // "All" pill
+  $all_url = \Drupal\Core\Url::fromRoute('<current>', [], ['query' => ['field_category_target_id' => ''] + $current_request->query->all()])->toString();
+  $pills[] = [
+    'value'  => '',
+    'label'  => t('All products'),
+    'url'    => $all_url,
+    'active' => $current_tid === 0,
+    'count'  => NULL,
+  ];
+
+  foreach ($terms as $term) {
+    $tid = (int) $term->id();
+
+    // Count products in this category
+    $count = \Drupal::entityQuery('commerce_product')
+      ->condition('status', 1)
+      ->condition('field_category', $tid)
+      ->accessCheck(TRUE)
+      ->count()
+      ->execute();
+
+    $url = \Drupal\Core\Url::fromRoute('<current>', [], [
+      'query' => ['field_category_target_id' => $tid] + array_diff_key($current_request->query->all(), ['field_category_target_id' => '']),
+    ])->toString();
+
+    $pills[] = [
+      'value'  => $tid,
+      'label'  => $term->label(),
+      'url'    => $url,
+      'active' => $current_tid === $tid,
+      'count'  => $count,
+    ];
+  }
+  $variables['catalog_pills'] = $pills;
+
+  // ── Sort options ───────────────────────────────────────────────────
+  $active_sort = $current_request->query->get('sort_by', 'featured');
+  $variables['catalog_sort_active']  = $active_sort;
+  $variables['catalog_sort_options'] = [
+    ['value' => 'featured',    'label' => t('Featured')],
+    ['value' => 'price-asc',   'label' => t('Price: low to high')],
+    ['value' => 'price-desc',  'label' => t('Price: high to low')],
+    ['value' => 'rating',      'label' => t('Top rated')],
+  ];
+}
+
+/**
+ * Preprocess for Commerce product teaser cards on the /shop catalog.
+ * Template: commerce-product--honey-stick--teaser.html.twig
+ *
+ * Adds:
+ *   $variables['price_from']       — formatted cheapest variation price, e.g. "$8"
+ *   $variables['is_subscription']  — TRUE for subscription-category products
+ *   $variables['single_variation'] — TRUE when product has exactly 1 variation
+ *   $variables['swatch']           — hex color from field_swatch_color
+ */
+function hivesticks_preprocess_commerce_product__honey_stick__teaser(&$variables) {
+  /** @var \Drupal\commerce_product\Entity\ProductInterface $product */
+  $product = $variables['product_entity'] ?? NULL;
+  if (!$product) return;
+
+  // ── Swatch color ──────────────────────────────────────────────────
+  $variables['swatch'] = $product->hasField('field_swatch_color') && !$product->get('field_swatch_color')->isEmpty()
+    ? $product->get('field_swatch_color')->value
+    : '#f0a929';
+
+  // ── "From" price: cheapest variation ─────────────────────────────
+  $min_price = NULL;
+  try {
+    $variations = $product->getVariations();
+    $variables['single_variation'] = count($variations) === 1;
+    foreach ($variations as $variation) {
+      $price = $variation->getPrice();
+      if (!$price) continue;
+      if ($min_price === NULL || $price->compareTo($min_price) < 0) {
+        $min_price = $price;
+      }
+    }
+    if ($min_price) {
+      $currency_formatter = \Drupal::service('commerce_price.currency_formatter');
+      $formatted = $currency_formatter->format(
+        $min_price->getNumber(),
+        $min_price->getCurrencyCode()
+      );
+      $variables['price_from'] = preg_replace('/\.00$/', '', $formatted);
+    }
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('hivesticks')->warning('Price error on teaser: @msg', ['@msg' => $e->getMessage()]);
+  }
+
+  // ── Subscription flag ─────────────────────────────────────────────
+  $variables['is_subscription'] = FALSE;
+  if ($product->hasField('field_category') && !$product->get('field_category')->isEmpty()) {
+    $term = $product->get('field_category')->entity;
+    if ($term && stripos($term->label(), 'subscri') !== FALSE) {
+      $variables['is_subscription'] = TRUE;
+    }
+  }
+}
+
+/**
+ * Builds category pill data and sort options for the catalog view template.
+ * Pills use plain GET-param links — no exposed Views form needed.
+ */
+function hivesticks_preprocess_views_view__catalog(&$variables) {
+  $request     = \Drupal::request();
+  $current_tid = (int) $request->query->get('field_category_target_id', 0);
+  $query_all   = $request->query->all();
+
+  // ── Category pills ────────────────────────────────────────────────
+  $terms = \Drupal::entityTypeManager()
+    ->getStorage('taxonomy_term')
+    ->loadByProperties(['vid' => 'product_category']);
+  uasort($terms, fn($a, $b) => $a->getWeight() <=> $b->getWeight());
+
+  $pills = [];
+
+  // "All" pill
+  $all_query = array_merge($query_all, ['field_category_target_id' => '']);
+  $pills[] = [
+    'label'  => t('All products'),
+    'url'    => \Drupal\Core\Url::fromRoute('<current>', [], ['query' => $all_query])->toString(),
+    'active' => $current_tid === 0,
+    'count'  => NULL,
+  ];
+
+  foreach ($terms as $term) {
+    $tid   = (int) $term->id();
+    $count = \Drupal::entityQuery('commerce_product')
+      ->condition('status', 1)
+      ->condition('field_category', $tid)
+      ->accessCheck(TRUE)
+      ->count()
+      ->execute();
+
+    $cat_query = array_merge($query_all, ['field_category_target_id' => $tid]);
+    $pills[] = [
+      'label'  => $term->label(),
+      'url'    => \Drupal\Core\Url::fromRoute('<current>', [], ['query' => $cat_query])->toString(),
+      'active' => $current_tid === $tid,
+      'count'  => $count,
+    ];
+  }
+  $variables['catalog_pills']      = $pills;
+  $variables['catalog_active_tid'] = $current_tid ?: '';
+
+  // ── Sort options ──────────────────────────────────────────────────
+  $active_sort = $request->query->get('sort_by', 'featured');
+  $variables['catalog_sort_active']  = $active_sort;
+  $variables['catalog_sort_options'] = [
+    ['value' => 'featured',   'label' => t('Featured')],
+    ['value' => 'price-asc',  'label' => t('Price: low to high')],
+    ['value' => 'price-desc', 'label' => t('Price: high to low')],
+    ['value' => 'rating',     'label' => t('Top rated')],
+  ];
+}
+
+/**
+ * Filters catalog View by field_category_target_id GET param,
+ * and applies sort_by GET param ordering.
+ */
+function hivesticks_views_query_alter(\Drupal\views\ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  if ($view->id() !== 'catalog') return;
+
+  $request = \Drupal::request();
+
+  // ── Category filter ───────────────────────────────────────────────
+  $tid = (int) $request->query->get('field_category_target_id', 0);
+  if ($tid > 0) {
+    /** @var \Drupal\views\Plugin\views\query\Sql $query */
+    $query->addTable('commerce_product__field_category');
+    $query->addWhere(0, 'commerce_product__field_category.field_category_target_id', $tid, '=');
+  }
+
+  // ── Sort order ────────────────────────────────────────────────────
+  $sort_by = $request->query->get('sort_by', 'featured');
+  // Clear existing sorts, then apply chosen one
+  $query->orderby = [];
+  switch ($sort_by) {
+    case 'price-asc':
+      $query->addTable('commerce_product_variation_field_data');
+      $query->addOrderBy('commerce_product_variation_field_data', 'price__number', 'ASC');
+      break;
+    case 'price-desc':
+      $query->addTable('commerce_product_variation_field_data');
+      $query->addOrderBy('commerce_product_variation_field_data', 'price__number', 'DESC');
+      break;
+    case 'rating':
+      // Sort by field_rating descending if it exists
+      try {
+        $query->addTable('commerce_product__field_rating');
+        $query->addOrderBy('commerce_product__field_rating', 'field_rating_value', 'DESC');
+      }
+      catch (\Exception $e) {
+        $query->addOrderBy('commerce_product_field_data', 'product_id', 'ASC');
+      }
+      break;
+    default:
+      // Featured: use product_id ASC (natural entry order)
+      $query->addOrderBy('commerce_product_field_data', 'product_id', 'ASC');
+      break;
+  }
+}
+
+/**
+ * Implements hook_preprocess_page__checkout().
+ *
+ * Embeds the current checkout order's line items — including product thumbnail
+ * image URLs — as JSON so checkout.js can populate the order summary sidebar
+ * on ALL checkout steps without making any API / REST calls.
+ *
+ * The Twig template reads {{ hs_cart_json|raw }} and outputs:
+ *   <script type="application/json" id="hs-cart-data">…</script>
+ * checkout.js reads it via document.getElementById('hs-cart-data').
+ *
+ * Data shape: { order_id, items[{title,quantity,total,image}], total, count }
+ *
+ * Added automatically by install-checkout.sh / add-checkout-preprocess.php
+ */
+function hivesticks_preprocess_page__checkout(&$variables) {
+  $order = \Drupal::routeMatch()->getParameter('commerce_order');
+  if (!$order || !method_exists($order, 'getItems')) {
+    return;
+  }
+
+  /** @var \Drupal\file\FileUrlGeneratorInterface $url_generator */
+  $url_generator = \Drupal::service('file_url_generator');
+
+  $items = [];
+  foreach ($order->getItems() as $item) {
+    // ── Price ────────────────────────────────────────────────────────────────
+    $total = $item->getTotalPrice();
+    $total_formatted = $total
+      ? '$' . number_format((float) $total->getNumber(), 2)
+      : '';
+
+    // ── Product image URL ────────────────────────────────────────────────────
+    // Try field_images (and common alternatives) on the variation first,
+    // then fall back to the parent product entity.
+    $image_url = '';
+    $purchased  = $item->getPurchasedEntity(); // usually ProductVariation
+    $candidates = $purchased
+      ? [$purchased, method_exists($purchased, 'getProduct') ? $purchased->getProduct() : null]
+      : [];
+
+    foreach (array_filter($candidates) as $entity) {
+      if ($image_url) break;
+      foreach (['field_images', 'field_image', 'field_product_image', 'field_media_image'] as $fn) {
+        if ($entity->hasField($fn) && !$entity->get($fn)->isEmpty()) {
+          try {
+            $first = $entity->get($fn)->first();
+            // field_images is typically an entity_reference to File
+            $file_or_media = $first->entity ?? null;
+            if (!$file_or_media) continue;
+
+            if ($file_or_media->getEntityTypeId() === 'file') {
+              $image_url = $url_generator->generateAbsoluteString($file_or_media->getFileUri());
+              break;
+            }
+
+            // If it's a Media entity, dig into field_media_image
+            if ($file_or_media->getEntityTypeId() === 'media') {
+              foreach (['field_media_image', 'field_image', 'field_media_file'] as $mfn) {
+                if ($file_or_media->hasField($mfn) && !$file_or_media->get($mfn)->isEmpty()) {
+                  $file = $file_or_media->get($mfn)->first()->entity ?? null;
+                  if ($file && method_exists($file, 'getFileUri')) {
+                    $image_url = $url_generator->generateAbsoluteString($file->getFileUri());
+                    break 2;
+                  }
+                }
+              }
+            }
+          }
+          catch (\Exception $e) {
+            // Field access error — skip and try next field/entity
+          }
+        }
+      }
+    }
+
+    $items[] = [
+      'title'    => (string) $item->getTitle(),
+      'quantity' => (int) $item->getQuantity(),
+      'total'    => $total_formatted,
+      'image'    => $image_url,
+    ];
+  }
+
+  $order_total = $order->getTotalPrice();
+  $variables['hs_cart_json'] = json_encode(
+    [
+      'order_id' => (int) $order->id(),
+      'items'    => $items,
+      'total'    => $order_total
+        ? '$' . number_format((float) $order_total->getNumber(), 2)
+        : '',
+      'count'    => count($items),
+    ],
+    JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+  );
+}
+/**
+ * Hide View/Edit/Delete local tasks for non-administrators.
+ */
+function hivesticks_preprocess_menu_local_tasks(&$variables) {
+  if (!in_array('administrator', \Drupal::currentUser()->getRoles(), TRUE)) {
+    $variables['primary'] = [];
+    $variables['secondary'] = [];
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * The add-to-cart form is a normal POST (not AJAX), so we redirect to the cart
+ * page by appending a submit handler.
+ */
+function hivesticks_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if (strpos($form_id, 'commerce_order_item_add_to_cart_form') !== FALSE) {
+    if (isset($form['actions']['submit'])) {
+      $form['actions']['submit']['#submit'][] = 'hivesticks_redirect_to_cart';
+    }
+    else {
+      $form['#submit'][] = 'hivesticks_redirect_to_cart';
+    }
+  }
+}
+
+/**
+ * Submit handler: send the shopper to the cart page after adding an item.
+ */
+function hivesticks_redirect_to_cart(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  $form_state->setRedirect('commerce_cart.page');
+}
+
+/**
+ * Account-area variables for page--user.html.twig (avatar, name, active section).
+ */
+function hivesticks_preprocess_page__user(&$variables) {
+  $account = \Drupal::currentUser();
+  $variables['user_uid'] = $account->id();
+  if ($account->isAuthenticated()) {
+    $user = \Drupal\user\Entity\User::load($account->id());
+    $name = $user ? $user->getDisplayName() : $account->getAccountName();
+    $variables['account_name'] = $name;
+    $variables['account_email'] = $account->getEmail();
+    $parts = preg_split('/[\s@._-]+/', trim((string) $name), -1, PREG_SPLIT_NO_EMPTY);
+    $ini = '';
+    foreach ($parts as $p) { $ini .= mb_strtoupper(mb_substr($p, 0, 1)); if (mb_strlen($ini) >= 2) break; }
+    if ($ini === '') { $ini = mb_strtoupper(mb_substr(trim((string) $name), 0, 2)); }
+    $variables['account_initials'] = $ini;
+    $path = \Drupal::service('path.current')->getPath();
+    if (strpos($path, '/orders') !== FALSE) { $variables['account_active'] = 'orders'; }
+    elseif (strpos($path, '/subscriptions') !== FALSE) { $variables['account_active'] = 'subscriptions'; }
+    elseif (strpos($path, '/rewards') !== FALSE) { $variables['account_active'] = 'rewards'; }
+    elseif (strpos($path, '/address-book') !== FALSE) { $variables['account_active'] = 'addresses'; }
+    elseif (strpos($path, '/edit') !== FALSE) { $variables['account_active'] = 'profile'; }
+    else { $variables['account_active'] = 'overview'; }
+  }
+}
+
+/**
+ * Build order-card data for the account Orders view.
+ */
+function hivesticks_preprocess_views_view__commerce_user_orders(&$variables) {
+  if (empty($variables['view']) || empty($variables['view']->result)) {
+    return;
+  }
+  $formatter = \Drupal::service('commerce_price.currency_formatter');
+  $date = \Drupal::service('date.formatter');
+  $cards = [];
+  foreach ($variables['view']->result as $row) {
+    $order = isset($row->_entity) ? $row->_entity : NULL;
+    if (!$order || $order->getEntityTypeId() !== 'commerce_order') {
+      continue;
+    }
+    $state = $order->getState()->getId();
+    $ship = '';
+    if ($order->hasField('shipments') && !$order->get('shipments')->isEmpty()) {
+      $shipment = $order->get('shipments')->entity;
+      if ($shipment) { $ship = $shipment->getState()->getId(); }
+    }
+    if ($state === 'canceled') { $status = t('Canceled'); $tone = 'muted'; }
+    elseif ($ship === 'delivered' || $state === 'completed') { $status = t('Delivered'); $tone = 'done'; }
+    elseif ($ship === 'shipped') { $status = t('In transit'); $tone = 'active'; }
+    else { $status = t('Processing'); $tone = 'pending'; }
+
+    $items = [];
+    $count = 0;
+    foreach ($order->getItems() as $item) {
+      $q = (int) $item->getQuantity();
+      $count += $q;
+      if (count($items) < 3) { $items[] = ['title' => $item->getTitle(), 'qty' => $q]; }
+    }
+    $total = $order->getTotalPrice();
+    $total_str = $total ? $formatter->format($total->getNumber(), $total->getCurrencyCode()) : '';
+    $ts = $order->getPlacedTime() ?: $order->getCreatedTime();
+    $placed = $ts ? $date->format($ts, 'custom', 'M j, Y') : '';
+    $uid = $order->getCustomerId();
+    $cards[] = [
+      'number' => $order->getOrderNumber() ?: $order->id(),
+      'status' => $status,
+      'tone' => $tone,
+      'placed' => $placed,
+      'item_count' => $count,
+      'total' => $total_str,
+      'items' => $items,
+      'url' => '/user/' . $uid . '/orders/' . $order->id(),
+    ];
+  }
+  $variables['order_cards'] = $cards;
+}
+
+/**
+ * Derived status + tracking data for the order detail page.
+ */
+function hivesticks_preprocess_commerce_order(&$variables) {
+  $order = isset($variables['order_entity']) ? $variables['order_entity']
+    : (isset($variables['elements']['#commerce_order']) ? $variables['elements']['#commerce_order'] : NULL);
+  if (!$order) { return; }
+  $state = $order->getState()->getId();
+  $ship = '';
+  $step = 0;
+  $tracking = '';
+  $has_shipment = FALSE;
+  if ($order->hasField('shipments') && !$order->get('shipments')->isEmpty()) {
+    $shipment = $order->get('shipments')->entity;
+    if ($shipment) {
+      $has_shipment = TRUE;
+      $ship = $shipment->getState()->getId();
+      if ($shipment->hasField('tracking_code') && !$shipment->get('tracking_code')->isEmpty()) {
+        $tracking = $shipment->get('tracking_code')->value;
+      }
+      if ($ship === 'delivered') { $step = 4; }
+      elseif ($ship === 'shipped') { $step = 2; }
+      elseif ($ship === 'ready') { $step = 1; }
+    }
+  }
+  if ($state === 'canceled') { $label = t('Canceled'); $tone = 'muted'; }
+  elseif ($ship === 'delivered' || $state === 'completed') { $label = t('Delivered'); $tone = 'done'; }
+  elseif ($ship === 'shipped') { $label = t('In transit'); $tone = 'active'; }
+  else { $label = t('Processing'); $tone = 'pending'; }
+  $variables['order_status_label'] = $label;
+  $variables['order_status_tone'] = $tone;
+  $variables['order_has_shipment'] = $has_shipment;
+  $variables['order_track_step'] = $step;
+  $variables['order_tracking'] = $tracking;
+  $variables['order_canceled'] = ($state === 'canceled');
+}
+
+/**
+ * Overview dashboard data for user.html.twig (/user/{uid}, full view mode).
+ */
+function hivesticks_preprocess_user(&$variables) {
+  if (($variables['elements']['#view_mode'] ?? '') !== 'full') {
+    return;
+  }
+  $account = $variables['user'] ?? ($variables['elements']['#user'] ?? NULL);
+  if (!$account) { return; }
+  $uid = $account->id();
+  $variables['overview_uid'] = $uid;
+
+  $name = $account->getDisplayName();
+  $parts = preg_split('/[\s@._-]+/', trim((string) $name), -1, PREG_SPLIT_NO_EMPTY);
+  $first = $parts ? $parts[0] : $name;
+  $variables['overview_greeting'] = t('Hey @name 🐝', ['@name' => $first]);
+
+  $since = \Drupal::service('date.formatter')->format($account->getCreatedTime(), 'custom', 'F Y');
+
+  $os = \Drupal::entityTypeManager()->getStorage('commerce_order');
+  $ids = $os->getQuery()
+    ->condition('uid', $uid)
+    ->condition('cart', 0)
+    ->sort('placed', 'DESC')
+    ->accessCheck(FALSE)
+    ->execute();
+  $orders = $os->loadMultiple($ids);
+  $count = count($orders);
+  $delivered = 0;
+  $latest = NULL;
+  $fmt = \Drupal::service('commerce_price.currency_formatter');
+  foreach ($orders as $o) {
+    $state = $o->getState()->getId();
+    $ship = '';
+    if ($o->hasField('shipments') && !$o->get('shipments')->isEmpty()) {
+      $sh = $o->get('shipments')->entity;
+      if ($sh) { $ship = $sh->getState()->getId(); }
+    }
+    $done = ($ship === 'delivered' || $state === 'completed');
+    if ($done) { $delivered++; }
+    if ($latest === NULL) {
+      if ($state === 'canceled') { $label = t('Canceled'); $tone = 'muted'; }
+      elseif ($done) { $label = t('Delivered'); $tone = 'done'; }
+      elseif ($ship === 'shipped') { $label = t('In transit'); $tone = 'active'; }
+      else { $label = t('Processing'); $tone = 'pending'; }
+      $total = $o->getTotalPrice();
+      $itemc = 0;
+      foreach ($o->getItems() as $it) { $itemc += (int) $it->getQuantity(); }
+      $latest = [
+        'number' => $o->getOrderNumber() ?: $o->id(),
+        'status' => $label,
+        'tone' => $tone,
+        'total' => $total ? $fmt->format($total->getNumber(), $total->getCurrencyCode()) : '',
+        'item_count' => $itemc,
+        'url' => '/user/' . $uid . '/orders/' . $o->id(),
+      ];
+    }
+  }
+  $variables['overview_subtitle'] = t('Member since @since · @n orders placed', ['@since' => $since, '@n' => $count]);
+  $variables['overview_latest'] = $latest;
+  $variables['overview_delivered'] = $delivered;
+
+  $ps = \Drupal::entityTypeManager()->getStorage('profile');
+  $aids = $ps->getQuery()
+    ->condition('uid', $uid)
+    ->condition('type', 'customer')
+    ->accessCheck(FALSE)
+    ->execute();
+  $variables['overview_addresses'] = count($aids);
+}
+
+/**
+ * Build subscription-card data for the account Subscriptions view.
+ */
+function hivesticks_preprocess_views_view__commerce_user_subscriptions(&$variables) {
+  if (empty($variables['view']) || empty($variables['view']->result)) {
+    return;
+  }
+  $date = \Drupal::service('date.formatter');
+  $fmt = \Drupal::service('commerce_price.currency_formatter');
+  $cards = [];
+  foreach ($variables['view']->result as $row) {
+    $sub = isset($row->_entity) ? $row->_entity : NULL;
+    if (!$sub || $sub->getEntityTypeId() !== 'commerce_subscription') {
+      continue;
+    }
+    $state = $sub->getState()->getId();
+    if ($state === 'canceled') { $status = t('Canceled'); $tone = 'muted'; }
+    elseif ($state === 'active') { $status = t('Active'); $tone = 'active'; }
+    elseif ($state === 'pending') { $status = t('Pending'); $tone = 'pending'; }
+    else { $status = ucfirst($state); $tone = 'done'; }
+
+    $cadence = '';
+    if (method_exists($sub, 'getBillingSchedule') && ($schedule = $sub->getBillingSchedule())) {
+      $cadence = method_exists($schedule, 'getDisplayLabel') ? ($schedule->getDisplayLabel() ?: $schedule->label()) : $schedule->label();
+    }
+    $next = '';
+    if ($sub->hasField('next_renewal') && !$sub->get('next_renewal')->isEmpty()) {
+      $next = $date->format((int) $sub->get('next_renewal')->value, 'custom', 'M j, Y');
+    }
+    $price = '';
+    if (method_exists($sub, 'getUnitPrice') && ($up = $sub->getUnitPrice())) {
+      $price = $fmt->format($up->getNumber(), $up->getCurrencyCode());
+    }
+    $cards[] = [
+      'title' => $sub->label(),
+      'status' => $status,
+      'tone' => $tone,
+      'cadence' => $cadence,
+      'next' => $next ?: '—',
+      'price' => $price,
+      'manage_url' => $sub->toUrl()->toString(),
+    ];
+  }
+  $variables['subscription_cards'] = $cards;
 }

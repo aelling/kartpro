@@ -1,0 +1,19 @@
+uuid: 41811797-15db-4622-8fd6-8e7ea2d678d7
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.honey_stick
+    - field.storage.commerce_product.field_certifications
+id: commerce_product.honey_stick.field_certifications
+field_name: field_certifications
+entity_type: commerce_product
+bundle: honey_stick
+label: Certifications
+description: 'e.g. USDA True Source · Non-GMO'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

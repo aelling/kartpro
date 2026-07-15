@@ -1,0 +1,25 @@
+uuid: 08c4cac1-b9da-4b9b-bea7-a77ceb9cfc4d
+langcode: en
+status: true
+dependencies: {  }
+id: sales_tax
+label: 'Sales Tax'
+plugin: custom
+configuration:
+  display_inclusive: true
+  display_tax_rate_in_label: true
+  display_label: tax
+  round: true
+  rates:
+    -
+      id: 405e682b-de0b-413b-a064-7cf78c145de3
+      label: 'Sales Tax'
+      percentage: '0.07'
+  territories:
+    -
+      country_code: US
+      administrative_area: IA
+      locality: null
+      dependent_locality: null
+conditions: {  }
+conditionOperator: AND

@@ -1,0 +1,31 @@
+uuid: 5054b22d-a09b-4eb3-a556-856fd063c850
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:landing_page_section:4d3241ff-fd12-4e80-9a6f-a7ed54ef7d33'
+  module:
+    - block_content
+    - system
+  theme:
+    - hivesticks
+id: hivesticks_howtousesection
+theme: hivesticks
+region: sidebar_second
+weight: 0
+provider: null
+plugin: 'block_content:4d3241ff-fd12-4e80-9a6f-a7ed54ef7d33'
+settings:
+  id: 'block_content:4d3241ff-fd12-4e80-9a6f-a7ed54ef7d33'
+  label: 'How To Use Section'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: '<front>'

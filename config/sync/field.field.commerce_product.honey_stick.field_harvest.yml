@@ -1,0 +1,19 @@
+uuid: ba38a3ce-0026-48a9-917d-a02a1d4acc4e
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.honey_stick
+    - field.storage.commerce_product.field_harvest
+id: commerce_product.honey_stick.field_harvest
+field_name: field_harvest
+entity_type: commerce_product
+bundle: honey_stick
+label: Harvest
+description: 'e.g. May 2026 batch'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

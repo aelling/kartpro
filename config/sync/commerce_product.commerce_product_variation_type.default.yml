@@ -1,0 +1,17 @@
+uuid: 1c04e1fc-a8f1-4f27-a07b-1c7b39e2b5cc
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_shipping
+third_party_settings:
+  commerce_shipping:
+    shipment_type: default
+_core:
+  default_config_hash: 3vA4FKQ1Qu8B1R8UdGPnmMfJrYO6Y6uMqeNgDgXxods
+id: default
+label: Default
+traits: {  }
+locked: false
+orderItemType: default
+generateTitle: true

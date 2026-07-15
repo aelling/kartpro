@@ -1,0 +1,258 @@
+/*
+ * HiveSticks Header — shared nav stylesheet
+ * Attach via hivesticks/header library.
+ * Class prefix: .hs-nav__
+ *
+ * This file is the source of truth for nav styles on INNER pages
+ * (cart, PDP, checkout, etc.) that attach hivesticks/header.
+ *
+ * The homepage (page--front.html.twig) loads homepage.css which also
+ * contains .hs-nav styles. Both target the same classes; homepage.css
+ * takes visual precedence since it loads alongside this file on the
+ * homepage (but this file is not loaded on the homepage at all).
+ */
+
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN TOKENS (subset — keep in sync with homepage.css)
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --hs-bg:          #fbf6ec;
+  --hs-bg-2:        #f3ecd9;
+  --hs-ink:         #2a1a08;
+  --hs-ink-2:       #4a3520;
+  --hs-ink-mute:    #8a7558;
+  --hs-honey:       #d9871a;
+  --hs-honey-deep:  #a8640e;
+  --hs-card:        #ffffff;
+  --hs-rule:        rgba(42, 26, 8, 0.10);
+  --hs-rule-strong: rgba(42, 26, 8, 0.22);
+  --hs-serif:       'Fraunces', 'Georgia', serif;
+  --hs-sans:        'Inter', system-ui, sans-serif;
+  --hs-r-ctrl:      12px;
+  --hs-gutter:      clamp(20px, 5vw, 80px);
+  --hs-nav-h:       68px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ACCESSIBILITY
+   ═══════════════════════════════════════════════════════════════ */
+.hs-skip-link {
+  position: absolute; top: -999px; left: 8px; z-index: 9999;
+  background: var(--hs-ink); color: var(--hs-bg);
+  padding: 8px 16px; border-radius: 0 0 var(--hs-r-ctrl) var(--hs-r-ctrl);
+  font-size: 13px; font-family: var(--hs-sans);
+  text-decoration: none;
+}
+.hs-skip-link:focus { top: 0; }
+
+/* ═══════════════════════════════════════════════════════════════
+   BUTTONS (used in nav CTA)
+   ═══════════════════════════════════════════════════════════════ */
+.hs-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 14px 28px; border-radius: var(--hs-r-ctrl);
+  font-size: 14px; font-weight: 700; font-family: var(--hs-sans);
+  cursor: pointer; border: none; transition: all 150ms; text-decoration: none;
+  letter-spacing: .02em;
+}
+.hs-btn--dark  { background: var(--hs-ink);  color: var(--hs-bg); }
+.hs-btn--dark:hover  { background: var(--hs-ink-2); }
+.hs-btn--honey { background: var(--hs-honey); color: var(--hs-ink); }
+.hs-btn--honey:hover { background: var(--hs-honey-deep); color: #fff; }
+
+/* ═══════════════════════════════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════════════════════════════ */
+.hs-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--hs-nav-h);
+  background: rgba(251, 246, 236, 0.95);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border-bottom: 1px solid var(--hs-rule);
+  transition: box-shadow 200ms;
+}
+.hs-nav.is-scrolled { box-shadow: 0 2px 16px rgba(42,26,8,.08); }
+
+.hs-nav__inner {
+  max-width: 1280px; margin: 0 auto;
+  padding: 0 var(--hs-gutter);
+  height: 100%; display: flex; align-items: center; gap: 32px;
+}
+
+/* ── Logo ─────────────────────────────────────────────────────── */
+.hs-nav__logo-link {
+  flex-shrink: 0; text-decoration: none;
+  display: flex; align-items: center;
+}
+.hs-nav__logo-img {
+  height: 36px; width: auto; display: block;
+  object-fit: contain;
+}
+/* Hex icon + text lockup */
+.hs-nav__logo-wrap {
+  display: flex; align-items: center; gap: 8px;
+}
+.hs-nav__hex { flex-shrink: 0; display: block; }
+/* Fallback text when no logo image is configured */
+.hs-nav__logo-text {
+  font-family: var(--hs-serif); font-size: 22px; font-weight: 600;
+  color: var(--hs-ink); letter-spacing: -.01em;
+}
+.hs-nav__logo-text em { font-style: italic; color: var(--hs-honey); }
+
+/* ── Nav links ────────────────────────────────────────────────── */
+.hs-nav__menu { margin-left: 8px; flex: 1; }
+.hs-nav__links {
+  display: flex; gap: 4px; list-style: none; margin: 0; padding: 0;
+}
+.hs-nav__links a {
+  padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: 500;
+  color: var(--hs-ink-2); transition: color 120ms, background 120ms;
+  text-decoration: none;
+}
+.hs-nav__links a:hover { color: var(--hs-ink); background: var(--hs-bg-2); }
+
+/* ── Actions: cart + CTA ──────────────────────────────────────── */
+.hs-nav__actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+/* Buy Now CTA removed from the header — hidden everywhere it may still render */
+.hs-nav__cta { display: none !important; }
+
+/* ── Cart icon link ───────────────────────────────────────────── */
+.hs-nav__cart-link {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 10px; border-radius: 8px;
+  color: var(--hs-ink-2); text-decoration: none;
+  font-size: 13px; font-weight: 500; font-family: var(--hs-sans);
+  transition: color 120ms, background 120ms;
+  flex-shrink: 0;
+}
+.hs-nav__cart-link:hover { background: var(--hs-bg-2); color: var(--hs-ink); }
+.hs-nav__cart-link svg { display: block; flex-shrink: 0; }
+
+/* ── Cart text (icon + "Cart · 0") ───────────────────────────── */
+.hs-nav__cart-text { white-space: nowrap; }
+.hs-nav__cart-count { font-variant-numeric: tabular-nums; }
+
+/* ── Account icon link ────────────────────────────────────────── */
+.hs-nav__account-link {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 10px; border-radius: 8px;
+  color: var(--hs-ink-2); text-decoration: none;
+  font-size: 13px; font-weight: 500; font-family: var(--hs-sans);
+  transition: color 120ms, background 120ms;
+  flex-shrink: 0;
+}
+.hs-nav__account-link:hover { background: var(--hs-bg-2); color: var(--hs-ink); }
+.hs-nav__account-link svg { display: block; flex-shrink: 0; }
+.hs-nav__account-text { white-space: nowrap; }
+
+/* ── Sign out link (shown when logged in, beside My Orders) ──── */
+.hs-nav__signout-link {
+  display: flex; align-items: center;
+  padding: 6px 10px; border-radius: 8px;
+  color: var(--hs-ink-2); text-decoration: none;
+  font-size: 13px; font-weight: 500; font-family: var(--hs-sans);
+  white-space: nowrap;
+  transition: color 120ms, background 120ms;
+  flex-shrink: 0;
+}
+.hs-nav__signout-link:hover { background: var(--hs-bg-2); color: var(--hs-ink); }
+
+/* Hidden Commerce cart block — rendered for JS to read count, never shown */
+.hs-nav__cart-data {
+  display: none !important;
+  visibility: hidden;
+  position: absolute;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   404 PAGE
+   ═══════════════════════════════════════════════════════════════ */
+.hs-404 {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 72px 24px 96px;
+  text-align: center;
+}
+
+.hs-404__icon {
+  margin-bottom: 24px;
+  opacity: .7;
+}
+
+.hs-404__code {
+  font-family: var(--hs-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--hs-honey);
+  margin: 0 0 12px;
+}
+
+.hs-404__heading {
+  font-family: var(--hs-serif);
+  font-size: clamp(24px, 5vw, 36px);
+  font-weight: 600;
+  color: var(--hs-ink);
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+.hs-404__body {
+  font-family: var(--hs-sans);
+  font-size: 16px;
+  color: var(--hs-ink-2);
+  line-height: 1.6;
+  margin: 0 0 32px;
+}
+
+.hs-404__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.hs-404__home-link {
+  font-family: var(--hs-sans);
+  font-size: 14px;
+  color: var(--hs-ink-2);
+  text-decoration: none;
+  transition: color 120ms;
+}
+.hs-404__home-link:hover { color: var(--hs-ink); }
+
+/* ═══════════════════════════════════════════════════════════════
+   INNER PAGE MAIN CONTENT AREA
+   ═══════════════════════════════════════════════════════════════ */
+/* Offset below the fixed nav */
+.hs-page-main {
+  padding-top: var(--hs-nav-h);
+  min-height: calc(100vh - var(--hs-nav-h));
+  background: var(--hs-bg);
+  font-family: var(--hs-sans);
+  color: var(--hs-ink);
+}
+
+/* Drupal system messages (status / warning / error) */
+.hs-messages {
+  padding: 12px var(--hs-gutter);
+  background: var(--hs-bg-2);
+  border-bottom: 1px solid var(--hs-rule);
+  font-family: var(--hs-sans);
+  font-size: 14px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 720px) {
+  .hs-nav__links { display: none; } /* hide desktop nav on mobile */
+  .hs-nav__menu  { display: none; }
+
+  .hs-nav__inner { gap: 12px; }
+  .hs-nav__logo-img { height: 30px; }
+  .hs-nav__cta { display: none; } /* hide Buy Now on mobile — cart is enough */
+}

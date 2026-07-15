@@ -1,0 +1,30 @@
+uuid: 4fc1b79b-b698-4622-abb4-d2b43d90938d
+langcode: en
+status: false
+dependencies:
+  content:
+    - 'block_content:basic:b24a8616-ec55-4462-ad50-43d7ecd46ded'
+  module:
+    - block_content
+    - system
+  theme:
+    - hivesticks
+id: hivesticks_frontheroslider
+theme: hivesticks
+region: hero
+weight: 0
+provider: null
+plugin: 'block_content:b24a8616-ec55-4462-ad50-43d7ecd46ded'
+settings:
+  id: 'block_content:b24a8616-ec55-4462-ad50-43d7ecd46ded'
+  label: 'Front hero slider'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'

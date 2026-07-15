@@ -1,0 +1,22 @@
+uuid: 3ec2ec26-6a3a-4a45-8d55-c1453e4fcd3e
+langcode: en
+status: false
+dependencies:
+  module:
+    - commerce_cart
+  theme:
+    - hivesticks
+id: hivesticks_cart
+theme: hivesticks
+region: header
+weight: 0
+provider: null
+plugin: commerce_cart
+settings:
+  id: commerce_cart
+  label: Cart
+  label_display: '0'
+  provider: commerce_cart
+  dropdown: true
+  show_if_empty: true
+visibility: {  }

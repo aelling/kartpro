@@ -1,0 +1,19 @@
+uuid: 94302fff-c77d-4bd0-b7d6-abdfe8aec06e
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_attribute.flavor
+    - field.storage.commerce_product_attribute_value.field_flavor_tagline
+id: commerce_product_attribute_value.flavor.field_flavor_tagline
+field_name: field_flavor_tagline
+entity_type: commerce_product_attribute_value
+bundle: flavor
+label: 'Flavor Tagline'
+description: 'e.g. Our signature. Bright, balanced, classic.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,50 @@
+{#
+  views-view--commerce-user-subscriptions.html.twig
+  ─────────────────────────────────────────────────
+  Restyles the Commerce Recurring "User subscriptions" view into HiveSticks
+  subscription cards. `subscription_cards` is built in
+  hivesticks_preprocess_views_view__commerce_user_subscriptions().
+
+  Deploy to: themes/custom/hivesticks/templates/views/
+#}
+
+<div class="hs-sec-head">
+  <div>
+    <h1 class="hs-sec-head__title hs-serif">{{ 'Subscriptions'|t }}</h1>
+    <p class="hs-sec-head__sub">{{ 'Your recurring deliveries — manage or cancel anytime.'|t }}</p>
+  </div>
+  <a href="/shop" class="hs-abtn hs-abtn--ghost">{{ '+ New subscription'|t }}</a>
+</div>
+
+{% if subscription_cards is defined and subscription_cards is not empty %}
+  <div class="hs-ord-list">
+    {% for s in subscription_cards %}
+      <div class="hs-subcard hs-panel">
+        <div class="hs-subcard__main">
+          <div>
+            <div class="hs-subcard__title">
+              {{ s.title }}
+              <span class="hs-badge hs-badge--{{ s.tone }}"><span class="hs-badge__dot"></span>{{ s.status }}</span>
+            </div>
+            <div class="hs-subcard__meta">{{ s.cadence }}{% if s.price %} · {{ s.price }}{% endif %}</div>
+          </div>
+          <div class="hs-subcard__next">
+            <div class="hs-mono hs-ov-eyebrow">{{ 'Next delivery'|t }}</div>
+            <div class="hs-subcard__next-date hs-serif">{{ s.next }}</div>
+          </div>
+        </div>
+        {% if s.manage_url %}
+          <div class="hs-subcard__actions">
+            <a href="{{ s.manage_url }}" class="hs-abtn hs-abtn--ghost">{{ 'Manage'|t }}</a>
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="hs-empty">
+    <div class="hs-empty__title hs-serif">{{ 'No active subscriptions'|t }}</div>
+    <p class="hs-empty__body">{{ 'Subscribe & save on any flavor, delivered on your schedule — skip or cancel anytime.'|t }}</p>
+    <a href="/shop" class="hs-abtn hs-abtn--dark">{{ 'Browse flavors'|t }}</a>
+  </div>
+{% endif %}

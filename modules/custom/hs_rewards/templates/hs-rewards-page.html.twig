@@ -1,0 +1,60 @@
+{#
+  hs-rewards-page.html.twig — Honey Points rewards page.
+  Styled by the theme's account.css (hs-rw-* classes), which loads on /user/* pages.
+  Variables: points, tier, next_tier, to_next, pct, perk, referral, uid
+#}
+<div class="hs-rewards">
+
+  <div class="hs-sec-head">
+    <div>
+      <h1 class="hs-sec-head__title hs-serif">{{ 'Rewards'|t }}</h1>
+      <p class="hs-sec-head__sub">{{ 'Earn Honey Points on every order and unlock perks.'|t }}</p>
+    </div>
+  </div>
+
+  <div class="hs-rw-grid">
+    {# Points panel — dark honey gradient #}
+    <div class="hs-rw-points">
+      <span class="hs-mono hs-rw-tier">{{ tier }}</span>
+      <div class="hs-rw-points__row">
+        <span class="hs-serif hs-rw-points__num">{{ points }}</span>
+        <span class="hs-rw-points__label">{{ 'Honey Points'|t }}</span>
+      </div>
+      <div class="hs-rw-perk">{{ perk }}</div>
+      <div class="hs-rw-bar"><div class="hs-rw-bar__fill" style="width: {{ pct }}%"></div></div>
+      {% if next_tier %}
+        <div class="hs-rw-bar__labels">
+          <span>{{ points }} {{ 'pts'|t }}</span>
+          <span>{{ to_next }} {{ 'pts to'|t }} {{ next_tier }}</span>
+        </div>
+      {% endif %}
+    </div>
+
+    {# Referral panel #}
+    <div class="hs-panel hs-rw-referral">
+      <span class="hs-mono hs-ov-eyebrow">{{ 'Refer a friend'|t }}</span>
+      <p class="hs-rw-referral__desc">{{ 'Give friends $5 off their first order — you earn 100 points when they buy.'|t }}</p>
+      <div class="hs-rw-code" data-code="{{ referral }}">{{ referral }}</div>
+    </div>
+  </div>
+
+  {# Ways to earn #}
+  <div class="hs-panel hs-rw-earn">
+    <span class="hs-mono hs-ov-eyebrow">{{ 'Ways to earn'|t }}</span>
+    <div class="hs-rw-earn__grid">
+      <div class="hs-rw-earn__item">
+        <div class="hs-rw-earn__t">{{ 'Place an order'|t }}</div>
+        <div class="hs-rw-earn__d">{{ '1 pt / $1 spent'|t }}</div>
+      </div>
+      <div class="hs-rw-earn__item">
+        <div class="hs-rw-earn__t">{{ 'Subscribe & save'|t }}</div>
+        <div class="hs-rw-earn__d">{{ '2× points on every delivery'|t }}</div>
+      </div>
+      <div class="hs-rw-earn__item">
+        <div class="hs-rw-earn__t">{{ 'Refer a friend'|t }}</div>
+        <div class="hs-rw-earn__d">{{ '100 pts per referral'|t }}</div>
+      </div>
+    </div>
+  </div>
+
+</div>

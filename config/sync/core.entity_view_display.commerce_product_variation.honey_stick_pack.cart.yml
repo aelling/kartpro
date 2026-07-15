@@ -1,0 +1,51 @@
+uuid: cef49a1a-c5b1-421e-8d21-2225da881889
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_variation_type.honey_stick_pack
+    - core.entity_view_mode.commerce_product_variation.cart
+    - field.field.commerce_product_variation.honey_stick_pack.attribute_pack_size
+    - field.field.commerce_product_variation.honey_stick_pack.billing_schedule
+    - field.field.commerce_product_variation.honey_stick_pack.subscription_type
+    - field.field.commerce_product_variation.honey_stick_pack.weight
+  module:
+    - commerce_price
+id: commerce_product_variation.honey_stick_pack.cart
+targetEntityType: commerce_product_variation
+bundle: honey_stick_pack
+mode: cart
+content:
+  list_price:
+    type: commerce_price_default
+    label: above
+    settings:
+      strip_trailing_zeroes: false
+      currency_display: symbol
+    third_party_settings: {  }
+    weight: -1
+    region: content
+  price:
+    type: commerce_price_default
+    label: above
+    settings:
+      strip_trailing_zeroes: false
+      currency_display: symbol
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -10
+    region: content
+hidden:
+  attribute_pack_size: true
+  billing_schedule: true
+  product_id: true
+  sku: true
+  subscription_type: true
+  weight: true

@@ -1,0 +1,19 @@
+uuid: 9c79d4f2-9f0b-4e16-8f02-095002cdff56
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.landing_page_section
+    - field.storage.block_content.field_button_text
+id: block_content.landing_page_section.field_button_text
+field_name: field_button_text
+entity_type: block_content
+bundle: landing_page_section
+label: 'Button Text'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

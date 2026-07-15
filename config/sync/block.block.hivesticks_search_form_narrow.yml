@@ -1,0 +1,23 @@
+uuid: 09ea8669-3608-47c3-b5bb-fd022c258dd2
+langcode: en
+status: false
+dependencies:
+  module:
+    - search
+  theme:
+    - hivesticks
+_core:
+  default_config_hash: yEBET0cqDbk8dkWzaJw-8CKft0961VBflsISoSR6Lj8
+id: hivesticks_search_form_narrow
+theme: hivesticks
+region: header
+weight: -5
+provider: null
+plugin: search_form_block
+settings:
+  id: search_form_block
+  label: 'Search form (narrow)'
+  label_display: '0'
+  provider: search
+  page_id: ''
+visibility: {  }
