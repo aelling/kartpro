@@ -573,11 +573,10 @@
   display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
 }
 .hs-story__photo {
-  aspect-ratio: 4/3; background: var(--hs-bg-3);
+  aspect-ratio: 4/3; width: 100%;
+  object-fit: cover; display: block;
+  background: var(--hs-bg-3);
   border-radius: 16px; border: 1px solid var(--hs-rule);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; color: var(--hs-ink-mute); text-align: center;
-  letter-spacing: .08em;
 }
 
 /* ═══════════════════════════════════════════════════════════════

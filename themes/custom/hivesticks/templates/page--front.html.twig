@@ -296,12 +296,13 @@
 
       <div class="hs-story__grid" aria-label="{{ 'Farm photo gallery'|t }}">
         {% for img in [
-          {label: 'Hives in field'|t},
-          {label: 'Honey extraction'|t},
-          {label: 'Beekeeper portrait'|t},
-          {label: 'Sticks on line'|t},
+          {src: 'story-1.jpg', alt: 'Our beehives on the Iowa prairie'|t},
+          {src: 'story-2.jpg', alt: 'Extracting raw honey at the farm'|t},
+          {src: 'story-3.jpg', alt: 'Filling honey sticks by hand'|t},
+          {src: 'story-4.jpg', alt: 'The family behind HiveSticks'|t},
         ] %}
-          <div class="hs-story__photo hs-mono">{{ img.label }}</div>
+          <img class="hs-story__photo" src="/themes/custom/hivesticks/images/{{ img.src }}"
+               alt="{{ img.alt }}" loading="lazy" width="600" height="450">
         {% endfor %}
       </div>
 
