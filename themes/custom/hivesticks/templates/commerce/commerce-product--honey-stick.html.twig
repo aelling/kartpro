@@ -139,29 +139,7 @@
       {# Product title #}
       <h1 class="hs-buy__title hs-serif">{{ product_entity.label }}</h1>
 
-      {# Star rating + review count + orders #}
-      {% if rating > 0 %}
-        <div class="hs-buy__rating">
-          <span class="hs-stars" aria-label="{{ '@rating out of 5 stars'|t({'@rating': rating}) }}">
-            {% for i in 1..5 %}
-              <svg class="hs-star{% if i <= rating %} hs-star--filled{% endif %}"
-                   width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-                <path d="M8 1.5l2.06 4.18L14.5 6.3l-3.25 3.17.77 4.5L8 11.85l-4.02 2.12.77-4.5L1.5 6.3l4.44-.62z"/>
-              </svg>
-            {% endfor %}
-          </span>
-          <span class="hs-buy__rating-score">{{ rating }}</span>
-          {% if review_count > 0 %}
-            <a href="#reviews" class="hs-buy__rating-link">
-              {{- review_count|number_format -}}&nbsp;{{ 'reviews'|t -}}
-            </a>
-          {% endif %}
-          {% if orders_month > 0 %}
-            <span class="hs-buy__rating-sep">·</span>
-            <span class="hs-buy__orders">{{ orders_month|number_format }}+ {{ 'orders this month'|t }}</span>
-          {% endif %}
-        </div>
-      {% endif %}
+      {# Rating / review count / orders removed — placeholder data. #}
 
       {# Subtitle #}
       {% if subtitle %}
@@ -328,54 +306,7 @@
     </div>
   </section>
 
-  {# ── Reviews ──────────────────────────────────────────────────────────────── #}
-  <section id="reviews" class="hs-reviews">
-    <div class="hs-mono hs-label">{{ 'Reviews'|t }}</div>
-    <h2 class="hs-reviews__heading hs-serif">
-      {% if review_count > 0 %}
-        {{- '@count people have something to say.'|t({'@count': review_count|number_format}) -}}
-      {% else %}
-        {{- 'Be the first to leave a review.'|t -}}
-      {% endif %}
-    </h2>
-
-    <div class="hs-reviews__layout">
-      {# Summary card #}
-      <div class="hs-reviews__summary">
-        {% if rating > 0 %}
-          <div class="hs-reviews__score hs-serif">{{ rating }}</div>
-          <span class="hs-stars">
-            {% for i in 1..5 %}
-              <svg class="hs-star{% if i <= rating %} hs-star--filled{% endif %}" width="18" height="18" viewBox="0 0 16 16">
-                <path d="M8 1.5l2.06 4.18L14.5 6.3l-3.25 3.17.77 4.5L8 11.85l-4.02 2.12.77-4.5L1.5 6.3l4.44-.62z"/>
-              </svg>
-            {% endfor %}
-          </span>
-          <div class="hs-mono hs-reviews__count">{{ review_count|number_format }} {{ 'verified reviews'|t }}</div>
-          {# Distribution bars — static design values; swap for real data when reviews module is added #}
-          <div class="hs-reviews__dist">
-            {% for bar in [{s:5,p:86},{s:4,p:11},{s:3,p:2},{s:2,p:1},{s:1,p:0}] %}
-              <div class="hs-reviews__dist-row">
-                <span class="hs-mono">{{ bar.s }}★</span>
-                <div class="hs-reviews__dist-bar">
-                  <div class="hs-reviews__dist-fill" style="width: {{ bar.p }}%"></div>
-                </div>
-                <span class="hs-mono">{{ bar.p }}%</span>
-              </div>
-            {% endfor %}
-          </div>
-        {% endif %}
-        <button class="hs-btn hs-btn--outline">{{ 'Write a review'|t }}</button>
-      </div>
-
-      {# Review list placeholder (connect to reviews module or Views) #}
-      <div class="hs-reviews__list">
-        <p class="hs-reviews__list-placeholder">
-          {{ 'Connect a reviews module or Views block here to display individual reviews.'|t }}
-        </p>
-      </div>
-    </div>
-  </section>
+  {# Reviews section removed — content was placeholder/generated. #}
 
   {# ── FAQ ──────────────────────────────────────────────────────────────────── #}
   {% if faq_items %}

@@ -91,23 +91,7 @@
   {# ── Card body ───────────────────────────────────────────────── #}
   <div class="hs-card__body">
 
-    {# Rating row #}
-    {% if rating > 0 %}
-      <div class="hs-card__rating">
-        <span class="hs-card__stars" aria-label="{{ 'Rating: '|t }}{{ rating }} {{ 'out of 5'|t }}">
-          {% for i in 1..5 %}
-            {% if i <= rating_round %}
-              <span class="hs-star-filled" aria-hidden="true">★</span>
-            {% else %}
-              <span class="hs-star-empty" aria-hidden="true">★</span>
-            {% endif %}
-          {% endfor %}
-        </span>
-        <span class="hs-card__rating-text">
-          {{ rating }} · {{ reviews|number_format }}
-        </span>
-      </div>
-    {% endif %}
+    {# Rating row removed — placeholder review data. #}
 
     {# Title #}
     <a class="hs-card__title hs-serif"

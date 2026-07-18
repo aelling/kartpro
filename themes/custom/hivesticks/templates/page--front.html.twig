@@ -97,7 +97,7 @@
 
       {# Left: headline text #}
       <div class="hs-hero__text">
-        <p class="hs-hero__eyebrow hs-mono"><span aria-hidden="true">🍯</span> {{ 'From our Iowa hives · Est. 2014'|t }}</p>
+        <p class="hs-hero__eyebrow hs-mono"><span aria-hidden="true">🍯</span> {{ 'From our Iowa hives · Est. 2020'|t }}</p>
         <h1 id="hs-hero-heading" class="hs-hero__heading hs-serif">
           {{ 'Real honey. No mess. <em>Ready&nbsp;to&nbsp;go.</em>'|raw|t }}
         </h1>
@@ -113,10 +113,9 @@
         <div class="hs-hero__stats">
           <div class="hs-hero__stats-inner">
             {% for stat in [
-              {n: '14',    l: 'Years beekeeping'|t},
-              {n: '3,200', l: 'Hives in rotation'|t},
+              {n: '6',     l: 'Years beekeeping'|t},
+              {n: '50',    l: 'Hives in rotation'|t},
               {n: '0',     l: 'Additives, ever'|t},
-              {n: '4.9★',  l: 'From 2,841 reviews'|t},
             ] %}
               <div class="hs-stat">
                 <span class="hs-stat__n hs-serif">{{ stat.n }}</span>
@@ -134,10 +133,6 @@
       <div class="hs-hero__stage" role="group" aria-label="{{ 'Product preview'|t }}">
         <div class="hs-stage__head">
           <span class="hs-stage__badge hs-mono">✦ {{ 'New Batch · Wildflower'|t }}</span>
-          <div class="hs-stage__rating" aria-label="{{ '4.9 out of 5 stars, 2841 reviews'|t }}">
-            <span class="hs-stage__stars" aria-hidden="true">★★★★★</span>
-            <span class="hs-stage__rcount hs-mono">4.9 · 2,841</span>
-          </div>
         </div>
 
         {# Honey sticks visual with ghost number #}
@@ -257,7 +252,7 @@
           'Bee-Friendly Hives',
           'Cold-Pack Process',
           'No Additives, Ever',
-          'Family-Run Since 2014',
+          'Family-Run Since 2020',
           'One Ingredient',
         ] %}
           <span class="hs-marquee__item hs-mono">{{ badge|t }}</span>
@@ -293,9 +288,9 @@
       <div class="hs-story__text">
         <p class="hs-mono hs-label">{{ '03 Our Story'|t }}</p>
         <h2 id="hs-story-heading" class="hs-story__heading hs-serif">
-          {{ 'A farm, <em>3,200 hives</em>, and one stubborn idea.'|raw|t }}
+          {{ 'A farm, <em>50 hives</em>, and one stubborn idea.'|raw|t }}
         </h2>
-        <p>{{ "We started in 2014 with twelve hives behind the barn and a hunch that great honey didn't need to live in a plastic bear on a shelf. Twelve years later, our bees forage 4,000 acres of unsprayed Iowa farmland — and our honey ships in single-serve sticks, the way coffee should."|t }}</p>
+        <p>{{ "We started in 2020 with twelve hives behind the barn and a hunch that great honey didn't need to live in a plastic bear on a shelf. A few years and fifty hives later, our bees forage the unsprayed Iowa farmland around us — and our honey ships in single-serve sticks, the way coffee should."|t }}</p>
         <p>{{ "Every batch is cold-packed within 48 hours of extraction. We don't pasteurize, we don't filter, we don't blend across seasons. What's in the stick is what was in the comb that week."|t }}</p>
         <a href="/our-story" class="hs-story__link">{{ 'Visit the farm →'|t }}</a>
       </div>
@@ -340,64 +335,7 @@
     </div>
   </section>
 
-  {# ── REVIEWS ─────────────────────────────────────────────────────────── #}
-  <section class="hs-reviews-home" aria-labelledby="hs-reviews-home-heading">
-    <div class="hs-reviews-home__inner">
-      <div class="hs-reviews-home__head">
-        <div>
-          <p class="hs-mono hs-label">{{ '05 Reviews'|t }}</p>
-          <h2 id="hs-reviews-home-heading" class="hs-reviews-home__heading hs-serif">
-            {{ '<em>2,841</em> people. One sticky thumb up.'|raw|t }}
-          </h2>
-        </div>
-        <div class="hs-reviews-home__summary hs-mono" aria-label="{{ '4.9 out of 5 stars based on 2841 reviews'|t }}">
-          <span class="hs-reviews-home__stars" aria-hidden="true">★★★★★</span>
-          <strong>4.9</strong>
-          <span>/ 5 · 2,841 {{ 'reviews'|t }}</span>
-        </div>
-      </div>
-      <div class="hs-reviews-home__grid">
-        {% for r in [
-          {
-            quote:   "I keep one in every bag. Tea at the office, oatmeal on the go, and my four-year-old thinks they're candy.",
-            name:    'Maya R.',
-            initial: 'M',
-            tag:     'VERIFIED BUYER · WILDFLOWER X60',
-          },
-          {
-            quote:   "The buckwheat is unreal in coffee. Actual honey, not the squeeze-bottle stuff. I'm converted.",
-            name:    'Eli T.',
-            initial: 'E',
-            tag:     'VERIFIED BUYER · BUCKWHEAT X30',
-          },
-          {
-            quote:   "Switched from a big jar that lived sticky in the cabinet for a year. These ship every month, never go off, never make a mess.",
-            name:    'Priya S.',
-            initial: 'P',
-            tag:     'VERIFIED BUYER · SUBSCRIPTION',
-          },
-          {
-            quote:   "Trail running fuel. Beats every gel I've tried — no weird aftertaste, hits fast.",
-            name:    'Jordan K.',
-            initial: 'J',
-            tag:     'VERIFIED BUYER · ORANGE BLOSSOM',
-          },
-        ] %}
-          <article class="hs-review-card">
-            <span class="hs-review-card__stars" aria-label="{{ '5 out of 5 stars'|t }}">★★★★★</span>
-            <blockquote class="hs-review-card__quote hs-serif">"{{ r.quote|t }}"</blockquote>
-            <footer class="hs-review-card__footer">
-              <span class="hs-review-card__avatar" aria-hidden="true">{{ r.initial }}</span>
-              <div>
-                <strong class="hs-review-card__name">{{ r.name }}</strong>
-                <span class="hs-review-card__tag hs-mono">{{ r.tag|t }}</span>
-              </div>
-            </footer>
-          </article>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
+  {# Reviews section removed — content was placeholder/generated. #}
 
   {# ── FAQ ─────────────────────────────────────────────────────────────── #}
   <section id="hs-faq" class="hs-faq-home" aria-labelledby="hs-faq-home-heading"
@@ -485,7 +423,7 @@
         Hive<em>Sticks</em>
       </a>
       <p class="hs-footer-home__tagline">
-        {{ 'Single-origin raw honey from our family farm in Story County, Iowa. Family-run since 2014.'|t }}
+        {{ 'Single-origin raw honey from our family farm in Story County, Iowa. Family-run since 2020.'|t }}
       </p>
     </div>
 
