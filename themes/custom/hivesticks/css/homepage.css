@@ -713,9 +713,9 @@
   margin: 0 0 20px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.05;
 }
 .hs-cta__heading em { font-style: italic; color: var(--hs-honey-glow); }
-.hs-cta__body {
+.hs-cta__inner .hs-cta__body {
   font-size: 17px; color: rgba(255,255,255,.88) !important; max-width: 48ch;
-  margin: 0 auto 36px; line-height: 1.6;
+  margin: 0 auto 36px; line-height: 1.6; text-align: center;
 }
 .hs-cta__btn { font-size: 16px; padding: 17px 40px; }
 .hs-cta__trust {
